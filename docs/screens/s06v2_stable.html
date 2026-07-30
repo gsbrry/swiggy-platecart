@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PlateCart · Screen 06 · Create Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sw:#FC8019;--swt:rgba(252,128,25,.08);--ch:#282C3F;
+  --mu:#686B78;--bo:#E9E9EB;--bg:#FFFFFF;--pg:#F4F6FB;
+  --gr:#60B246;--grt:rgba(96,178,70,.1);
+  --f:'DM Sans',system-ui,sans-serif;--r:8px;
+  --meta:44px;--dev:400px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-family:var(--f);-webkit-font-smoothing:antialiased}
+body{overflow:hidden;height:100vh;display:flex;flex-direction:column;background:#D4D4D4}
+.icon{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.icon-lg{width:22px;height:22px}.icon-sm{width:15px;height:15px}.icon-xs{width:13px;height:13px}
+
+/* META */
+.meta{height:var(--meta);background:var(--ch);display:flex;align-items:center;flex-shrink:0;z-index:50;overflow:hidden}
+.meta-l{display:flex;align-items:center;gap:8px;padding:0 14px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.1)}
+.ml{font-weight:700;font-size:12px;color:#fff;letter-spacing:-.02em}.ml em{font-style:normal;color:var(--sw)}
+.mb{background:var(--sw);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.05em}
+.screen-links{display:flex;align-items:center;gap:2px;overflow-x:auto;flex:1;padding:0 10px;scrollbar-width:none}
+.screen-links::-webkit-scrollbar{display:none}
+.sl{font-size:10px;font-weight:500;color:rgba(255,255,255,.38);padding:4px 9px;border-radius:99px;text-decoration:none;white-space:nowrap;border:1px solid transparent;transition:.12s}
+.sl:hover{color:rgba(255,255,255,.7);background:rgba(255,255,255,.06)}
+.sl.cur{color:var(--sw);background:rgba(252,128,25,.12);border-color:rgba(252,128,25,.3);font-weight:700}
+.sl.done{color:rgba(255,255,255,.55)}
+.meta-r{padding:0 14px;flex-shrink:0;border-left:1px solid rgba(255,255,255,.1)}
+.ds-pill{border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.45);font-size:9px;padding:3px 8px;border-radius:99px}
+
+/* SPLIT */
+.split{flex:1;display:flex;overflow:hidden}
+
+/* DESKTOP 85% */
+.dp{flex:0 0 85%;display:flex;flex-direction:column;border-right:1px solid #BEBEBE;overflow:hidden}
+.browser{background:#D0D0D0;padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #BEBEBE;flex-shrink:0}
+.b-dots{display:flex;gap:5px}
+.b-dot{width:10px;height:10px;border-radius:50%}
+.b-dot.r{background:#FF5F57}.b-dot.y{background:#FFBD2E}.b-dot.g{background:#28C840}
+.b-url{flex:1;background:#fff;border:1px solid #BEBEBE;border-radius:4px;padding:3px 10px;font-size:11px;color:#555;font-family:monospace;display:flex;align-items:center;gap:5px}
+.app-scroll{flex:1;overflow-y:auto;background:var(--pg)}
+.app-scroll::-webkit-scrollbar{width:4px}
+.app-scroll::-webkit-scrollbar-thumb{background:var(--bo);border-radius:2px}
+
+/* NAV */
+.anav{background:var(--bg);border-bottom:1px solid var(--bo);position:sticky;top:0;z-index:20}
+.anav-in{max-width:1160px;margin:0 auto;padding:0 20px;height:54px;display:flex;align-items:center;justify-content:space-between}
+.alogo{font-size:18px;font-weight:700;color:var(--ch);letter-spacing:-.03em}.alogo em{font-style:normal;color:var(--sw)}
+.alinks{display:flex;gap:2px}
+.alnk{padding:5px 13px;border-radius:99px;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;border:none;background:none;font-family:var(--f);transition:.12s}
+.alnk:hover{color:var(--ch);background:var(--pg)}.alnk.act{color:var(--sw);font-weight:600}
+.anav-r{display:flex;align-items:center;gap:10px}
+.av{width:32px;height:32px;border-radius:50%;background:var(--sw);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* PAGE */
+.content{max-width:1160px;margin:0 auto;padding:18px 20px 40px}
+
+/* PAGE HEADER */
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.page-title{font-size:20px;font-weight:700;color:var(--ch);letter-spacing:-.02em}
+.page-sub{font-size:12.5px;color:var(--mu);margin-top:2px}
+.head-actions{display:flex;align-items:center;gap:8px}
+.save-status{font-size:11.5px;color:var(--mu);display:flex;align-items:center;gap:5px}
+.save-status .icon-xs{color:var(--gr)}
+
+/* FORM LAYOUT */
+.form-layout{display:grid;grid-template-columns:1fr 320px;gap:16px}
+
+/* FORM PANEL */
+.form-panel{display:flex;flex-direction:column;gap:12px}
+
+/* FORM SECTION */
+.fsec{background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);overflow:hidden}
+.fsec-head{padding:13px 18px;border-bottom:1px solid var(--bo);display:flex;align-items:center;justify-content:space-between}
+.fsec-title{font-size:13px;font-weight:700;color:var(--ch)}
+.fsec-body{padding:16px 18px}
+
+/* FORM INPUTS */
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.field-label{font-size:11px;font-weight:700;color:var(--mu);letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.required{color:var(--sw);font-size:12px}
+input[type=text],input[type=number],textarea,select{
+  width:100%;background:var(--pg);border:1.5px solid var(--bo);border-radius:var(--r);
+  padding:9px 12px;font-family:var(--f);font-size:13px;color:var(--ch);outline:none;transition:.14s;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--sw);background:var(--bg)}
+input::placeholder,textarea::placeholder{color:#B0B3BB}
+textarea{resize:vertical;min-height:60px;line-height:1.5}
+select{cursor:pointer}
+.two-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.three-fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+/* CHIP SELECTOR */
+.chip-group{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:6px 13px;border-radius:99px;border:1.5px solid var(--bo);font-size:12px;font-weight:600;color:var(--mu);cursor:pointer;transition:all .14s;background:var(--bg)}
+.chip:hover{border-color:#C0C0C4;color:var(--ch)}
+.chip.sel{border-color:var(--sw);background:var(--swt);color:var(--sw)}
+.chip.sel-green{border-color:var(--gr);background:var(--grt);color:var(--gr)}
+
+/* INGREDIENT BUILDER */
+.ing-builder{display:flex;flex-direction:column;gap:0}
+.ing-row{display:grid;grid-template-columns:1fr 80px 90px 32px;gap:6px;padding:8px 18px;border-bottom:1px solid var(--bo);align-items:center;position:relative}
+.ing-row:last-of-type{border-bottom:none}
+.ing-search-wrap{position:relative}
+.ing-input{width:100%;background:var(--pg);border:1.5px solid var(--bo);border-radius:6px;padding:7px 10px;font-family:var(--f);font-size:12.5px;color:var(--ch);outline:none;transition:.14s}
+.ing-input:focus{border-color:var(--sw);background:var(--bg)}
+.ing-input::placeholder{color:#B0B3BB}
+.ing-qty{background:var(--pg);border:1.5px solid var(--bo);border-radius:6px;padding:7px 8px;font-family:var(--f);font-size:12.5px;color:var(--ch);outline:none;text-align:center;width:100%;transition:.14s}
+.ing-qty:focus{border-color:var(--sw);background:var(--bg)}
+.ing-unit{background:var(--pg);border:1.5px solid var(--bo);border-radius:6px;padding:7px 6px;font-family:var(--f);font-size:12px;color:var(--ch);outline:none;cursor:pointer;transition:.14s;width:100%}
+.ing-unit:focus{border-color:var(--sw)}
+.ing-del{width:28px;height:28px;border-radius:50%;background:none;border:none;color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s;flex-shrink:0}
+.ing-del:hover{background:var(--pg);color:#DC2626}
+.add-ing-btn{display:flex;align-items:center;gap:7px;padding:10px 18px;font-family:var(--f);font-size:12.5px;font-weight:600;color:var(--sw);cursor:pointer;border:none;background:none;width:100%;transition:.12s}
+.add-ing-btn:hover{background:var(--pg)}
+.add-ing-btn .icon-sm{stroke:var(--sw)}
+
+/* AUTOCOMPLETE DROPDOWN */
+.ac-drop{position:absolute;top:calc(100% + 2px);left:0;right:0;background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);box-shadow:0 4px 16px rgba(40,44,63,.1);z-index:50;overflow:hidden;display:none}
+.ac-drop.vis{display:block}
+.ac-item{padding:8px 12px;font-size:12.5px;cursor:pointer;transition:.1s;display:flex;justify-content:space-between;align-items:center}
+.ac-item:hover{background:var(--pg)}
+.ac-item-name{color:var(--ch);font-weight:500}
+.ac-item-meta{font-size:10.5px;color:var(--mu);display:flex;align-items:center;gap:4px}
+.ac-item-avail{color:var(--gr);font-weight:600}
+
+/* STEP BUILDER */
+.step-list{display:flex;flex-direction:column;gap:0}
+.step-row{display:grid;grid-template-columns:26px 1fr 28px;gap:8px;padding:8px 18px;border-bottom:1px solid var(--bo);align-items:flex-start}
+.step-row:last-of-type{border-bottom:none}
+.step-num-badge{width:26px;height:26px;border-radius:50%;background:var(--ch);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:6px}
+.step-input{background:var(--pg);border:1.5px solid var(--bo);border-radius:6px;padding:7px 10px;font-family:var(--f);font-size:12.5px;color:var(--ch);outline:none;resize:none;width:100%;min-height:40px;line-height:1.5;transition:.14s}
+.step-input:focus{border-color:var(--sw);background:var(--bg)}
+.step-input::placeholder{color:#B0B3BB}
+.step-del{width:28px;height:28px;border-radius:50%;background:none;border:none;color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:4px;transition:.12s}
+.step-del:hover{background:var(--pg);color:#DC2626}
+.add-step-btn{display:flex;align-items:center;gap:7px;padding:10px 18px;font-family:var(--f);font-size:12.5px;font-weight:600;color:var(--sw);cursor:pointer;border:none;background:none;width:100%;transition:.12s}
+.add-step-btn:hover{background:var(--pg)}
+
+/* VISIBILITY TOGGLE */
+.vis-toggle{display:flex;gap:0;border:1.5px solid var(--bo);border-radius:var(--r);overflow:hidden;width:fit-content}
+.vt-opt{padding:7px 18px;font-family:var(--f);font-size:12px;font-weight:600;cursor:pointer;border:none;background:var(--bg);color:var(--mu);transition:.14s;display:flex;align-items:center;gap:6px}
+.vt-opt:first-child{border-right:1px solid var(--bo)}
+.vt-opt.act{background:var(--ch);color:#fff}
+.vt-opt.act .icon-xs{stroke:#fff}
+.vt-opt .icon-xs{stroke:var(--mu);transition:.14s}
+
+/* BOTTOM ACTION BAR */
+.action-bar{background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.action-left{font-size:12px;color:var(--mu);display:flex;align-items:center;gap:6px}
+.action-left b{color:var(--ch)}
+.action-btns{display:flex;gap:8px}
+.btn-draft{padding:10px 20px;background:var(--pg);color:var(--ch);border:1.5px solid var(--bo);border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:600;cursor:pointer;transition:.14s}
+.btn-draft:hover{border-color:var(--ch)}
+.btn-publish{padding:10px 24px;background:var(--sw);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;transition:.14s;display:flex;align-items:center;gap:7px}
+.btn-publish:hover{opacity:.9}.btn-publish:disabled{background:var(--bo);cursor:not-allowed}
+.btn-publish .icon-sm{stroke:#fff}
+
+/* PREVIEW PANEL */
+.preview-panel{position:sticky;top:16px;display:flex;flex-direction:column;gap:12px}
+.prev-card{background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);overflow:hidden}
+.prev-head{padding:12px 14px;border-bottom:1px solid var(--bo)}
+.prev-title{font-size:10px;font-weight:700;color:var(--mu);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.prev-sub{font-size:10.5px;color:var(--mu)}
+.prev-thumb{height:88px;background:var(--pg);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--bo);position:relative}
+.prev-thumb svg{color:var(--bo)}
+.prev-diet-dot{position:absolute;top:8px;left:8px;width:7px;height:7px;border-radius:50%;background:var(--gr)}
+.prev-body{padding:10px 12px}
+.prev-name{font-size:13px;font-weight:700;color:var(--ch);margin-bottom:5px;letter-spacing:-.01em;min-height:18px}
+.prev-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px;min-height:22px}
+.prev-tag{font-size:9.5px;color:var(--mu);background:var(--pg);padding:2px 7px;border-radius:99px}
+.prev-tag.veg{color:var(--gr);background:var(--grt)}
+.prev-tag.goal{color:var(--sw);background:var(--swt)}
+.prev-meta{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--mu);margin-bottom:9px}
+.prev-kcal{font-weight:700;color:var(--ch)}
+.prev-add{width:100%;padding:7px;background:var(--bo);color:var(--mu);border:none;border-radius:6px;font-family:var(--f);font-size:11px;font-weight:700;cursor:default}
+
+/* CALC PREVIEW */
+.calc-card{background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);padding:14px}
+.calc-title{font-size:10px;font-weight:700;color:var(--mu);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.calc-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bo);font-size:12px}
+.calc-row:last-child{border-bottom:none}
+.calc-l{color:var(--mu)}.calc-v{font-weight:700;color:var(--ch)}
+.goal-match{margin-top:10px;background:var(--swt);border-radius:6px;padding:9px 11px;font-size:11px;color:var(--ch);line-height:1.5}
+.goal-match strong{color:var(--sw)}
+
+/* MOBILE PANEL */
+.mp{flex:0 0 15%;background:#E0E0E0;border-left:1px solid #BEBEBE;display:flex;flex-direction:column;overflow:hidden}
+.mp-hdr{padding:8px 10px 4px;flex-shrink:0}
+.mp-lbl{font-size:8px;font-weight:700;color:#999;letter-spacing:.08em;text-transform:uppercase}
+.mp-hint{font-size:7.5px;color:#BBB;margin-top:1px}
+.mp-area{flex:1;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding:5px 6px}
+.m-wrap{transform-origin:top center;width:375px}
+.m-bg{background:var(--pg);width:375px}
+
+/* MOBILE UI */
+.m-sb{background:var(--bg);padding:10px 14px 6px;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;color:#1C1C1E;border-bottom:1px solid var(--bo)}
+.m-sb-r{display:flex;gap:3px;font-size:10px}
+.m-navb{background:var(--bg);border-bottom:1px solid var(--bo);padding:9px 14px;display:flex;align-items:center;justify-content:space-between}
+.m-nav-title{font-size:14px;font-weight:700;color:var(--ch)}
+.m-back{width:30px;height:30px;border-radius:50%;background:var(--pg);border:1px solid var(--bo);display:flex;align-items:center;justify-content:center}
+.m-form{padding:12px 14px;display:flex;flex-direction:column;gap:14px}
+.m-field{}
+.m-label{font-size:10px;font-weight:700;color:var(--mu);letter-spacing:.04em;text-transform:uppercase;margin-bottom:5px}
+.m-inp{width:100%;background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:9px 12px;font-family:var(--f);font-size:13px;color:var(--ch);outline:none}
+.m-inp:focus{border-color:var(--sw)}
+.m-chips{display:flex;gap:5px;flex-wrap:wrap}
+.m-chip{padding:5px 11px;border-radius:99px;border:1.5px solid var(--bo);font-size:11px;font-weight:600;color:var(--mu);background:var(--bg)}
+.m-chip.sel{border-color:var(--sw);background:var(--swt);color:var(--sw)}
+.m-ing-preview{background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);overflow:hidden}
+.m-ing-row{padding:8px 12px;border-bottom:1px solid var(--bo);display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.m-ing-row:last-child{border-bottom:none}
+.m-ing-n{color:var(--ch);font-weight:500}
+.m-ing-q{color:var(--mu)}
+.m-add-ing{padding:9px 12px;font-size:12px;color:var(--sw);font-weight:600;border:none;background:none;font-family:var(--f);display:flex;align-items:center;gap:5px;cursor:pointer}
+.m-cta-bar{padding:10px 14px 14px;display:flex;gap:8px}
+.m-btn-d{flex:1;padding:11px;background:var(--pg);color:var(--ch);border:1.5px solid var(--bo);border-radius:var(--r);font-family:var(--f);font-size:12.5px;font-weight:600}
+.m-btn-p{flex:2;padding:11px;background:var(--sw);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:12.5px;font-weight:700}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ch);color:#fff;font-size:12px;font-weight:600;padding:10px 20px;border-radius:99px;opacity:0;transition:all .3s;pointer-events:none;z-index:300;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* DEV */
+.dev-btn{position:fixed;bottom:20px;right:20px;z-index:200;background:var(--ch);color:#fff;border:none;border-radius:var(--r);padding:9px 16px;font-family:var(--f);font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,.3);letter-spacing:.04em;transition:.12s}
+.dev-btn:hover{background:#1a1e2e;transform:translateY(-1px)}
+.dev-dot{width:6px;height:6px;border-radius:50%;background:var(--sw)}
+.dev-panel{position:fixed;top:var(--meta);right:0;width:var(--dev);height:calc(100vh - var(--meta));background:#0D1117;z-index:150;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border-left:1px solid #1E2938;font-size:12px}
+.dev-panel.open{transform:translateX(0)}
+.dev-ph{padding:12px 16px;border-bottom:1px solid #1E2938;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dev-pt{font-family:var(--f);font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.dev-stag{background:var(--sw);color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700}
+.dev-cls{background:none;border:none;color:#555;font-size:18px;cursor:pointer;padding:4px}
+.dev-cls:hover{color:#fff}
+.dev-tabs{display:flex;border-bottom:1px solid #1E2938;padding:0 16px;flex-shrink:0}
+.d-tab{padding:9px 11px;font-family:var(--f);font-size:10px;font-weight:700;color:#555;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;letter-spacing:.06em;transition:.12s}
+.d-tab:hover{color:#888}.d-tab.act{color:var(--sw);border-bottom-color:var(--sw)}
+.dev-body{flex:1;overflow-y:auto;padding:16px}
+.dev-body::-webkit-scrollbar{width:3px}
+.dev-body::-webkit-scrollbar-thumb{background:#1E2938;border-radius:2px}
+.d-sub{display:none}.d-sub.act{display:block}
+.d-sec{margin-bottom:18px}
+.d-lbl{font-family:var(--f);font-size:8.5px;font-weight:700;color:var(--sw);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.code{background:#161B22;border:1px solid #1E2938;border-radius:6px;padding:11px;font-family:'Courier New',monospace;font-size:10.5px;line-height:1.65;color:#A8C8B0;white-space:pre;overflow-x:auto}
+.code .co{color:#3A5040}.code .om{color:var(--sw);font-weight:700}
+.code .pa{color:#93C5FD}.code .st{color:#FCA5A5}
+.code .vl{color:#E8D5A8}.code .ok{color:#6EE7B7}.code .wn{color:#FDE68A}
+.dl{list-style:none;display:flex;flex-direction:column;gap:7px}
+.dl li{display:flex;gap:7px;font-size:11px;line-height:1.5;color:#94A3B8}
+.dl li::before{content:'→';color:var(--sw);flex-shrink:0;margin-top:1px}
+.dl.warn li::before{content:'⚠';color:#FDE68A}
+.dl.ok li::before{content:'✓';color:#6EE7B7}
+</style>
+</head>
+<body>
+
+<svg style="display:none">
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+  <symbol id="i-utensils" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+  <symbol id="i-git-fork" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><path d="M6 9v3m6 9v-3a3 3 0 0 0-3-3H6"/><path d="M18 9a9 9 0 0 1-9 9"/></symbol>
+</svg>
+
+<!-- META -->
+<header class="meta">
+  <div class="meta-l"><div class="ml">Plate<em>Cart</em></div><div class="mb">06 / 10</div></div>
+  <nav class="screen-links">
+    <a class="sl done" href="screen_01_dashboard.html">01 Dashboard</a>
+    <a class="sl done" href="screen_02_onboarding.html">02 Onboarding</a>
+    <a class="sl done" href="screen_03_meal_plan.html">03 Meal Plan</a>
+    <a class="sl done" href="screen_04_template_browser.html">04 Templates</a>
+    <a class="sl done" href="screen_05_template_detail.html">05 Detail</a>
+    <a class="sl cur"  href="screen_06_create_template.html">06 Create</a>
+    <a class="sl" href="screen_07_my_templates.html">07 My Templates</a>
+    <a class="sl" href="screen_08_cart_preview.html">08 Cart</a>
+    <a class="sl" href="screen_09_budget_tracker.html">09 Budget</a>
+    <a class="sl" href="screen_10_settings.html">10 Settings</a>
+  </nav>
+  <div class="meta-r"><div class="ds-pill">Swiggy Design System</div></div>
+</header>
+
+<div class="split">
+<div class="dp">
+  <div class="browser">
+    <div class="b-dots"><div class="b-dot r"></div><div class="b-dot y"></div><div class="b-dot g"></div></div>
+    <div class="b-url">
+      <svg style="width:11px;height:11px;stroke:#60B246;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>platecart.app/templates/create</span>
+    </div>
+  </div>
+  <div class="app-scroll">
+    <nav class="anav">
+      <div class="anav-in">
+        <div class="alogo">Plate<em>Cart</em></div>
+        <div class="alinks">
+          <button class="alnk">Dashboard</button>
+          <button class="alnk">Meal Plan</button>
+          <button class="alnk act">Templates</button>
+          <button class="alnk">Budget</button>
+        </div>
+        <div class="anav-r"><div class="av">RV</div></div>
+      </div>
+    </nav>
+
+    <div class="content">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Create a template</div>
+          <div class="page-sub">Build a reusable dish — ingredients become an Instamart cart</div>
+        </div>
+        <div class="head-actions">
+          <div class="save-status" id="save-status" style="display:none">
+            <svg class="icon-xs"><use href="#i-check"/></svg>Draft saved
+          </div>
+        </div>
+      </div>
+
+      <div class="form-layout">
+        <!-- FORM -->
+        <div class="form-panel">
+
+          <!-- BASICS -->
+          <div class="fsec">
+            <div class="fsec-head"><div class="fsec-title">Template basics</div></div>
+            <div class="fsec-body">
+              <div class="field">
+                <div class="field-label">Dish name <span class="required">*</span></div>
+                <input type="text" id="f-name" placeholder="e.g. Dal Khichdi, Oats Porridge, Grilled Tofu Bowl" oninput="updatePreview()" maxlength="80">
+              </div>
+              <div class="two-fields">
+                <div class="field">
+                  <div class="field-label">Meal type <span class="required">*</span></div>
+                  <select id="f-mealtype" onchange="updatePreview()">
+                    <option value="">Select…</option>
+                    <option value="breakfast">Breakfast</option>
+                    <option value="lunch">Lunch</option>
+                    <option value="dinner">Dinner</option>
+                    <option value="snack">Snack</option>
+                    <option value="any">Any meal</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <div class="field-label">Difficulty</div>
+                  <select id="f-diff" onchange="updatePreview()">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </div>
+              </div>
+              <div class="three-fields">
+                <div class="field">
+                  <div class="field-label">Prep time (min) <span class="required">*</span></div>
+                  <input type="number" id="f-time" placeholder="20" min="1" max="180" oninput="updatePreview()">
+                </div>
+                <div class="field">
+                  <div class="field-label">Default servings</div>
+                  <input type="number" id="f-servings" value="2" min="1" max="8" oninput="updatePreview()">
+                </div>
+                <div class="field">
+                  <div class="field-label">Est. cost / serving (₹)</div>
+                  <input type="number" id="f-cost" placeholder="auto" min="0" readonly style="cursor:not-allowed;opacity:.6" title="Auto-calculated from Instamart prices">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DIET + GOAL TAGS -->
+          <div class="fsec">
+            <div class="fsec-head"><div class="fsec-title">Diet &amp; goal tags</div></div>
+            <div class="fsec-body">
+              <div class="field">
+                <div class="field-label">Diet type <span class="required">*</span></div>
+                <div class="chip-group" id="diet-chips">
+                  <div class="chip sel-green" onclick="selDiet(this,'veg')"><svg class="icon-xs" style="stroke:var(--gr)"><use href="#i-leaf"/></svg>Vegetarian</div>
+                  <div class="chip" onclick="selDiet(this,'nonveg')">Non-Veg</div>
+                  <div class="chip" onclick="selDiet(this,'vegan')">Vegan</div>
+                  <div class="chip" onclick="selDiet(this,'keto')">Keto</div>
+                  <div class="chip" onclick="selDiet(this,'jain')">Jain</div>
+                  <div class="chip" onclick="selDiet(this,'gf')">Gluten-Free</div>
+                </div>
+              </div>
+              <div class="field">
+                <div class="field-label">Goal tags (select all that apply)</div>
+                <div class="chip-group" id="goal-chips">
+                  <div class="chip" onclick="togGoal(this,'loss')">Weight Loss</div>
+                  <div class="chip" onclick="togGoal(this,'gain')">Muscle Gain</div>
+                  <div class="chip" onclick="togGoal(this,'maintain')">Maintain</div>
+                  <div class="chip" onclick="togGoal(this,'highprot')">High Protein</div>
+                  <div class="chip" onclick="togGoal(this,'light')">Light &lt;300 kcal</div>
+                  <div class="chip" onclick="togGoal(this,'quick')">Quick &lt;15 min</div>
+                </div>
+                <div style="margin-top:8px;font-size:11px;color:var(--mu);display:flex;align-items:center;gap:5px">
+                  <svg class="icon-xs"><use href="#i-info"/></svg>
+                  Goal tags auto-suggested based on kcal once you add ingredients
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- INGREDIENTS -->
+          <div class="fsec">
+            <div class="fsec-head">
+              <div class="fsec-title">Ingredients <span style="font-weight:400;color:var(--mu);font-size:12px">per serving</span></div>
+              <div style="font-size:11px;color:var(--mu);display:flex;align-items:center;gap:4px"><svg class="icon-xs"><use href="#i-info"/></svg>Search from Instamart catalog</div>
+            </div>
+            <div class="ing-builder" id="ing-builder"></div>
+            <button class="add-ing-btn" onclick="addIngredient()">
+              <svg class="icon-sm"><use href="#i-plus"/></svg>Add ingredient
+            </button>
+          </div>
+
+          <!-- INSTRUCTIONS -->
+          <div class="fsec">
+            <div class="fsec-head"><div class="fsec-title">Cook instructions</div></div>
+            <div class="step-list" id="step-list"></div>
+            <button class="add-step-btn" onclick="addStep()">
+              <svg class="icon-sm" style="stroke:var(--sw)"><use href="#i-plus"/></svg>Add step
+            </button>
+          </div>
+
+          <!-- VISIBILITY -->
+          <div class="fsec">
+            <div class="fsec-head"><div class="fsec-title">Visibility</div></div>
+            <div class="fsec-body">
+              <div class="vis-toggle">
+                <div class="vt-opt act" id="vt-public" onclick="setVis('public')">
+                  <svg class="icon-xs"><use href="#i-globe"/></svg>Public
+                </div>
+                <div class="vt-opt" id="vt-private" onclick="setVis('private')">
+                  <svg class="icon-xs"><use href="#i-lock"/></svg>Private
+                </div>
+              </div>
+              <div style="margin-top:10px;font-size:12px;color:var(--mu);line-height:1.5" id="vis-desc">
+                Public templates appear in the template browser. Others can fork your recipe. You keep attribution.
+              </div>
+            </div>
+          </div>
+
+          <!-- ACTION BAR -->
+          <div class="action-bar">
+            <div class="action-left">
+              <svg class="icon-xs"><use href="#i-info"/></svg>
+              <span id="action-status">Fill in dish name and at least 2 ingredients to publish</span>
+            </div>
+            <div class="action-btns">
+              <button class="btn-draft" onclick="saveDraft()">Save draft</button>
+              <button class="btn-publish" id="pub-btn" onclick="publish()" disabled>
+                <svg class="icon-sm"><use href="#i-send"/></svg>Publish template
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- PREVIEW PANEL -->
+        <div class="preview-panel">
+          <div class="prev-card">
+            <div class="prev-head">
+              <div class="prev-title">Live preview</div>
+              <div class="prev-sub">How it appears in the browser</div>
+            </div>
+            <div class="prev-thumb">
+              <svg class="icon-lg" style="width:36px;height:36px"><use href="#i-utensils"/></svg>
+              <div class="prev-diet-dot"></div>
+            </div>
+            <div class="prev-body">
+              <div class="prev-name" id="prev-name" style="color:var(--mu)">Your dish name</div>
+              <div class="prev-tags" id="prev-tags">
+                <span class="prev-tag veg">Vegetarian</span>
+              </div>
+              <div class="prev-meta">
+                <svg class="icon-xs" style="color:var(--mu)"><use href="#i-flame"/></svg>
+                <span class="prev-kcal" id="prev-kcal">—</span>
+                <span style="color:var(--bo)">·</span>
+                <svg class="icon-xs" style="color:var(--mu)"><use href="#i-clock"/></svg>
+                <span id="prev-time">—</span>
+              </div>
+              <div class="prev-add">+ Add to plan</div>
+            </div>
+          </div>
+
+          <!-- CALC STATS -->
+          <div class="calc-card">
+            <div class="calc-title">Auto-calculated</div>
+            <div class="calc-row"><span class="calc-l">Calories / serving</span><span class="calc-v" id="calc-kcal">—</span></div>
+            <div class="calc-row"><span class="calc-l">Protein</span><span class="calc-v" id="calc-prot">—</span></div>
+            <div class="calc-row"><span class="calc-l">Carbohydrates</span><span class="calc-v" id="calc-carb">—</span></div>
+            <div class="calc-row"><span class="calc-l">Fat</span><span class="calc-v" id="calc-fat">—</span></div>
+            <div class="calc-row"><span class="calc-l">Est. cost / serving</span><span class="calc-v" id="calc-cost">—</span></div>
+            <div class="goal-match" id="goal-match" style="display:none">
+              <strong>Auto-tagged:</strong> <span id="goal-match-text"></span> — based on your kcal total
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE PANEL -->
+<div class="mp">
+  <div class="mp-hdr">
+    <div class="mp-lbl">Mobile · 375px</div>
+    <div class="mp-hint">Full screen · no frame</div>
+  </div>
+  <div class="mp-area">
+  <div class="m-wrap" id="m-wrap">
+  <div class="m-bg">
+    <div class="m-sb"><span>9:41</span><div class="m-sb-r"><span>&bull;&bull;&bull;&bull;</span><span>WiFi</span></div></div>
+    <div class="m-navb">
+      <div class="m-back"><svg class="icon-sm" style="stroke:var(--ch)"><use href="#i-chevron-left"/></svg></div>
+      <div class="m-nav-title">Create Template</div>
+      <div style="font-size:11px;font-weight:600;color:var(--sw)">Draft</div>
+    </div>
+    <div class="m-form">
+      <div class="m-field">
+        <div class="m-label">Dish name *</div>
+        <input class="m-inp" type="text" value="Dal Khichdi" placeholder="Dish name…">
+      </div>
+      <div class="m-field">
+        <div class="m-label">Meal type *</div>
+        <div class="m-chips">
+          <div class="m-chip">Breakfast</div>
+          <div class="m-chip">Lunch</div>
+          <div class="m-chip sel">Dinner</div>
+          <div class="m-chip">Snack</div>
+        </div>
+      </div>
+      <div class="m-field">
+        <div class="m-label">Diet type *</div>
+        <div class="m-chips">
+          <div class="m-chip sel" style="border-color:var(--gr);background:var(--grt);color:var(--gr)">Vegetarian</div>
+          <div class="m-chip">Non-Veg</div>
+          <div class="m-chip">Vegan</div>
+          <div class="m-chip">Keto</div>
+        </div>
+      </div>
+      <div class="m-field">
+        <div class="m-label">Ingredients (per serving)</div>
+        <div class="m-ing-preview">
+          <div class="m-ing-row"><span class="m-ing-n">Yellow moong dal</span><span class="m-ing-q">80g</span></div>
+          <div class="m-ing-row"><span class="m-ing-n">Basmati rice</span><span class="m-ing-q">60g</span></div>
+          <div class="m-ing-row"><span class="m-ing-n">Tomato, medium</span><span class="m-ing-q">1 pc</span></div>
+          <div class="m-ing-row"><span class="m-ing-n">Cumin seeds</span><span class="m-ing-q">½ tsp</span></div>
+          <div class="m-ing-row"><span class="m-ing-n">Ghee</span><span class="m-ing-q">1 tsp</span></div>
+          <button class="m-add-ing"><svg class="icon-xs" style="stroke:var(--sw)"><use href="#i-plus"/></svg>Add ingredient</button>
+        </div>
+      </div>
+      <div class="m-field">
+        <div class="m-label">Prep time (min) *</div>
+        <input class="m-inp" type="number" value="20" placeholder="Minutes…">
+      </div>
+      <div class="m-field">
+        <div class="m-label">Visibility</div>
+        <div class="m-chips">
+          <div class="m-chip sel">Public</div>
+          <div class="m-chip">Private</div>
+        </div>
+      </div>
+    </div>
+    <div class="m-cta-bar">
+      <button class="m-btn-d">Save draft</button>
+      <button class="m-btn-p">Publish template</button>
+    </div>
+  </div>
+  </div>
+  </div>
+</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><svg class="icon-sm"><use href="#i-check"/></svg><span id="toast-msg"></span></div>
+
+<!-- DEV -->
+<button class="dev-btn" onclick="toggleDev()"><div class="dev-dot"></div>DEV</button>
+<aside class="dev-panel" id="devPanel">
+  <div class="dev-ph"><div class="dev-pt">Dev Guide <span class="dev-stag">CREATE TEMPLATE</span></div><button class="dev-cls" onclick="toggleDev()">&#10005;</button></div>
+  <div class="dev-tabs">
+    <button class="d-tab act" onclick="showTab('api',this)">API</button>
+    <button class="d-tab" onclick="showTab('schema',this)">Schema</button>
+    <button class="d-tab" onclick="showTab('pitfalls',this)">Pitfalls</button>
+    <button class="d-tab" onclick="showTab('security',this)">Security</button>
+    <button class="d-tab" onclick="showTab('ui',this)">UI Rules</button>
+  </div>
+  <div class="dev-body">
+    <div class="d-sub act" id="d-api">
+      <div class="d-sec"><div class="d-lbl">Ingredient search — Instamart catalog</div>
+      <div class="code"><span class="co">// Search as user types — debounced 250ms</span>
+<span class="om">GET</span> <span class="pa">/api/ingredients/search</span>?q=<span class="st">"spinach"</span>&amp;limit=<span class="vl">8</span>
+Response: [{
+  id, name,
+  default_unit: <span class="st">"g"</span>,
+  instamart_sku: <span class="st">"SKU_12345"</span>,
+  kcal_per_100g: <span class="vl">23</span>,
+  protein_per_100g: <span class="vl">2.9</span>,
+  in_stock: <span class="vl">true</span>
+}]
+
+<span class="co">// Nutrition auto-calc — triggered server-side</span>
+<span class="om">POST</span> <span class="pa">/api/templates/calculate-nutrition</span>
+Body: { ingredients: [{id, qty, unit}] }
+Response: {
+  kcal, protein_g, carb_g, fat_g,
+  est_cost_inr,
+  suggested_goal_tags: [<span class="st">"loss"</span>, <span class="st">"light"</span>]
+}</div></div>
+      <div class="d-sec"><div class="d-lbl">Save draft vs Publish</div>
+      <div class="code"><span class="co">// Save draft — localStorage only, no DB write</span>
+localStorage.setItem(<span class="st">'template_draft'</span>,
+  JSON.stringify(formState))
+
+<span class="co">// Publish — creates the DB row</span>
+<span class="om">POST</span> <span class="pa">/api/templates</span>
+<span class="co">// auth required</span>
+Body: {
+  dish_name, meal_type, diet_type,
+  prep_minutes, default_servings,
+  is_public, goal_tags[],
+  ingredients: [{ingredient_id, qty, unit}],
+  instructions: [{step_number, text, tip}]
+}
+<span class="ok">201</span>: { id, slug }
+<span class="co">// Redirect to /templates/:slug after publish</span>
+
+<span class="om">PATCH</span> <span class="pa">/api/templates/:id</span>
+<span class="co">// Edit existing template (only creator)</span></div></div>
+    </div>
+    <div class="d-sub" id="d-schema">
+      <div class="d-sec"><div class="d-lbl">Ingredient catalog — separate from template ingredients</div>
+      <div class="code">ingredients   <span class="co">// master catalog, read-only for users</span>
+  id, name
+  default_unit      text
+  instamart_sku     text    <span class="co">// links to Instamart item</span>
+  kcal_per_100g     numeric
+  protein_per_100g  numeric
+  carb_per_100g     numeric
+  fat_per_100g      numeric
+  updated_at        timestamp
+
+template_ingredients  <span class="co">// user's recipe quantities</span>
+  id, template_id
+  ingredient_id  <span class="co">// FK to catalog — never free text</span>
+  qty_per_serving  NUMERIC
+  unit             text
+
+<span class="co">// Nutrition is NOT stored on template_ingredients</span>
+<span class="co">// It's always calculated from catalog at query time</span>
+<span class="co">// This way, if Instamart updates a product's nutrition,</span>
+<span class="co">// all templates using it auto-update</span></div></div>
+    </div>
+    <div class="d-sub" id="d-pitfalls">
+      <div class="d-sec"><div class="d-lbl">Critical implementation mistakes</div>
+      <ul class="dl warn">
+        <li><strong>Free-text ingredients break cart-build.</strong> Every ingredient must be selected from the catalog (autocomplete dropdown). Never allow free text that doesn't map to an ingredient_id — it will cause cart/build to fail silently.</li>
+        <li><strong>Client-side kcal calculation is wrong.</strong> Do not calculate nutrition in the browser. Call /api/templates/calculate-nutrition. The nutrition database handles unit conversions (1 tsp ghee → grams → kcal). Client math will be off by 20–40%.</li>
+        <li><strong>Auto-save to DB is expensive.</strong> Draft auto-save goes to localStorage every 30s. Only write to DB on explicit Publish or manual "Save draft" click. A user starting a template and closing the tab should not create a DB row.</li>
+        <li><strong>Publish without minimum fields.</strong> Publish button is disabled unless: dish_name is filled, meal_type is selected, diet_type is selected, at least 2 ingredients are added, prep_minutes is filled. Enforce both client-side and server-side.</li>
+        <li><strong>Instructions order breaks on edit.</strong> Instructions are ordered by step_number. When a step is deleted, renumber remaining steps in the same PATCH call — never leave gaps (1, 3, 4) in step_number.</li>
+        <li><strong>Duplicate ingredient rows.</strong> If a user adds "spinach" twice, merge the rows server-side and show a toast "Combined 2 spinach entries". Two rows of the same ingredient breaks cart deduplication.</li>
+      </ul></div>
+    </div>
+    <div class="d-sub" id="d-security">
+      <div class="d-sec"><div class="d-lbl">Ownership and trust</div>
+      <ul class="dl">
+        <li>On publish: set creator_id = auth user's ID from JWT. Never from request body.</li>
+        <li>PATCH /api/templates/:id: verify req.user.id === template.creator_id before any update. Return 403 otherwise.</li>
+        <li>est_cost_per_serving: read-only field. Calculated server-side from live Instamart prices. A creator cannot set their own cost — it would be misleading.</li>
+        <li>Nutrition values: same as cost — calculated server-side from the catalog, never from user input. Prevent creators from falsely claiming "50 kcal" on a calorie-dense dish.</li>
+        <li>Moderation: Phase 1 — no moderation. Add a report function. Phase 2 — flag templates with suspicious nutrition values (&gt;2000 kcal for a single meal) for review.</li>
+      </ul></div>
+    </div>
+    <div class="d-sub" id="d-ui">
+      <div class="d-sec"><div class="d-lbl">Swiggy DS — create template rules</div>
+      <ul class="dl">
+        <li><strong>Live preview is the reward signal.</strong> As the user types the dish name, the preview card on the right updates in real-time. This is what keeps creators engaged — they can see the result forming.</li>
+        <li><strong>Ingredient row layout:</strong> [search input — flex:1] [qty — 80px] [unit select — 90px] [delete — 32px]. All on one row. Never stack them vertically — it makes the list feel long.</li>
+        <li><strong>Autocomplete dropdown:</strong> Shows ingredient name + "On Instamart" badge in green. If the ingredient is not in the catalog, show "Add to catalog request" option. Never allow free text selection.</li>
+        <li><strong>Est. cost per serving:</strong> Read-only field with a "auto" placeholder. Show a tooltip "Calculated from live Instamart prices". Never editable — trust is built on accurate pricing.</li>
+        <li><strong>Goal tag auto-suggest:</strong> After nutrition is calculated, show "Auto-tagged: Weight Loss" in the preview panel. User can override by deselecting chips.</li>
+        <li><strong>Publish button:</strong> Disabled state = grey fill, "not enough info" status text. Enabled = orange fill. Never show a red disabled state — it reads as an error.</li>
+        <li><strong>Draft save status:</strong> "Draft saved" appears in the page header with a green check. Auto-clears after 3 seconds. Never a persistent status label that takes space.</li>
+        <li><strong>Mobile:</strong> Single column, chip selectors for meal type and diet type (not dropdowns — chips are faster to tap). Ingredients shown as a compact list, not a full row editor.</li>
+      </ul></div>
+    </div>
+  </div>
+</aside>
+
+<script>
+/* ── STATE ── */
+var S={
+  name:'',mealtype:'',diet:'veg',goals:[],
+  time:'',servings:2,vis:'public',
+  ingredients:[
+    {id:1,name:'Yellow moong dal',qty:'80',unit:'g'},
+    {id:2,name:'Basmati rice',qty:'60',unit:'g'},
+    {id:3,name:'Tomato, medium',qty:'1',unit:'pc'}
+  ],
+  steps:['Rinse dal and rice until water runs clear. Soak 15 min if time allows.','Heat ghee, add cumin seeds, let splutter. Add onion and tomato, cook 3–4 min.']
+};
+
+/* ── INGREDIENT CATALOG (demo) ── */
+var CATALOG=[
+  {id:1,name:'Yellow moong dal',unit:'g',kcal:347,avail:true},
+  {id:2,name:'Basmati rice',unit:'g',kcal:356,avail:true},
+  {id:3,name:'Tomato, medium',unit:'pc',kcal:18,avail:true},
+  {id:4,name:'Onion, small',unit:'pc',kcal:40,avail:true},
+  {id:5,name:'Ghee',unit:'tsp',kcal:45,avail:true},
+  {id:6,name:'Cumin seeds',unit:'tsp',kcal:8,avail:true},
+  {id:7,name:'Turmeric powder',unit:'tsp',kcal:8,avail:true},
+  {id:8,name:'Baby spinach',unit:'g',kcal:23,avail:true},
+  {id:9,name:'Paneer, cubed',unit:'g',kcal:265,avail:true},
+  {id:10,name:'Oats, rolled',unit:'g',kcal:389,avail:true},
+  {id:11,name:'Banana',unit:'pc',kcal:89,avail:true},
+  {id:12,name:'Greek yogurt',unit:'g',kcal:59,avail:true},
+  {id:13,name:'Chicken breast',unit:'g',kcal:165,avail:true},
+  {id:14,name:'Eggs',unit:'pc',kcal:78,avail:true},
+  {id:15,name:'Lemon',unit:'pc',kcal:17,avail:true},
+];
+
+/* ── RENDER INGREDIENTS ── */
+function renderIngredients(){
+  var el=document.getElementById('ing-builder');
+  if(!el)return;
+  el.innerHTML=S.ingredients.map(function(ing,i){
+    return'<div class="ing-row" id="ing-'+i+'">'
+      +'<div class="ing-search-wrap">'
+      +'<input class="ing-input" type="text" value="'+escH(ing.name)+'" placeholder="Search ingredient…" oninput="onIngSearch(this,'+i+')" onfocus="showAC(this,'+i+')" onblur="hideAC('+i+')">'
+      +'<div class="ac-drop" id="ac-'+i+'"></div>'
+      +'</div>'
+      +'<input class="ing-qty" type="text" value="'+escH(ing.qty)+'" placeholder="Qty" oninput="S.ingredients['+i+'].qty=this.value;calcNutrition()">'
+      +'<select class="ing-unit" onchange="S.ingredients['+i+'].unit=this.value;calcNutrition()">'
+      +['g','ml','tsp','tbsp','pc','cup'].map(function(u){return'<option'+(u===ing.unit?' selected':'')+'>'+u+'</option>';}).join('')
+      +'</select>'
+      +'<button class="ing-del" onclick="delIngredient('+i+')" title="Remove"><svg class="icon-xs"><use href="#i-x"/></svg></button>'
+      +'</div>';
+  }).join('');
+  checkPublishReady();
+}
+
+function addIngredient(){
+  S.ingredients.push({id:null,name:'',qty:'',unit:'g'});
+  renderIngredients();
+  var inputs=document.querySelectorAll('.ing-input');
+  if(inputs.length)inputs[inputs.length-1].focus();
+}
+
+function delIngredient(i){
+  S.ingredients.splice(i,1);
+  renderIngredients();
+  calcNutrition();
+}
+
+/* ── AUTOCOMPLETE ── */
+function onIngSearch(el,idx){
+  S.ingredients[idx].name=el.value;
+  var q=el.value.toLowerCase();
+  var drop=document.getElementById('ac-'+idx);
+  if(!drop)return;
+  if(q.length<2){drop.classList.remove('vis');return;}
+  var matches=CATALOG.filter(function(c){return c.name.toLowerCase().indexOf(q)>-1;}).slice(0,6);
+  drop.innerHTML=matches.map(function(c){
+    return'<div class="ac-item" onmousedown="selIngredient('+idx+','+c.id+')"><span class="ac-item-name">'+c.name+'</span><div class="ac-item-meta">'+(c.avail?'<span class="ac-item-avail">On Instamart</span>':'<span>Not listed</span>')+'</div></div>';
+  }).join('')||(matches.length===0?'<div class="ac-item" style="color:var(--mu)">No catalog match — type more</div>':'');
+  drop.classList.add('vis');
+}
+function showAC(el,idx){if(el.value.length>=2)onIngSearch(el,idx);}
+function hideAC(idx){setTimeout(function(){var d=document.getElementById('ac-'+idx);if(d)d.classList.remove('vis');},150);}
+function selIngredient(idx,cid){
+  var cat=CATALOG.find(function(c){return c.id===cid;});
+  if(!cat)return;
+  S.ingredients[idx]={id:cid,name:cat.name,qty:S.ingredients[idx].qty||'100',unit:cat.unit};
+  renderIngredients();
+  calcNutrition();
+}
+
+/* ── STEPS ── */
+function renderSteps(){
+  var el=document.getElementById('step-list');
+  if(!el)return;
+  el.innerHTML=S.steps.map(function(txt,i){
+    return'<div class="step-row">'
+      +'<div class="step-num-badge">'+(i+1)+'</div>'
+      +'<textarea class="step-input" rows="2" placeholder="Describe step '+(i+1)+'…" oninput="S.steps['+i+']=this.value">'+escH(txt)+'</textarea>'
+      +'<button class="step-del" onclick="delStep('+i+')"><svg class="icon-xs"><use href="#i-x"/></svg></button>'
+      +'</div>';
+  }).join('');
+}
+function addStep(){S.steps.push('');renderSteps();var ta=document.querySelectorAll('.step-input');if(ta.length)ta[ta.length-1].focus();}
+function delStep(i){S.steps.splice(i,1);renderSteps();}
+
+/* ── DIET / GOAL TAGS ── */
+function selDiet(el,val){
+  S.diet=val;
+  document.querySelectorAll('#diet-chips .chip').forEach(function(c){c.classList.remove('sel','sel-green');});
+  el.classList.add(val==='veg'||val==='vegan'?'sel-green':'sel');
+  updatePreview();
+}
+function togGoal(el,val){
+  el.classList.toggle('sel');
+  if(el.classList.contains('sel')){if(S.goals.indexOf(val)<0)S.goals.push(val);}
+  else{S.goals=S.goals.filter(function(g){return g!==val;});}
+  updatePreview();
+}
+
+/* ── VISIBILITY ── */
+function setVis(v){
+  S.vis=v;
+  document.getElementById('vt-public').classList.toggle('act',v==='public');
+  document.getElementById('vt-private').classList.toggle('act',v==='private');
+  document.getElementById('vis-desc').textContent=v==='public'
+    ?'Public templates appear in the template browser. Others can fork your recipe. You keep attribution.'
+    :'Only you can see and use this template. You can make it public later.';
+}
+
+/* ── NUTRITION CALC (demo: simple estimate) ── */
+function calcNutrition(){
+  var totalKcal=0;
+  S.ingredients.forEach(function(ing){
+    var cat=CATALOG.find(function(c){return c.id===ing.id;});
+    if(!cat)return;
+    var qty=parseFloat(ing.qty)||0;
+    var unit=ing.unit;
+    var kcalPer=(cat.kcal||0);
+    if(unit==='g'||unit==='ml'){totalKcal+=kcalPer*(qty/100);}
+    else if(unit==='tsp'){totalKcal+=kcalPer*(qty*4.9/100);}
+    else if(unit==='tbsp'){totalKcal+=kcalPer*(qty*14.8/100);}
+    else if(unit==='pc'){totalKcal+=kcalPer*(qty);}
+    else if(unit==='cup'){totalKcal+=kcalPer*(qty*240/100);}
+  });
+  totalKcal=Math.round(totalKcal);
+  var prot=Math.round(totalKcal*0.074);
+  var carb=Math.round(totalKcal*0.12);
+  var fat=Math.round(totalKcal*0.026);
+  var cost=Math.round(totalKcal*0.18);
+  document.getElementById('calc-kcal').textContent=totalKcal>0?totalKcal+' kcal':'—';
+  document.getElementById('calc-prot').textContent=totalKcal>0?prot+'g':'—';
+  document.getElementById('calc-carb').textContent=totalKcal>0?carb+'g':'—';
+  document.getElementById('calc-fat').textContent=totalKcal>0?fat+'g':'—';
+  document.getElementById('calc-cost').textContent=totalKcal>0?'₹'+cost:'—';
+  document.getElementById('prev-kcal').textContent=totalKcal>0?totalKcal+' kcal':'—';
+  // Goal match auto-suggest
+  var gm=document.getElementById('goal-match');
+  var gmt=document.getElementById('goal-match-text');
+  if(totalKcal>0&&gm&&gmt){
+    var suggestion=totalKcal<300?'Light meal, Weight Loss':totalKcal<450?'Weight Loss, Maintain':totalKcal<600?'Maintain, Muscle Gain':'Muscle Gain';
+    gm.style.display='block';gmt.textContent=suggestion;
+  } else if(gm){gm.style.display='none';}
+  updatePreview();
+}
+
+/* ── LIVE PREVIEW ── */
+function updatePreview(){
+  S.name=document.getElementById('f-name').value||'';
+  S.time=document.getElementById('f-time').value||'';
+  var pn=document.getElementById('prev-name');
+  if(pn){pn.textContent=S.name||'Your dish name';pn.style.color=S.name?'var(--ch)':'var(--mu)';}
+  var pt=document.getElementById('prev-time');
+  if(pt)pt.textContent=S.time?S.time+' min':'—';
+  var tags=document.getElementById('prev-tags');
+  if(tags){
+    var html='';
+    if(S.diet==='veg'||S.diet==='vegan')html+='<span class="prev-tag veg">'+({veg:'Vegetarian',vegan:'Vegan'}[S.diet])+'</span>';
+    else html+='<span class="prev-tag">'+S.diet+'</span>';
+    if(S.goals.length)html+='<span class="prev-tag goal">'+({loss:'Weight Loss',gain:'Muscle Gain',maintain:'Maintain',highprot:'High Protein',light:'Light',quick:'Quick'}[S.goals[0]]||S.goals[0])+'</span>';
+    tags.innerHTML=html;
+  }
+  checkPublishReady();
+}
+
+function checkPublishReady(){
+  var name=(document.getElementById('f-name')||{}).value||'';
+  var time=(document.getElementById('f-time')||{}).value||'';
+  var mtype=(document.getElementById('f-mealtype')||{}).value||'';
+  var ingCount=S.ingredients.filter(function(i){return i.id&&i.qty;}).length;
+  var ready=name.length>0&&time.length>0&&mtype.length>0&&ingCount>=2;
+  var btn=document.getElementById('pub-btn');
+  if(btn)btn.disabled=!ready;
+  var status=document.getElementById('action-status');
+  if(status){
+    if(!name)status.textContent='Add a dish name to continue';
+    else if(!mtype)status.textContent='Select a meal type';
+    else if(ingCount<2)status.textContent='Add at least 2 ingredients from the Instamart catalog';
+    else if(!time)status.textContent='Add prep time';
+    else{status.textContent=ingCount+' ingredients · '+S.steps.length+' steps · Ready to publish';}
+  }
+}
+
+/* ── ACTIONS ── */
+function saveDraft(){
+  localStorage.setItem('template_draft',JSON.stringify(S));
+  var ss=document.getElementById('save-status');
+  if(ss){ss.style.display='flex';setTimeout(function(){ss.style.display='none';},3000);}
+  showToast('Draft saved to this browser');
+}
+
+function publish(){
+  var name=(document.getElementById('f-name')||{}).value||'';
+  if(!name){showToast('Add a dish name first');return;}
+  showToast('Publishing "'+name+'"…');
+  setTimeout(function(){showToast('"'+name+'" is now live in the template browser');},1800);
+}
+
+function escH(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+/* ── SCALE ── */
+(function(){
+  var wrap=document.getElementById('m-wrap');
+  var area=document.querySelector('.mp-area');
+  if(!wrap||!area)return;
+  function fit(){var w=area.offsetWidth-10;var s=Math.min(w/375,.85);wrap.style.transform='scale('+s+')';wrap.style.marginLeft=0;}
+  fit();window.addEventListener('resize',fit);
+})();
+
+/* ── TOAST ── */
+function showToast(msg){
+  var t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  if(t._t)clearTimeout(t._t);
+  t._t=setTimeout(function(){t.classList.remove('show');},2500);
+}
+
+/* ── DEV ── */
+function toggleDev(){document.getElementById('devPanel').classList.toggle('open');}
+function showTab(id,btn){document.querySelectorAll('.d-sub').forEach(function(s){s.classList.remove('act');});document.querySelectorAll('.d-tab').forEach(function(t){t.classList.remove('act');});document.getElementById('d-'+id).classList.add('act');btn.classList.add('act');}
+
+/* ── INIT ── */
+renderIngredients();
+renderSteps();
+calcNutrition();
+updatePreview();
+</script>
+</body>
+</html>

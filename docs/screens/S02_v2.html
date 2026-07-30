@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PlateCart · Screen 02 · Onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sw:#FC8019;--swt:rgba(252,128,25,.08);--swb:rgba(252,128,25,.3);
+  --ch:#282C3F;--mu:#686B78;--bo:#E9E9EB;--bg:#FFFFFF;--pg:#F4F6FB;
+  --gr:#60B246;--grt:rgba(96,178,70,.08);
+  --f:'DM Sans',system-ui,sans-serif;--r:8px;
+  --meta:44px;--dev:400px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-family:var(--f);-webkit-font-smoothing:antialiased;background:#E0E0E0}
+body{overflow:hidden;height:100vh;display:flex;flex-direction:column}
+
+/* META */
+.meta{height:var(--meta);background:var(--ch);display:flex;align-items:center;flex-shrink:0;z-index:50;overflow:hidden}
+.meta-l{display:flex;align-items:center;gap:8px;padding:0 14px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.1)}
+.meta-logo{font-weight:700;font-size:12px;color:#fff;letter-spacing:-.02em}
+.meta-logo em{font-style:normal;color:var(--sw)}
+.meta-badge{background:var(--sw);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.05em}
+.screen-links{display:flex;align-items:center;gap:2px;overflow-x:auto;flex:1;padding:0 10px;scrollbar-width:none}
+.screen-links::-webkit-scrollbar{display:none}
+.sl{font-size:10px;font-weight:500;color:rgba(255,255,255,.38);padding:4px 9px;border-radius:99px;text-decoration:none;white-space:nowrap;border:1px solid transparent;transition:.12s}
+.sl:hover{color:rgba(255,255,255,.7);background:rgba(255,255,255,.06)}
+.sl.cur{color:var(--sw);background:rgba(252,128,25,.12);border-color:rgba(252,128,25,.3);font-weight:700}
+.sl.done{color:rgba(255,255,255,.55)}
+.meta-r{padding:0 14px;flex-shrink:0;border-left:1px solid rgba(255,255,255,.1)}
+.ds-pill{border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.45);font-size:9px;padding:3px 8px;border-radius:99px;white-space:nowrap}
+
+/* SPLIT */
+.split{flex:1;display:flex;overflow:hidden}
+
+/* DESKTOP 85% */
+.dp{flex:0 0 85%;display:flex;flex-direction:column;border-right:1px solid #C0C0C0;overflow:hidden}
+.browser{background:#D8D8D8;padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #C0C0C0;flex-shrink:0}
+.b-dots{display:flex;gap:5px}
+.b-dot{width:10px;height:10px;border-radius:50%}
+.b-dot.r{background:#FF5F57}.b-dot.y{background:#FFBD2E}.b-dot.g{background:#28C840}
+.b-url{flex:1;background:#fff;border:1px solid #C0C0C0;border-radius:4px;padding:3px 10px;font-size:11px;color:#555;font-family:monospace}
+.app-scroll{flex:1;overflow-y:auto;background:var(--pg)}
+.app-scroll::-webkit-scrollbar{width:4px}
+.app-scroll::-webkit-scrollbar-thumb{background:var(--bo);border-radius:2px}
+
+/* ONBOARDING SHELL */
+.ob-shell{min-height:100%;display:flex;flex-direction:column;align-items:center;padding:28px 24px 40px}
+.ob-logo{font-size:20px;font-weight:700;color:var(--ch);letter-spacing:-.03em;margin-bottom:22px}
+.ob-logo em{font-style:normal;color:var(--sw)}
+
+/* PROGRESS */
+.ob-prog{display:flex;gap:5px;margin-bottom:6px}
+.prog-seg{height:5px;width:48px;border-radius:3px;background:var(--bo);transition:background .25s}
+.prog-seg.fill{background:var(--sw)}
+.ob-step-lbl{font-size:12px;color:var(--mu);margin-bottom:24px}
+.ob-step-lbl strong{color:var(--ch)}
+
+/* LAYOUT */
+.ob-layout{display:flex;gap:20px;width:100%;max-width:960px}
+.ob-left{flex:1;min-width:0}
+.ob-right{width:280px;flex-shrink:0}
+
+/* STEP HEADINGS */
+.step-h{font-size:23px;font-weight:700;color:var(--ch);letter-spacing:-.025em;margin-bottom:5px}
+.step-sub{font-size:13px;color:var(--mu);margin-bottom:20px;line-height:1.5}
+
+/* STEP CONTENT visibility */
+.step-content{display:none}.step-content.active{display:block}
+.step-preview{display:none}.step-preview.active{display:block}
+
+/* ── STEP 1: GOAL CARDS ── */
+.goal-cards{display:flex;flex-direction:column;gap:9px}
+.gc{background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:15px 16px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:12px;position:relative}
+.gc:hover{border-color:#C8C8CC;box-shadow:0 2px 8px rgba(40,44,63,.06)}
+.gc.sel{border-color:var(--sw);background:var(--swt)}
+.gc-icon{width:42px;height:42px;border-radius:var(--r);background:var(--pg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:.15s}
+.gc.sel .gc-icon{background:rgba(252,128,25,.12)}
+.gc-body{flex:1}
+.gc-row{display:flex;align-items:center;gap:7px;margin-bottom:3px}
+.gc-t{font-size:14px;font-weight:700;color:var(--ch);letter-spacing:-.01em}
+.pop-tag{background:#FFF0E0;color:var(--sw);font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.04em}
+.gc-d{font-size:12px;color:var(--mu);line-height:1.4;margin-bottom:7px}
+.gc-chips{display:flex;gap:6px}
+.gc-chip{font-size:10px;color:var(--mu);background:var(--pg);padding:2px 7px;border-radius:99px}
+.gc.sel .gc-chip{background:rgba(252,128,25,.1);color:var(--sw)}
+.gc-check{position:absolute;top:13px;right:13px;width:20px;height:20px;border-radius:50%;background:var(--sw);display:none;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700}
+.gc.sel .gc-check{display:flex}
+
+/* ── STEP 2: DIET TYPE ── */
+.diet-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.dc{background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:11px}
+.dc:hover{border-color:#C8C8CC;background:#FAFAFA}
+.dc.sel{border-color:var(--sw);background:var(--swt)}
+.dc-icon{font-size:24px;flex-shrink:0;width:36px;text-align:center}
+.dc-body .dc-t{font-size:13px;font-weight:700;color:var(--ch);margin-bottom:2px}
+.dc-body .dc-d{font-size:11px;color:var(--mu)}
+.dc-check{margin-left:auto;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--bo);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--mu);flex-shrink:0;transition:.15s}
+.dc.sel .dc-check{background:var(--sw);border-color:var(--sw);color:#fff}
+
+/* ── STEP 3: HOUSEHOLD ── */
+.hh-row{display:flex;gap:10px}
+.hh{flex:1;background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:18px 10px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:8px}
+.hh:hover{border-color:#C8C8CC;background:#FAFAFA}
+.hh.sel{border-color:var(--sw);background:var(--swt)}
+.hh-icon{font-size:28px}
+.hh-num{font-size:20px;font-weight:700;color:var(--ch);letter-spacing:-.02em}
+.hh-lbl{font-size:11px;color:var(--mu);text-align:center}
+.hh.sel .hh-num{color:var(--sw)}
+.hh-note{margin-top:16px;background:var(--pg);border-radius:var(--r);padding:12px;font-size:12px;color:var(--mu);line-height:1.5}
+.hh-note strong{color:var(--ch)}
+
+/* ── STEP 4: BUDGET ── */
+.budget-segs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.bseg{flex:1;min-width:100px;background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:13px 10px;cursor:pointer;transition:all .15s;text-align:center}
+.bseg:hover{border-color:#C8C8CC;background:#FAFAFA}
+.bseg.sel{border-color:var(--sw);background:var(--swt)}
+.bseg-val{font-size:17px;font-weight:700;color:var(--ch);letter-spacing:-.02em;margin-bottom:3px}
+.bseg.sel .bseg-val{color:var(--sw)}
+.bseg-lbl{font-size:11px;color:var(--mu)}
+.custom-slider-wrap{background:var(--pg);border-radius:var(--r);padding:16px;display:none}
+.custom-slider-wrap.vis{display:block}
+.slider-row{display:flex;align-items:center;gap:12px;margin-top:10px}
+.slider-row input[type=range]{flex:1;accent-color:var(--sw);height:4px}
+.slider-val{font-size:16px;font-weight:700;color:var(--sw);min-width:70px;text-align:right}
+.budget-items{margin-top:14px}
+.budget-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bo);font-size:12px}
+.budget-item:last-child{border-bottom:none}
+.bi-dot{width:7px;height:7px;border-radius:50%;background:var(--gr);flex-shrink:0}
+.bi-dot.or{background:var(--sw)}
+
+/* ── STEP 5: EXCLUSIONS ── */
+.excl-note{font-size:12px;color:var(--mu);background:var(--pg);border-radius:var(--r);padding:10px 12px;margin-bottom:14px;line-height:1.5}
+.excl-none{background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:12px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.excl-none.sel{border-color:var(--sw);background:var(--swt)}
+.excl-none-t{font-size:13px;font-weight:700;color:var(--ch)}
+.excl-none-d{font-size:11px;color:var(--mu)}
+.excl-check{margin-left:auto;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--bo);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;transition:.15s}
+.excl-none.sel .excl-check{background:var(--sw);border-color:var(--sw);color:#fff}
+.excl-grid{display:flex;flex-wrap:wrap;gap:8px}
+.etag{display:flex;align-items:center;gap:6px;background:var(--pg);border:1.5px solid var(--bo);border-radius:99px;padding:7px 13px;cursor:pointer;transition:all .15s;font-size:12px;font-weight:500;color:var(--ch)}
+.etag:hover{border-color:#C8C8CC;background:#EAEAEE}
+.etag.sel{border-color:var(--sw);background:var(--swt);color:var(--sw)}
+.etag-icon{font-size:14px}
+
+/* ── STEP 6: COMPLETE ── */
+.complete-screen{text-align:center;padding:20px 0}
+.complete-check{width:64px;height:64px;border-radius:50%;background:var(--gr);color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.complete-h{font-size:22px;font-weight:700;color:var(--ch);letter-spacing:-.025em;margin-bottom:6px}
+.complete-sub{font-size:13px;color:var(--mu);margin-bottom:24px}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;text-align:left}
+.sum-item{background:var(--pg);border-radius:var(--r);padding:12px}
+.sum-lbl{font-size:10px;font-weight:700;color:var(--mu);letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.sum-val{font-size:13px;font-weight:700;color:var(--ch)}
+.go-btn{width:100%;padding:13px;background:var(--sw);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:-.01em}
+
+/* ── PREVIEW PANEL ── */
+.preview-card{background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);padding:18px;position:sticky;top:16px}
+.pv-title{font-size:10px;font-weight:700;color:var(--mu);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.pv-h{font-size:15px;font-weight:700;color:var(--ch);letter-spacing:-.02em;margin-bottom:3px}
+.pv-sub{font-size:11px;color:var(--mu);margin-bottom:14px}
+.pv-meal{background:var(--pg);border-radius:6px;padding:9px 10px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.pv-mi{font-size:14px;width:22px;flex-shrink:0}
+.pv-mt{flex:1}
+.pv-mn{font-size:12px;font-weight:700;color:var(--ch)}
+.pv-mm{font-size:10px;color:var(--mu)}
+.pv-mk{font-size:11px;font-weight:700;color:var(--sw)}
+.pv-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bo);font-size:12px}
+.pv-row:last-of-type{border-bottom:none}
+.pv-rl{color:var(--mu)}.pv-rv{font-weight:700;color:var(--ch)}
+.pv-rv.g{color:var(--gr)}
+.pv-tip{margin-top:12px;background:var(--swt);border-radius:6px;padding:10px 11px;font-size:11px;color:var(--ch);line-height:1.5}
+.pv-tip strong{color:var(--sw)}
+.pv-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.pv-tag{font-size:10px;background:var(--pg);border-radius:99px;padding:3px 8px;color:var(--mu)}
+.pv-template{background:var(--pg);border-radius:6px;padding:9px;margin-bottom:6px}
+.pv-tn{font-size:12px;font-weight:700;color:var(--ch);margin-bottom:2px}
+.pv-td{font-size:10px;color:var(--mu)}
+.pv-bbar{height:6px;background:var(--bo);border-radius:3px;overflow:hidden;margin:8px 0}
+.pv-bfill{height:100%;background:var(--sw);border-radius:3px;transition:width .3s}
+.pv-hh-img{font-size:32px;text-align:center;margin:10px 0}
+
+/* NAV */
+.ob-nav{display:flex;align-items:center;justify-content:space-between;margin-top:20px;width:100%;max-width:960px}
+.ob-back-btn{font-size:13px;font-weight:600;color:var(--mu);background:none;border:none;cursor:pointer;font-family:var(--f);padding:0;opacity:.6;transition:.12s}
+.ob-back-btn:hover{opacity:1;color:var(--ch)}
+.ob-back-btn:disabled{opacity:.2;cursor:not-allowed}
+.ob-skip{font-size:12px;color:var(--mu);background:none;border:none;cursor:pointer;font-family:var(--f);text-decoration:underline;text-underline-offset:2px}
+.ob-continue{background:var(--sw);color:#fff;border:none;border-radius:var(--r);padding:11px 28px;font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:-.01em}
+.ob-continue:hover{opacity:.92}
+.ob-continue:disabled{background:var(--pg);color:var(--mu);border:1.5px solid var(--bo);cursor:not-allowed}
+
+/* Social proof */
+.social-proof{margin-top:14px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mu)}
+.sp-avs{display:flex}.sp-av{width:20px;height:20px;border-radius:50%;background:var(--sw);border:2px solid #fff;color:#fff;font-size:7px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-left:-4px}
+.sp-av:first-child{margin-left:0}.sp-av.b{background:var(--gr)}.sp-av.c{background:var(--ch)}
+.priv{margin-top:10px;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mu)}
+
+/* ── MOBILE PANEL ── */
+.mp{flex:0 0 15%;background:#E8E8E8;border-left:1px solid #C0C0C0;display:flex;flex-direction:column;overflow:hidden}
+.mp-hdr{padding:8px 10px 4px;flex-shrink:0}
+.mp-lbl{font-size:8.5px;font-weight:700;color:#999;letter-spacing:.08em;text-transform:uppercase}
+.mp-hint{font-size:8px;color:#BBB;margin-top:1px}
+.mp-area{flex:1;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding:6px 6px 6px}
+.m-wrap{transform-origin:top center;width:375px}
+.m-bg{background:#fff;width:375px}
+
+/* MOBILE UI */
+.m-sb{background:#fff;padding:10px 16px 6px;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;color:#1C1C1E}
+.m-sb-r{display:flex;gap:3px;font-size:10px;align-items:center}
+.m-prog-bar{height:4px;background:var(--bo);display:flex;gap:3px;padding:0 0;margin:0 16px}
+.m-ps{flex:1;background:var(--bo);border-radius:2px;transition:background .25s}
+.m-ps.fill{background:var(--sw)}
+.m-ob-top{padding:16px 18px 0}
+.m-back-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:12px;color:var(--mu)}
+.m-back-btn{font-size:20px;color:var(--ch);cursor:pointer}
+.m-step-info{font-size:11px;color:var(--mu)}
+.m-ob-logo{font-size:17px;font-weight:700;color:var(--ch);letter-spacing:-.02em;margin-bottom:14px}
+.m-ob-logo em{font-style:normal;color:var(--sw)}
+.m-ob-h{font-size:19px;font-weight:700;color:var(--ch);letter-spacing:-.02em;margin-bottom:5px;line-height:1.25}
+.m-ob-sub{font-size:12px;color:var(--mu);margin-bottom:18px;line-height:1.4}
+.m-step{display:none}.m-step.active{display:block}
+
+/* Mobile goal cards */
+.m-gc{background:#fff;border:1.5px solid var(--bo);border-radius:var(--r);padding:13px;display:flex;align-items:center;gap:10px;margin:0 18px 9px;cursor:pointer}
+.m-gc.sel{border-color:var(--sw);background:var(--swt)}
+.m-gc-ic{width:36px;height:36px;background:var(--pg);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.m-gc.sel .m-gc-ic{background:rgba(252,128,25,.1)}
+.m-gc-t{font-size:13px;font-weight:700;color:var(--ch)}
+.m-gc-d{font-size:10px;color:var(--mu);margin-top:1px}
+.m-gc-ck{margin-left:auto;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--bo);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
+.m-gc.sel .m-gc-ck{background:var(--sw);border-color:var(--sw);color:#fff}
+
+/* Mobile diet chips */
+.m-diet-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 18px}
+.m-dc{background:#fff;border:1.5px solid var(--bo);border-radius:var(--r);padding:11px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.m-dc.sel{border-color:var(--sw);background:var(--swt)}
+.m-dc-ic{font-size:20px;flex-shrink:0}
+.m-dc-t{font-size:12px;font-weight:700;color:var(--ch)}
+.m-dc-d{font-size:10px;color:var(--mu)}
+
+/* Mobile household */
+.m-hh-row{display:flex;gap:8px;padding:0 18px}
+.m-hh{flex:1;background:#fff;border:1.5px solid var(--bo);border-radius:var(--r);padding:14px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px}
+.m-hh.sel{border-color:var(--sw);background:var(--swt)}
+.m-hh-ic{font-size:22px}
+.m-hh-n{font-size:18px;font-weight:700;color:var(--ch)}
+.m-hh.sel .m-hh-n{color:var(--sw)}
+.m-hh-l{font-size:9px;color:var(--mu);text-align:center}
+
+/* Mobile budget */
+.m-bsegs{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 18px}
+.m-bs{background:#fff;border:1.5px solid var(--bo);border-radius:var(--r);padding:11px;cursor:pointer;text-align:center}
+.m-bs.sel{border-color:var(--sw);background:var(--swt)}
+.m-bs-v{font-size:15px;font-weight:700;color:var(--ch)}
+.m-bs.sel .m-bs-v{color:var(--sw)}
+.m-bs-l{font-size:10px;color:var(--mu)}
+
+/* Mobile exclusions */
+.m-excl-note{margin:0 18px 12px;padding:9px;background:var(--pg);border-radius:6px;font-size:11px;color:var(--mu);line-height:1.4}
+.m-excl-grid{display:flex;flex-wrap:wrap;gap:7px;padding:0 18px}
+.m-et{background:var(--pg);border:1.5px solid var(--bo);border-radius:99px;padding:6px 12px;font-size:11px;font-weight:500;color:var(--ch);cursor:pointer;display:flex;align-items:center;gap:5px}
+.m-et.sel{border-color:var(--sw);background:var(--swt);color:var(--sw)}
+.m-et-ic{font-size:13px}
+
+/* Mobile complete */
+.m-complete{text-align:center;padding:20px 18px}
+.m-comp-ck{width:52px;height:52px;border-radius:50%;background:var(--gr);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.m-comp-h{font-size:18px;font-weight:700;color:var(--ch);margin-bottom:4px}
+.m-comp-s{font-size:12px;color:var(--mu);margin-bottom:16px}
+.m-sum{background:var(--pg);border-radius:var(--r);padding:10px 12px;margin-bottom:12px;text-align:left}
+.m-sum-row{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid var(--bo)}
+.m-sum-row:last-child{border-bottom:none}
+.m-sum-l{color:var(--mu)}.m-sum-v{font-weight:700;color:var(--ch)}
+.m-go{width:100%;padding:12px;background:var(--sw);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:700}
+
+/* Mobile bottom area */
+.m-bottom-area{padding:18px 18px 14px}
+.m-continue{width:100%;padding:13px;background:var(--sw);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;margin-bottom:9px}
+.m-continue:disabled{background:var(--pg);color:var(--mu);border:1.5px solid var(--bo);cursor:not-allowed}
+.m-skip-lnk{display:block;text-align:center;font-size:11px;color:var(--mu);background:none;border:none;font-family:var(--f);cursor:pointer;padding:4px;text-decoration:underline;text-underline-offset:2px}
+.m-priv{display:flex;align-items:center;justify-content:center;gap:5px;font-size:10px;color:var(--mu);padding:8px 0 0}
+
+/* DEV */
+.dev-btn{position:fixed;bottom:20px;right:20px;z-index:200;background:var(--ch);color:#fff;border:none;border-radius:var(--r);padding:9px 16px;font-family:var(--f);font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,.3);letter-spacing:.04em;transition:.12s}
+.dev-btn:hover{background:#1a1e2e;transform:translateY(-1px)}
+.dev-dot{width:6px;height:6px;border-radius:50%;background:var(--sw)}
+.dev-panel{position:fixed;top:var(--meta);right:0;width:var(--dev);height:calc(100vh - var(--meta));background:#0D1117;color:#E8E8F0;z-index:150;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border-left:1px solid #1E2938;font-size:12px}
+.dev-panel.open{transform:translateX(0)}
+.dev-ph{padding:12px 16px;border-bottom:1px solid #1E2938;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dev-pt{font-family:var(--f);font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.dev-stag{background:var(--sw);color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700}
+.dev-cls{background:none;border:none;color:#555;font-size:18px;cursor:pointer;line-height:1;padding:4px}
+.dev-cls:hover{color:#fff}
+.dev-tabs{display:flex;border-bottom:1px solid #1E2938;padding:0 16px;flex-shrink:0}
+.d-tab{padding:9px 11px;font-family:var(--f);font-size:10px;font-weight:700;color:#555;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;letter-spacing:.06em;transition:.12s}
+.d-tab:hover{color:#888}.d-tab.act{color:var(--sw);border-bottom-color:var(--sw)}
+.dev-body{flex:1;overflow-y:auto;padding:16px}
+.dev-body::-webkit-scrollbar{width:3px}
+.dev-body::-webkit-scrollbar-thumb{background:#1E2938;border-radius:2px}
+.d-sub{display:none}.d-sub.act{display:block}
+.d-sec{margin-bottom:18px}
+.d-lbl{font-family:var(--f);font-size:8.5px;font-weight:700;color:var(--sw);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.code{background:#161B22;border:1px solid #1E2938;border-radius:6px;padding:11px;font-family:'Courier New',monospace;font-size:10.5px;line-height:1.65;color:#A8C8B0;white-space:pre;overflow-x:auto}
+.code .co{color:#3A5040}.code .om{color:var(--sw);font-weight:700}
+.code .pa{color:#93C5FD}.code .st{color:#FCA5A5}
+.code .vl{color:#E8D5A8}.code .ok{color:#6EE7B7}.code .wn{color:#FDE68A}
+.dl{list-style:none;display:flex;flex-direction:column;gap:7px}
+.dl li{display:flex;gap:7px;font-size:11px;line-height:1.5;color:#94A3B8}
+.dl li::before{content:'→';color:var(--sw);flex-shrink:0;margin-top:1px}
+.dl.warn li::before{content:'⚠';color:#FDE68A}
+.dl.ok li::before{content:'✓';color:#6EE7B7}
+</style>
+</head>
+<body>
+
+<!-- META BAR -->
+<header class="meta">
+  <div class="meta-l">
+    <div class="meta-logo">Plate<em>Cart</em></div>
+    <div class="meta-badge">02 / 10</div>
+  </div>
+  <nav class="screen-links">
+    <a class="sl done" href="screen_01_dashboard.html">01 Dashboard</a>
+    <a class="sl cur"  href="screen_02_onboarding.html">02 Onboarding</a>
+    <a class="sl" href="screen_03_meal_plan.html">03 Meal Plan</a>
+    <a class="sl" href="screen_04_template_browser.html">04 Templates</a>
+    <a class="sl" href="screen_05_template_detail.html">05 Detail</a>
+    <a class="sl" href="screen_06_create_template.html">06 Create</a>
+    <a class="sl" href="screen_07_my_templates.html">07 My Templates</a>
+    <a class="sl" href="screen_08_cart_preview.html">08 Cart</a>
+    <a class="sl" href="screen_09_budget_tracker.html">09 Budget</a>
+    <a class="sl" href="screen_10_settings.html">10 Settings</a>
+  </nav>
+  <div class="meta-r"><div class="ds-pill">Swiggy Design System</div></div>
+</header>
+
+<div class="split">
+
+<!-- DESKTOP 85% -->
+<div class="dp">
+  <div class="browser">
+    <div class="b-dots"><div class="b-dot r"></div><div class="b-dot y"></div><div class="b-dot g"></div></div>
+    <div class="b-url"><span style="color:#60B246;margin-right:3px">🔒</span> platecart.app/onboarding</div>
+  </div>
+  <div class="app-scroll">
+  <div class="ob-shell">
+    <div class="ob-logo">Plate<em>Cart</em></div>
+
+    <!-- PROGRESS BAR -->
+    <div class="ob-prog">
+      <div class="prog-seg fill" id="ps1"></div>
+      <div class="prog-seg" id="ps2"></div>
+      <div class="prog-seg" id="ps3"></div>
+      <div class="prog-seg" id="ps4"></div>
+      <div class="prog-seg" id="ps5"></div>
+    </div>
+    <div class="ob-step-lbl" id="step-lbl">Step <strong>1</strong> of 5 · Your Health Goal</div>
+
+    <div class="ob-layout">
+
+      <!-- LEFT: all 5 step contents -->
+      <div class="ob-left">
+
+        <!-- STEP 1: GOAL -->
+        <div class="step-content active" id="sc1">
+          <div class="step-h">What's your health goal?</div>
+          <div class="step-sub">PlateCart builds your grocery list around this. You can change it anytime in Settings.</div>
+          <div class="goal-cards">
+            <div class="gc" onclick="selectGoal(this,'loss')">
+              <div class="gc-icon">🎯</div>
+              <div class="gc-body">
+                <div class="gc-row"><div class="gc-t">Lose Weight</div><div class="pop-tag">MOST POPULAR</div></div>
+                <div class="gc-d">Calorie-controlled meal plans with high-satiety ingredients. Avg deficit: 400–500 kcal/day.</div>
+                <div class="gc-chips"><div class="gc-chip">🔥 1,400–1,600 kcal/day</div><div class="gc-chip">📉 Results from week 2</div></div>
+              </div>
+              <div class="gc-check">✓</div>
+            </div>
+            <div class="gc" onclick="selectGoal(this,'gain')">
+              <div class="gc-icon">💪</div>
+              <div class="gc-body">
+                <div class="gc-row"><div class="gc-t">Gain Muscle</div></div>
+                <div class="gc-d">High-protein, high-calorie plans. Prioritises lean proteins, complex carbs, and healthy fats.</div>
+                <div class="gc-chips"><div class="gc-chip">🔥 2,200–2,500 kcal/day</div><div class="gc-chip">💪 Protein-first approach</div></div>
+              </div>
+              <div class="gc-check">✓</div>
+            </div>
+            <div class="gc" onclick="selectGoal(this,'maintain')">
+              <div class="gc-icon">⚖️</div>
+              <div class="gc-body">
+                <div class="gc-row"><div class="gc-t">Stay Healthy</div></div>
+                <div class="gc-d">Balanced, varied meal planning. Focused on nutritional diversity and long-term consistency.</div>
+                <div class="gc-chips"><div class="gc-chip">🔥 1,800–2,000 kcal/day</div><div class="gc-chip">🥗 Balanced macros</div></div>
+              </div>
+              <div class="gc-check">✓</div>
+            </div>
+          </div>
+          <div class="social-proof">
+            <div class="sp-avs"><div class="sp-av">P</div><div class="sp-av b">A</div><div class="sp-av c">R</div></div>
+            <span><strong style="color:var(--ch)">2,847 users</strong> chose Lose Weight last month</span>
+          </div>
+          <div class="priv">🔒 Your health data stays private — only used to personalise your grocery list.</div>
+        </div>
+
+        <!-- STEP 2: DIET TYPE -->
+        <div class="step-content" id="sc2">
+          <div class="step-h">What's your diet type?</div>
+          <div class="step-sub">Recipes and templates will be filtered to match. You can add more exclusions in step 5.</div>
+          <div class="diet-grid">
+            <div class="dc" onclick="selectDiet(this,'veg')">
+              <div class="dc-icon">🥗</div>
+              <div class="dc-body"><div class="dc-t">Vegetarian</div><div class="dc-d">No meat or seafood · Eggs OK</div></div>
+              <div class="dc-check">✓</div>
+            </div>
+            <div class="dc" onclick="selectDiet(this,'nonveg')">
+              <div class="dc-icon">🍗</div>
+              <div class="dc-body"><div class="dc-t">Non-Vegetarian</div><div class="dc-d">All proteins welcome</div></div>
+              <div class="dc-check">✓</div>
+            </div>
+            <div class="dc" onclick="selectDiet(this,'vegan')">
+              <div class="dc-icon">🌱</div>
+              <div class="dc-body"><div class="dc-t">Vegan</div><div class="dc-d">No animal products at all</div></div>
+              <div class="dc-check">✓</div>
+            </div>
+            <div class="dc" onclick="selectDiet(this,'keto')">
+              <div class="dc-icon">🥑</div>
+              <div class="dc-body"><div class="dc-t">Keto / Low-Carb</div><div class="dc-d">High fat, very low carbs</div></div>
+              <div class="dc-check">✓</div>
+            </div>
+            <div class="dc" onclick="selectDiet(this,'jain')">
+              <div class="dc-icon">🙏</div>
+              <div class="dc-body"><div class="dc-t">Jain</div><div class="dc-d">No root vegetables or meat</div></div>
+              <div class="dc-check">✓</div>
+            </div>
+            <div class="dc" onclick="selectDiet(this,'glutenfree')">
+              <div class="dc-icon">🌾</div>
+              <div class="dc-body"><div class="dc-t">Gluten-Free</div><div class="dc-d">No wheat, barley, rye</div></div>
+              <div class="dc-check">✓</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: HOUSEHOLD SIZE -->
+        <div class="step-content" id="sc3">
+          <div class="step-h">How many people are you cooking for?</div>
+          <div class="step-sub">Grocery quantities and restock amounts will scale to your household size.</div>
+          <div class="hh-row">
+            <div class="hh" onclick="selectHH(this,1)"><div class="hh-icon">🧑</div><div class="hh-num">1</div><div class="hh-lbl">Just me</div></div>
+            <div class="hh" onclick="selectHH(this,2)"><div class="hh-icon">👫</div><div class="hh-num">2</div><div class="hh-lbl">Two people</div></div>
+            <div class="hh" onclick="selectHH(this,3)"><div class="hh-icon">👨‍👩‍👦</div><div class="hh-num">3</div><div class="hh-lbl">Three people</div></div>
+            <div class="hh" onclick="selectHH(this,4)"><div class="hh-icon">👨‍👩‍👧‍👦</div><div class="hh-num">4+</div><div class="hh-lbl">Family</div></div>
+          </div>
+          <div class="hh-note" id="hh-note" style="display:none">
+            <strong id="hh-note-t"></strong> <span id="hh-note-d"></span>
+          </div>
+        </div>
+
+        <!-- STEP 4: BUDGET -->
+        <div class="step-content" id="sc4">
+          <div class="step-h">What's your monthly grocery budget?</div>
+          <div class="step-sub">PlateCart tracks groceries + eat-outs against this limit. You can adjust anytime.</div>
+          <div class="budget-segs">
+            <div class="bseg" onclick="selectBudget(this,2000)"><div class="bseg-val">₹2,000</div><div class="bseg-lbl">Basic</div></div>
+            <div class="bseg" onclick="selectBudget(this,3500)"><div class="bseg-val">₹3,500</div><div class="bseg-lbl">Standard</div></div>
+            <div class="bseg" onclick="selectBudget(this,5000)"><div class="bseg-val">₹5,000</div><div class="bseg-lbl">Comfortable ✦</div></div>
+            <div class="bseg" onclick="selectBudget(this,8000)"><div class="bseg-val">₹8,000</div><div class="bseg-lbl">Generous</div></div>
+            <div class="bseg" onclick="selectBudget(this,'custom')"><div class="bseg-val">Custom</div><div class="bseg-lbl">Set my own</div></div>
+          </div>
+          <div class="custom-slider-wrap" id="custom-wrap">
+            <div style="font-size:12px;color:var(--mu)">Drag to set your custom budget</div>
+            <div class="slider-row">
+              <input type="range" min="1000" max="20000" step="500" value="6000" id="budget-slider" oninput="updateSlider(this.value)">
+              <div class="slider-val" id="slider-display">₹6,000</div>
+            </div>
+          </div>
+          <div class="budget-items" id="budget-items" style="display:none">
+            <div style="font-size:11px;font-weight:700;color:var(--mu);letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px">What's covered at this budget</div>
+            <div class="budget-item"><div class="bi-dot"></div><span id="bi1"></span></div>
+            <div class="budget-item"><div class="bi-dot"></div><span id="bi2"></span></div>
+            <div class="budget-item"><div class="bi-dot or"></div><span id="bi3"></span></div>
+          </div>
+        </div>
+
+        <!-- STEP 5: EXCLUSIONS -->
+        <div class="step-content" id="sc5">
+          <div class="step-h">Any ingredients to avoid?</div>
+          <div class="step-sub">We'll hide templates containing these. You can update this list anytime in Settings.</div>
+          <div class="excl-note">Tap to select ingredients you want to exclude. Select nothing to get all recipes.</div>
+          <div class="excl-none" onclick="toggleNone(this)" id="excl-none-btn">
+            <div>
+              <div class="excl-none-t">🥘 No exclusions — I eat everything</div>
+              <div class="excl-none-d">Show me all available recipes</div>
+            </div>
+            <div class="excl-check">✓</div>
+          </div>
+          <div class="excl-grid">
+            <div class="etag" onclick="toggleExcl(this,'onion_garlic')"><span class="etag-icon">🧅</span>Onion &amp; Garlic</div>
+            <div class="etag" onclick="toggleExcl(this,'nuts')"><span class="etag-icon">🥜</span>Nuts</div>
+            <div class="etag" onclick="toggleExcl(this,'dairy')"><span class="etag-icon">🥛</span>Dairy</div>
+            <div class="etag" onclick="toggleExcl(this,'eggs')"><span class="etag-icon">🥚</span>Eggs</div>
+            <div class="etag" onclick="toggleExcl(this,'fish')"><span class="etag-icon">🐟</span>Fish &amp; Seafood</div>
+            <div class="etag" onclick="toggleExcl(this,'pork')"><span class="etag-icon">🐷</span>Pork</div>
+            <div class="etag" onclick="toggleExcl(this,'beef')"><span class="etag-icon">🐄</span>Beef</div>
+            <div class="etag" onclick="toggleExcl(this,'gluten')"><span class="etag-icon">🌾</span>Gluten / Wheat</div>
+            <div class="etag" onclick="toggleExcl(this,'mushroom')"><span class="etag-icon">🍄</span>Mushrooms</div>
+            <div class="etag" onclick="toggleExcl(this,'soy')"><span class="etag-icon">🫘</span>Soy</div>
+          </div>
+          <div style="margin-top:14px;font-size:12px;color:var(--mu)" id="excl-count">No exclusions selected — showing all recipes</div>
+        </div>
+
+        <!-- STEP 6: COMPLETE -->
+        <div class="step-content" id="sc6">
+          <div class="complete-screen">
+            <div class="complete-check">✓</div>
+            <div class="complete-h">Your PlateCart is ready!</div>
+            <div class="complete-sub">Here's your personalised setup. You can edit any of these from Settings.</div>
+            <div class="summary-grid">
+              <div class="sum-item"><div class="sum-lbl">Goal</div><div class="sum-val" id="s-goal">—</div></div>
+              <div class="sum-item"><div class="sum-lbl">Diet Type</div><div class="sum-val" id="s-diet">—</div></div>
+              <div class="sum-item"><div class="sum-lbl">Household</div><div class="sum-val" id="s-hh">—</div></div>
+              <div class="sum-item"><div class="sum-lbl">Monthly Budget</div><div class="sum-val" id="s-budget">—</div></div>
+              <div class="sum-item" style="grid-column:span 2"><div class="sum-lbl">Exclusions</div><div class="sum-val" id="s-excl">None</div></div>
+            </div>
+            <a href="screen_01_dashboard.html"><button class="go-btn">Go to Dashboard →</button></a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: preview panels (one per step) -->
+      <div class="ob-right">
+
+        <div class="step-preview active" id="pv1">
+          <div class="preview-card">
+            <div class="pv-title">Your plan preview</div>
+            <div class="pv-h" id="pv1-h">Select a goal →</div>
+            <div class="pv-sub" id="pv1-sub">Choose a goal to see your sample meal plan</div>
+            <div id="pv1-meals"></div>
+            <div id="pv1-stats"></div>
+            <div class="pv-tip" id="pv1-tip" style="display:none"><strong>Next:</strong> We'll match recipes to your diet type.</div>
+          </div>
+        </div>
+
+        <div class="step-preview" id="pv2">
+          <div class="preview-card">
+            <div class="pv-title">Templates unlocked</div>
+            <div class="pv-h" id="pv2-h">Select a diet type →</div>
+            <div class="pv-sub" id="pv2-sub">Your templates will be filtered to your diet</div>
+            <div id="pv2-items"></div>
+            <div class="pv-tip" id="pv2-tip" style="display:none"><strong>Next:</strong> Set quantities for your household size.</div>
+          </div>
+        </div>
+
+        <div class="step-preview" id="pv3">
+          <div class="preview-card">
+            <div class="pv-title">Grocery quantities</div>
+            <div class="pv-h" id="pv3-h">Select household size →</div>
+            <div class="pv-sub" id="pv3-sub">Quantities scale to your household</div>
+            <div id="pv3-items"></div>
+          </div>
+        </div>
+
+        <div class="step-preview" id="pv4">
+          <div class="preview-card">
+            <div class="pv-title">Monthly budget breakdown</div>
+            <div class="pv-h" id="pv4-h">Select a budget →</div>
+            <div class="pv-sub" id="pv4-sub">See how your budget is allocated</div>
+            <div id="pv4-items"></div>
+          </div>
+        </div>
+
+        <div class="step-preview" id="pv5">
+          <div class="preview-card">
+            <div class="pv-title">Your recipe library</div>
+            <div class="pv-h" id="pv5-h">All recipes available</div>
+            <div class="pv-sub" id="pv5-sub">Tap ingredients above to filter</div>
+            <div id="pv5-items"></div>
+            <div class="pv-tip"><strong>Tip:</strong> You can always add more exclusions from Settings after setup.</div>
+          </div>
+        </div>
+
+        <div class="step-preview" id="pv6">
+          <div class="preview-card" style="text-align:center;padding:24px 18px">
+            <div style="font-size:40px;margin-bottom:12px">🎉</div>
+            <div class="pv-h">Setup complete!</div>
+            <div class="pv-sub">Your first grocery list will be ready after you build your meal plan.</div>
+            <div style="background:var(--pg);border-radius:var(--r);padding:12px;margin-top:12px;font-size:12px;color:var(--mu);text-align:left">
+              <strong style="color:var(--ch)">What happens next:</strong><br>
+              1. Pick this week's meal templates<br>
+              2. Say a dish name to voice-order<br>
+              3. Confirm your Instamart cart
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- NAVIGATION BUTTONS -->
+    <div class="ob-nav">
+      <button class="ob-back-btn" id="back-btn" onclick="goBack()" disabled>← Back</button>
+      <button class="ob-skip" id="skip-btn" onclick="skip()">Skip setup</button>
+      <button class="ob-continue" id="cont-btn" onclick="goNext()" disabled>Continue →</button>
+    </div>
+
+  </div>
+  </div>
+</div>
+
+<!-- MOBILE PANEL 15% — no frame, full screen -->
+<div class="mp">
+  <div class="mp-hdr">
+    <div class="mp-lbl">Mobile · 375px</div>
+    <div class="mp-hint">Full screen · no frame</div>
+  </div>
+  <div class="mp-area">
+    <div class="m-wrap" id="m-wrap">
+    <div class="m-bg">
+      <!-- status + prog -->
+      <div class="m-sb"><span>9:41</span><div class="m-sb-r"><span>●●●●</span><span>WiFi</span><span>🔋</span></div></div>
+      <div class="m-prog-bar">
+        <div class="m-ps fill" id="mp1"></div><div class="m-ps" id="mp2"></div>
+        <div class="m-ps" id="mp3"></div><div class="m-ps" id="mp4"></div><div class="m-ps" id="mp5"></div>
+      </div>
+      <div class="m-ob-top">
+        <div class="m-back-row"><div class="m-back-btn" onclick="goBack()">←</div><div class="m-step-info" id="m-step-info">Step 1 of 5</div></div>
+        <div class="m-ob-logo">Plate<em>Cart</em></div>
+        <div class="m-ob-h" id="m-h">What's your health goal?</div>
+        <div class="m-ob-sub" id="m-sub">We'll build your grocery list around this.</div>
+      </div>
+
+      <!-- MOBILE STEP 1 -->
+      <div class="m-step active" id="ms1">
+        <div class="m-gc sel" onclick="mSelectGoal(this,'loss')"><div class="m-gc-ic">🎯</div><div><div class="m-gc-t">Lose Weight <span style="font-size:9px;background:#FFF0E0;color:var(--sw);padding:1px 5px;border-radius:99px;font-weight:700">POPULAR</span></div><div class="m-gc-d">1,400–1,600 kcal/day</div></div><div class="m-gc-ck">✓</div></div>
+        <div class="m-gc" onclick="mSelectGoal(this,'gain')"><div class="m-gc-ic">💪</div><div><div class="m-gc-t">Gain Muscle</div><div class="m-gc-d">2,200–2,500 kcal/day</div></div><div class="m-gc-ck">○</div></div>
+        <div class="m-gc" onclick="mSelectGoal(this,'maintain')"><div class="m-gc-ic">⚖️</div><div><div class="m-gc-t">Stay Healthy</div><div class="m-gc-d">1,800–2,000 kcal/day</div></div><div class="m-gc-ck">○</div></div>
+        <div class="m-social" style="padding:12px 18px 0;display:flex;align-items:center;gap:7px;font-size:11px;color:var(--mu)">
+          <div class="m-sp-avs"><div class="m-sp-av">P</div><div class="m-sp-av b">A</div><div class="m-sp-av c">R</div></div>
+          <span>2,847 chose Lose Weight last month</span>
+        </div>
+      </div>
+
+      <!-- MOBILE STEP 2 -->
+      <div class="m-step" id="ms2">
+        <div class="m-diet-grid">
+          <div class="m-dc" onclick="mSelDiet(this,'veg')"><div class="m-dc-ic">🥗</div><div><div class="m-dc-t">Vegetarian</div><div class="m-dc-d">No meat</div></div></div>
+          <div class="m-dc" onclick="mSelDiet(this,'nonveg')"><div class="m-dc-ic">🍗</div><div><div class="m-dc-t">Non-Veg</div><div class="m-dc-d">All proteins</div></div></div>
+          <div class="m-dc" onclick="mSelDiet(this,'vegan')"><div class="m-dc-ic">🌱</div><div><div class="m-dc-t">Vegan</div><div class="m-dc-d">Plant-only</div></div></div>
+          <div class="m-dc" onclick="mSelDiet(this,'keto')"><div class="m-dc-ic">🥑</div><div><div class="m-dc-t">Keto</div><div class="m-dc-d">Low-carb</div></div></div>
+          <div class="m-dc" onclick="mSelDiet(this,'jain')"><div class="m-dc-ic">🙏</div><div><div class="m-dc-t">Jain</div><div class="m-dc-d">No root veg</div></div></div>
+          <div class="m-dc" onclick="mSelDiet(this,'gf')"><div class="m-dc-ic">🌾</div><div><div class="m-dc-t">Gluten-Free</div><div class="m-dc-d">No wheat</div></div></div>
+        </div>
+      </div>
+
+      <!-- MOBILE STEP 3 -->
+      <div class="m-step" id="ms3">
+        <div class="m-hh-row">
+          <div class="m-hh" onclick="mSelHH(this,1)"><div class="m-hh-ic">🧑</div><div class="m-hh-n">1</div><div class="m-hh-l">Just me</div></div>
+          <div class="m-hh" onclick="mSelHH(this,2)"><div class="m-hh-ic">👫</div><div class="m-hh-n">2</div><div class="m-hh-l">Two</div></div>
+          <div class="m-hh" onclick="mSelHH(this,3)"><div class="m-hh-ic">👨‍👩‍👦</div><div class="m-hh-n">3</div><div class="m-hh-l">Three</div></div>
+          <div class="m-hh" onclick="mSelHH(this,4)"><div class="m-hh-ic">👨‍👩‍👧‍👦</div><div class="m-hh-n">4+</div><div class="m-hh-l">Family</div></div>
+        </div>
+        <div style="margin:12px 18px 0;padding:10px;background:var(--pg);border-radius:var(--r);font-size:11px;color:var(--mu);line-height:1.5" id="m-hh-note">Select your household size above</div>
+      </div>
+
+      <!-- MOBILE STEP 4 -->
+      <div class="m-step" id="ms4">
+        <div class="m-bsegs">
+          <div class="m-bs" onclick="mSelBudget(this,2000)"><div class="m-bs-v">₹2,000</div><div class="m-bs-l">Basic</div></div>
+          <div class="m-bs" onclick="mSelBudget(this,3500)"><div class="m-bs-v">₹3,500</div><div class="m-bs-l">Standard</div></div>
+          <div class="m-bs" onclick="mSelBudget(this,5000)"><div class="m-bs-v">₹5,000</div><div class="m-bs-l">Comfortable</div></div>
+          <div class="m-bs" onclick="mSelBudget(this,8000)"><div class="m-bs-v">₹8,000</div><div class="m-bs-l">Generous</div></div>
+        </div>
+        <div style="margin:12px 18px 0;padding:10px;background:var(--pg);border-radius:var(--r);font-size:11px;color:var(--mu)" id="m-budget-note">Select your monthly grocery budget</div>
+      </div>
+
+      <!-- MOBILE STEP 5 -->
+      <div class="m-step" id="ms5">
+        <div class="m-excl-note">Tap to exclude ingredients. Leave empty to see all recipes.</div>
+        <div class="m-excl-grid">
+          <div class="m-et" onclick="mToggleExcl(this,'onion')"><span class="m-et-ic">🧅</span>Onion &amp; Garlic</div>
+          <div class="m-et" onclick="mToggleExcl(this,'nuts')"><span class="m-et-ic">🥜</span>Nuts</div>
+          <div class="m-et" onclick="mToggleExcl(this,'dairy')"><span class="m-et-ic">🥛</span>Dairy</div>
+          <div class="m-et" onclick="mToggleExcl(this,'eggs')"><span class="m-et-ic">🥚</span>Eggs</div>
+          <div class="m-et" onclick="mToggleExcl(this,'fish')"><span class="m-et-ic">🐟</span>Fish &amp; Seafood</div>
+          <div class="m-et" onclick="mToggleExcl(this,'pork')"><span class="m-et-ic">🐷</span>Pork</div>
+          <div class="m-et" onclick="mToggleExcl(this,'gluten')"><span class="m-et-ic">🌾</span>Gluten</div>
+          <div class="m-et" onclick="mToggleExcl(this,'mushroom')"><span class="m-et-ic">🍄</span>Mushrooms</div>
+        </div>
+      </div>
+
+      <!-- MOBILE STEP 6: COMPLETE -->
+      <div class="m-step" id="ms6">
+        <div class="m-complete">
+          <div class="m-comp-ck">✓</div>
+          <div class="m-comp-h">You're all set!</div>
+          <div class="m-comp-s">Your PlateCart is personalised and ready.</div>
+          <div class="m-sum">
+            <div class="m-sum-row"><span class="m-sum-l">Goal</span><span class="m-sum-v" id="ms-goal">—</span></div>
+            <div class="m-sum-row"><span class="m-sum-l">Diet</span><span class="m-sum-v" id="ms-diet">—</span></div>
+            <div class="m-sum-row"><span class="m-sum-l">Household</span><span class="m-sum-v" id="ms-hh">—</span></div>
+            <div class="m-sum-row"><span class="m-sum-l">Budget</span><span class="m-sum-v" id="ms-budget">—</span></div>
+          </div>
+          <a href="screen_01_dashboard.html"><button class="m-go">Go to Dashboard →</button></a>
+        </div>
+      </div>
+
+      <!-- MOBILE CONTINUE BUTTON -->
+      <div class="m-bottom-area" id="m-bottom">
+        <button class="m-continue" id="m-cont" onclick="goNext()" disabled>Continue →</button>
+        <button class="m-skip-lnk" onclick="skip()">Skip setup for now</button>
+        <div class="m-priv">🔒 Your data stays private</div>
+      </div>
+
+    </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /split -->
+
+<!-- DEV BUTTON + PANEL -->
+<button class="dev-btn" onclick="toggleDev()"><div class="dev-dot"></div>DEV</button>
+<aside class="dev-panel" id="devPanel">
+  <div class="dev-ph"><div class="dev-pt">Dev Guide <span class="dev-stag">ONBOARDING</span></div><button class="dev-cls" onclick="toggleDev()">✕</button></div>
+  <div class="dev-tabs">
+    <button class="d-tab act" onclick="showTab('api',this)">API</button>
+    <button class="d-tab" onclick="showTab('schema',this)">Schema</button>
+    <button class="d-tab" onclick="showTab('pitfalls',this)">Pitfalls</button>
+    <button class="d-tab" onclick="showTab('security',this)">Security</button>
+    <button class="d-tab" onclick="showTab('ui',this)">UI Rules</button>
+  </div>
+  <div class="dev-body">
+    <div class="d-sub act" id="d-api">
+      <div class="d-sec"><div class="d-lbl">Only one API call — on step 5 "Complete"</div>
+      <div class="code"><span class="om">POST</span> <span class="pa">/api/users/onboarding</span>
+Body: {
+  goal: <span class="st">"loss"</span> | <span class="st">"gain"</span> | <span class="st">"maintain"</span>,
+  diet_type: <span class="st">"veg"</span> | <span class="st">"nonveg"</span> | <span class="st">"vegan"</span> | ...,
+  household_size: <span class="vl">1</span>–<span class="vl">4</span>,
+  monthly_budget: <span class="vl">integer</span> <span class="co">// ₹</span>
+  exclusions: <span class="st">string[]</span> <span class="co">// max 20</span>
+}
+<span class="ok">201</span>: { userId, onboarding_complete: true }
+<span class="st">400</span>: { errors: ZodError[] }
+<span class="st">409</span>: Onboarding already complete</div></div>
+      <div class="d-sec"><div class="d-lbl">Steps 1–4: client-side only (localStorage)</div>
+      <div class="code"><span class="co">// Persist draft on each step change</span>
+localStorage.setItem(<span class="st">'ob_draft'</span>, JSON.stringify({
+  step: currentStep, goal, diet, household,
+  budget, exclusions
+}))
+<span class="co">// Clear after successful POST</span>
+localStorage.removeItem(<span class="st">'ob_draft'</span>)</div></div>
+    </div>
+    <div class="d-sub" id="d-schema">
+      <div class="d-sec"><div class="d-lbl">users table — onboarding fields</div>
+      <div class="code">goal           goalEnum    <span class="co">// nullable until done</span>
+diet_type      dietTypeEnum
+household_size integer
+monthly_budget integer     <span class="co">// ₹/month</span>
+exclusions     text[]      <span class="co">// ingredient names</span>
+onboarding_done boolean    <span class="co">// default false</span></div></div>
+      <div class="d-sec"><div class="d-lbl">Zod validation</div>
+      <div class="code">z.object({
+  goal: z.enum([<span class="st">'loss','gain','maintain'</span>]),
+  diet_type: z.enum([<span class="st">'veg','nonveg',...</span>]),
+  household_size: z.number().int().min(<span class="vl">1</span>).max(<span class="vl">8</span>),
+  monthly_budget: z.number().int()
+    .min(<span class="vl">1000</span>).max(<span class="vl">50000</span>),
+  exclusions: z.array(z.string()).max(<span class="vl">20</span>)
+})</div></div>
+    </div>
+    <div class="d-sub" id="d-pitfalls">
+      <div class="d-sec"><div class="d-lbl">Critical bugs to prevent</div>
+      <ul class="dl warn">
+        <li>Do NOT write to DB on steps 1–4. Only POST on step 5 completion.</li>
+        <li>Persist all step data to localStorage — browser refresh kills state otherwise.</li>
+        <li>Return 409 if onboarding_done is already true. Never silently overwrite.</li>
+        <li>Budget field: validate ₹1,000 minimum — users enter "500" or "50" accidentally.</li>
+        <li>Skip = still marks onboarding_done:true with sensible defaults (goal:maintain, diet:veg, hh:1, budget:5000). Never leave it false — causes infinite redirect loop.</li>
+        <li>Exclusions: validate each string against a server-side allowlist. Free-text breaks template filtering.</li>
+      </ul></div>
+    </div>
+    <div class="d-sub" id="d-security">
+      <div class="d-sec"><div class="d-lbl">Auth flow</div>
+      <ul class="dl">
+        <li>User completes Clerk sign-up BEFORE onboarding. JWT available on all API calls.</li>
+        <li>POST /api/users/onboarding: validate auth() server-side before any DB write.</li>
+        <li>Clerk webhook (user.created) creates minimal row (clerk_id only). Onboarding POST fills the rest.</li>
+      </ul></div>
+      <div class="d-sec"><div class="d-lbl">Data privacy</div>
+      <ul class="dl ok">
+        <li>Health goal + diet = sensitive. Exclude from Sentry and Vercel logs.</li>
+        <li>Exclusions allowlist prevents injection via crafted strings.</li>
+        <li>Budget never returned in unauthenticated API responses.</li>
+      </ul></div>
+    </div>
+    <div class="d-sub" id="d-ui">
+      <div class="d-sec"><div class="d-lbl">Swiggy DS rules for this screen</div>
+      <ul class="dl">
+        <li>Selection cards: 1.5px border, orange on select. Never shadow on cards.</li>
+        <li>Continue: disabled = white fill + orange border + orange text. Enabled = full orange fill.</li>
+        <li>Progress: 5 equal segments, 5px height, 5px gap, fill=orange, unfill=#E9E9EB.</li>
+        <li>Check indicator: 20px circle, orange fill, white ✓, only visible when selected.</li>
+        <li>Skip: underlined muted text only. Never a button or chip shape.</li>
+        <li>Back button: disabled on step 1. Muted gray on steps 2–5. Never orange.</li>
+        <li>Step 5 (Exclusions): Continue always enabled. Having no exclusions is valid.</li>
+        <li>Step 6 (Complete): Replace Continue with "Go to Dashboard →" in the nav area. Hide skip link.</li>
+      </ul></div>
+    </div>
+  </div>
+</aside>
+
+<script>
+/* ── STATE ── */
+var S = { step:1, goal:null, diet:null, hh:null, budget:null, excl:[] };
+
+var STEP_LABELS = ['','Your Health Goal','Your Diet Type','Household Size','Monthly Budget','Ingredients to Avoid'];
+var STEP_HEADS  = ['','What\'s your health goal?','What\'s your diet type?','How many people are you cooking for?','What\'s your monthly grocery budget?','Any ingredients to avoid?'];
+var STEP_SUBS   = ['','We\'ll build your grocery list around this.','Recipes will be filtered to match.','Quantities scale to your household.','Track groceries + eat-outs against this.','We\'ll hide templates with these. Leave empty for all.'];
+
+/* ── NAVIGATION ── */
+function goNext() {
+  if (S.step === 5) { complete(); return; }
+  if (!canContinue()) return;
+  S.step++;
+  render();
+}
+function goBack() {
+  if (S.step <= 1) return;
+  S.step--;
+  render();
+}
+function skip() {
+  if (!S.goal) S.goal = 'maintain';
+  if (!S.diet) S.diet = 'Vegetarian';
+  if (!S.hh) S.hh = 1;
+  if (!S.budget) S.budget = 5000;
+  complete();
+}
+function complete() {
+  S.step = 6;
+  document.getElementById('s-goal').textContent   = goalLabel(S.goal);
+  document.getElementById('s-diet').textContent   = S.diet || 'Vegetarian';
+  document.getElementById('s-hh').textContent     = (S.hh||1) + ' person' + (S.hh > 1 ? 's' : '');
+  document.getElementById('s-budget').textContent = '₹' + ((S.budget||5000).toLocaleString('en-IN')) + '/mo';
+  document.getElementById('s-excl').textContent   = S.excl.length ? S.excl.join(', ') : 'None';
+  document.getElementById('ms-goal').textContent  = goalLabel(S.goal);
+  document.getElementById('ms-diet').textContent  = S.diet || 'Vegetarian';
+  document.getElementById('ms-hh').textContent    = (S.hh||1) + ' person' + (S.hh > 1 ? 's' : '');
+  document.getElementById('ms-budget').textContent= '₹' + ((S.budget||5000).toLocaleString('en-IN'));
+  render();
+}
+
+/* ── RENDER ── */
+function render() {
+  var n = S.step;
+  // Desktop steps
+  document.querySelectorAll('.step-content').forEach(function(el,i){ el.classList.toggle('active', i+1===n); });
+  document.querySelectorAll('.step-preview').forEach(function(el,i){ el.classList.toggle('active', i+1===n); });
+  // Mobile steps
+  document.querySelectorAll('.m-step').forEach(function(el,i){ el.classList.toggle('active', i+1===n); });
+  // Progress
+  for(var i=1;i<=5;i++){
+    document.getElementById('ps'+i).classList.toggle('fill', i<=n);
+    document.getElementById('mp'+i).classList.toggle('fill', i<=n);
+  }
+  // Step label
+  if (n <= 5) {
+    document.getElementById('step-lbl').innerHTML = 'Step <strong>' + n + '</strong> of 5 · ' + STEP_LABELS[n];
+    document.getElementById('m-step-info').textContent = 'Step ' + n + ' of 5';
+    document.getElementById('m-h').textContent = STEP_HEADS[n];
+    document.getElementById('m-sub').textContent = STEP_SUBS[n];
+  }
+  // URL bar
+  var urls = ['','goal','diet-type','household','budget','exclusions','complete'];
+  var urlEl = document.querySelector('.b-url');
+  if(urlEl) urlEl.innerHTML = '<span style="color:#60B246;margin-right:3px">🔒</span> platecart.app/onboarding/' + (urls[n]||'complete');
+  // Back button
+  var backBtn = document.getElementById('back-btn');
+  if(backBtn){ backBtn.disabled = n<=1; backBtn.style.opacity = n<=1 ? '.2':''.6; }
+  // Continue button
+  var contBtn = document.getElementById('cont-btn');
+  var mCont = document.getElementById('m-cont');
+  var isLast = n === 5;
+  var isDone = n === 6;
+  if(contBtn){
+    contBtn.textContent = isDone ? '— Done —' : isLast ? 'Complete Setup ✓' : 'Continue →';
+    contBtn.disabled = isDone || !canContinue();
+  }
+  if(mCont){
+    mCont.textContent = isLast ? 'Complete Setup ✓' : 'Continue →';
+    mCont.disabled = isDone || !canContinue();
+  }
+  // Hide nav on complete
+  var navEl = document.querySelector('.ob-nav');
+  var mBot = document.getElementById('m-bottom');
+  if(navEl){ navEl.style.display = isDone ? 'none' : 'flex'; }
+  if(mBot){ mBot.style.display = isDone ? 'none' : 'block'; }
+  // Mobile logo visibility
+  var mObTop = document.querySelector('.m-ob-top');
+  if(mObTop){ mObTop.style.display = isDone ? 'none' : 'block'; }
+  // Update preview
+  updatePreview();
+}
+
+function canContinue() {
+  if (S.step === 1) return !!S.goal;
+  if (S.step === 2) return !!S.diet;
+  if (S.step === 3) return !!S.hh;
+  if (S.step === 4) return !!S.budget;
+  if (S.step === 5) return true; // exclusions optional
+  return false;
+}
+
+/* ── STEP 1: GOAL ── */
+function selectGoal(el, val) {
+  S.goal = val;
+  document.querySelectorAll('.gc').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+  document.querySelectorAll('#ms1 .m-gc').forEach(function(c){
+    c.classList.toggle('sel', c.getAttribute('onclick').includes("'"+val+"'"));
+    var ck = c.querySelector('.m-gc-ck'); if(ck) ck.textContent = c.classList.contains('sel') ? '✓':'○';
+  });
+  updateContinueState();
+  updatePreview();
+}
+function mSelectGoal(el, val) {
+  S.goal = val;
+  document.querySelectorAll('#ms1 .m-gc').forEach(function(c){ c.classList.remove('sel'); c.querySelector('.m-gc-ck').textContent='○'; });
+  el.classList.add('sel'); el.querySelector('.m-gc-ck').textContent='✓';
+  document.querySelectorAll('.gc').forEach(function(c){
+    c.classList.toggle('sel', c.getAttribute('onclick').includes("'"+val+"'"));
+  });
+  updateContinueState(); updatePreview();
+}
+
+/* ── STEP 2: DIET ── */
+function selectDiet(el, val) {
+  S.diet = el.querySelector('.dc-t').textContent;
+  document.querySelectorAll('.dc').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+  document.querySelectorAll('#ms2 .m-dc').forEach(function(c){
+    c.classList.toggle('sel', c.getAttribute('onclick').includes("'"+val+"'"));
+  });
+  updateContinueState(); updatePreview();
+}
+function mSelDiet(el, val) {
+  S.diet = el.querySelector('.m-dc-t').textContent;
+  document.querySelectorAll('#ms2 .m-dc').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+  document.querySelectorAll('.dc').forEach(function(c){
+    c.classList.toggle('sel', c.getAttribute('onclick').includes("'"+val+"'"));
+  });
+  updateContinueState(); updatePreview();
+}
+
+/* ── STEP 3: HOUSEHOLD ── */
+var HH_NOTES = ['','Quantities set for one person. Perfect for solo meal planning.','Groceries scaled for two. Ideal for couples or flatmates.','Family quantities with variety. Great for varied meal plans.','Large household quantities. We\'ll buy in bulk to save more.'];
+function selectHH(el, val) {
+  S.hh = val;
+  document.querySelectorAll('.hh').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+  document.querySelectorAll('#ms3 .m-hh').forEach(function(c){
+    c.classList.toggle('sel', c.getAttribute('onclick').includes(','+val+')'));
+  });
+  var note = document.getElementById('hh-note');
+  if(note){ note.style.display='block'; document.getElementById('hh-note-t').textContent=val+' person'+(val>1?'s':''); document.getElementById('hh-note-d').textContent=HH_NOTES[val]||''; }
+  var mnote = document.getElementById('m-hh-note'); if(mnote) mnote.textContent = val+' person'+(val>1?'s':'')+': '+HH_NOTES[val];
+  updateContinueState(); updatePreview();
+}
+function mSelHH(el, val) {
+  S.hh = val;
+  document.querySelectorAll('#ms3 .m-hh').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+  document.querySelectorAll('.hh').forEach(function(c){
+    c.classList.toggle('sel', c.getAttribute('onclick').includes(','+val+')'));
+  });
+  var mnote = document.getElementById('m-hh-note'); if(mnote) mnote.textContent = val+' person'+(val>1?'s':'')+': '+HH_NOTES[val];
+  updateContinueState(); updatePreview();
+}
+
+/* ── STEP 4: BUDGET ── */
+var BUDGET_ITEMS = {
+  2000: ['3-day restock up to ₹700 per cycle','6–8 meal templates per week','Basic produce: dal, rice, vegetables'],
+  3500: ['3-day restock up to ₹1,150 per cycle','10–12 meal templates per week','Fruits, dairy, and pantry essentials included'],
+  5000: ['3-day restock up to ₹1,650 per cycle','Full 7-day meal plan coverage','Premium produce, superfoods, and snacks'],
+  8000: ['3-day restock up to ₹2,600 per cycle','Unlimited templates + eat-out budget','Organic options and specialty ingredients'],
+};
+function selectBudget(el, val) {
+  document.querySelectorAll('.bseg').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+  var customWrap = document.getElementById('custom-wrap');
+  if(val === 'custom') {
+    customWrap.classList.add('vis'); S.budget = 6000;
+    document.querySelectorAll('#ms4 .m-bs').forEach(function(c){ c.classList.remove('sel'); });
+  } else {
+    customWrap.classList.remove('vis'); S.budget = val;
+    document.querySelectorAll('#ms4 .m-bs').forEach(function(c){
+      c.classList.toggle('sel', c.getAttribute('onclick').includes(','+val+')'));
+    });
+  }
+  var items = BUDGET_ITEMS[S.budget] || BUDGET_ITEMS[5000];
+  var bi = document.getElementById('budget-items');
+  if(bi){ bi.style.display='block'; document.getElementById('bi1').textContent=items[0]; document.getElementById('bi2').textContent=items[1]; document.getElementById('bi3').textContent=items[2]; }
+  var mnote = document.getElementById('m-budget-note'); if(mnote) mnote.textContent = '₹'+S.budget.toLocaleString('en-IN')+'/month: '+items[0];
+  updateContinueState(); updatePreview();
+}
+function mSelBudget(el, val) {
+  S.budget = val;
+  document.querySelectorAll('#ms4 .m-bs').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+  document.querySelectorAll('.bseg').forEach(function(c){
+    c.classList.toggle('sel', c.getAttribute('onclick').includes(','+val+')'));
+  });
+  var items = BUDGET_ITEMS[val] || BUDGET_ITEMS[5000];
+  var bi = document.getElementById('budget-items'); if(bi){ bi.style.display='block'; document.getElementById('bi1').textContent=items[0]; document.getElementById('bi2').textContent=items[1]; document.getElementById('bi3').textContent=items[2]; }
+  var mnote = document.getElementById('m-budget-note'); if(mnote) mnote.textContent = '₹'+val.toLocaleString('en-IN')+'/mo · '+items[0];
+  updateContinueState(); updatePreview();
+}
+function updateSlider(val) {
+  S.budget = parseInt(val);
+  document.getElementById('slider-display').textContent = '₹' + parseInt(val).toLocaleString('en-IN');
+  var items = BUDGET_ITEMS[5000]; // default for custom
+  var bi = document.getElementById('budget-items'); if(bi){ bi.style.display='block'; document.getElementById('bi1').textContent='3-day restock up to ₹'+Math.round(parseInt(val)*0.33).toLocaleString('en-IN')+' per cycle'; document.getElementById('bi2').textContent='Full 7-day meal planning coverage'; document.getElementById('bi3').textContent='Adjusted quantities for your household'; }
+  updateContinueState(); updatePreview();
+}
+
+/* ── STEP 5: EXCLUSIONS ── */
+function toggleNone(el) {
+  var isActive = !el.classList.contains('sel');
+  if(isActive) {
+    S.excl = [];
+    document.querySelectorAll('.etag.sel').forEach(function(t){ t.classList.remove('sel'); });
+    document.querySelectorAll('#ms5 .m-et.sel').forEach(function(t){ t.classList.remove('sel'); });
+  }
+  el.classList.toggle('sel', isActive);
+  document.getElementById('excl-count').textContent = 'No exclusions — showing all ' + getTemplateCount() + ' recipes';
+  updatePreview();
+}
+function toggleExcl(el, val) {
+  document.getElementById('excl-none-btn').classList.remove('sel');
+  el.classList.toggle('sel');
+  S.excl = []; document.querySelectorAll('.etag.sel').forEach(function(t){ S.excl.push(t.textContent.trim()); });
+  var mEl = document.querySelector('#ms5 .m-et[onclick*="\''+val+'\'"]');
+  if(mEl) mEl.classList.toggle('sel', el.classList.contains('sel'));
+  var cnt = document.getElementById('excl-count');
+  if(cnt) cnt.textContent = S.excl.length ? S.excl.length + ' exclusion' + (S.excl.length>1?'s':'')+' selected · '+getTemplateCount()+' recipes available' : 'No exclusions selected — showing all recipes';
+  updatePreview();
+}
+function mToggleExcl(el, val) {
+  el.classList.toggle('sel');
+  S.excl = []; document.querySelectorAll('#ms5 .m-et.sel').forEach(function(t){ S.excl.push(t.querySelector('.m-et-ic').nextSibling.textContent.trim()); });
+  var dEl = document.querySelector('.etag[onclick*="\''+val+'\'"]');
+  if(dEl) dEl.classList.toggle('sel', el.classList.contains('sel'));
+  updatePreview();
+}
+function getTemplateCount() {
+  return Math.max(40, 340 - S.excl.length * 28);
+}
+
+/* ── PREVIEW UPDATES ── */
+var GOAL_DATA = {
+  loss:    { label:'Lose Weight',  sub:'Avg 1,450 kcal/day · High-fibre', meals:[['🌅','Oats Porridge','High Protein Mornings','310'],['☀️','Mixed Veggie Salad','Weight Loss Week','240'],['🌙','Dal Khichdi','Light Dinners','380']], stats:[['Avg grocery spend','₹3,200–4,500'],['Templates available','340+'],['Users hit goal','Week 8–12']], tip:'Next step: match recipes to your diet type.' },
+  gain:    { label:'Gain Muscle',  sub:'Avg 2,350 kcal/day · Protein-first', meals:[['🌅','Egg White Omelette','High Protein Mornings','420'],['☀️','Chicken Rice Bowl','Muscle Build Plan','680'],['🌙','Paneer &amp; Lentils','Protein Dinners','620']], stats:[['Avg grocery spend','₹4,500–6,500'],['Templates available','180+'],['Protein per day','120–150g']], tip:'Next: set your diet type for protein sources.' },
+  maintain:{ label:'Stay Healthy', sub:'Avg 1,900 kcal/day · Balanced', meals:[['🌅','Upma with Veggies','South Indian Basics','280'],['☀️','Roti &amp; Dal','Everyday Indian','450'],['🌙','Vegetable Curry','Light Dinners','420']], stats:[['Avg grocery spend','₹2,800–4,000'],['Templates available','400+'],['Variety','7 cuisines']], tip:'Next: fine-tune with your diet type.' },
+};
+var DIET_DATA = {
+  'Vegetarian':  { count:'287', samples:['High Protein Veg · 42 recipes','South Indian Basics · 38 recipes','Weight Loss Veg · 31 recipes'] },
+  'Non-Veg':     { count:'340', samples:['Chicken Meal Plans · 55 recipes','Egg &amp; Protein · 48 recipes','Mixed Non-Veg · 62 recipes'] },
+  'Vegan':       { count:'128', samples:['Plant Protein · 34 recipes','Raw Vegan · 18 recipes','Oil-Free Cooking · 22 recipes'] },
+  'Keto':        { count:'96',  samples:['Keto Indian · 28 recipes','Low-Carb Veg · 24 recipes','Keto Snacks · 16 recipes'] },
+  'Jain':        { count:'110', samples:['Jain Meals · 42 recipes','No Root Veg · 28 recipes','Festival Special · 18 recipes'] },
+  'Gluten-Free': { count:'142', samples:['GF Indian · 36 recipes','Rice Dishes · 44 recipes','Millet Plans · 22 recipes'] },
+};
+function updatePreview() {
+  var n = S.step;
+  // Preview 1: Goal
+  if(n===1) {
+    var d = GOAL_DATA[S.goal];
+    if(d) {
+      document.getElementById('pv1-h').textContent = d.label;
+      document.getElementById('pv1-sub').textContent = d.sub;
+      document.getElementById('pv1-meals').innerHTML = d.meals.map(function(m){ return '<div class="pv-meal"><div class="pv-mi">'+m[0]+'</div><div class="pv-mt"><div class="pv-mn">'+m[2]+'</div><div class="pv-mm">'+m[1]+' template</div></div><div class="pv-mk">'+m[3]+'</div></div>'; }).join('');
+      document.getElementById('pv1-stats').innerHTML = '<div style="margin-top:12px">'+d.stats.map(function(s){ return '<div class="pv-row"><span class="pv-rl">'+s[0]+'</span><span class="pv-rv'+(s[0].includes('hit')?'.g':'')+' ">'+s[1]+'</span></div>'; }).join('')+'</div>';
+      var tip = document.getElementById('pv1-tip'); tip.style.display='block'; tip.innerHTML='<strong>Next:</strong> '+d.tip;
+    } else {
+      document.getElementById('pv1-h').textContent = 'Select a goal →';
+      document.getElementById('pv1-sub').textContent = 'Choose a goal to see your sample meal plan';
+      document.getElementById('pv1-meals').innerHTML = '';
+      document.getElementById('pv1-stats').innerHTML = '';
+      document.getElementById('pv1-tip').style.display='none';
+    }
+  }
+  // Preview 2: Diet
+  if(n===2) {
+    var dd = DIET_DATA[S.diet];
+    if(dd) {
+      document.getElementById('pv2-h').textContent = dd.count + ' recipes match';
+      document.getElementById('pv2-sub').textContent = 'Templates for ' + S.diet + ' diet';
+      document.getElementById('pv2-items').innerHTML = dd.samples.map(function(s){ return '<div class="pv-template"><div class="pv-tn">'+s.split('·')[0].trim()+'</div><div class="pv-td">'+s.split('·')[1].trim()+'</div></div>'; }).join('') + '<div class="pv-tip" style="margin-top:8px"><strong>Next:</strong> Set quantities for your household size.</div>';
+      document.getElementById('pv2-tip').style.display='none';
+    }
+  }
+  // Preview 3: Household
+  if(n===3 && S.hh) {
+    var qts = { 1:['500g spinach','250g tomatoes','1L milk'], 2:['1kg spinach','500g tomatoes','2L milk'], 3:['1.5kg spinach','750g tomatoes','3L milk'], 4:['2kg spinach','1kg tomatoes','4L milk'] };
+    var q = qts[S.hh] || qts[1];
+    document.getElementById('pv3-h').textContent = 'Quantities for ' + S.hh + ' person'+(S.hh>1?'s':'');
+    document.getElementById('pv3-sub').textContent = 'Sample 3-day restock quantities';
+    document.getElementById('pv3-items').innerHTML = '<div class="pv-hh-img">'+['🧑','👫','👨‍👩‍👦','👨‍👩‍👧‍👦'][S.hh-1]+'</div>'+q.map(function(i){ return '<div class="pv-meal" style="margin-bottom:6px"><div class="pv-mi">🛒</div><div class="pv-mt"><div class="pv-mn">'+i+'</div><div class="pv-mm">Per 3-day cycle</div></div></div>'; }).join('')+'<div class="pv-tip" style="margin-top:8px"><strong>Next:</strong> Set your monthly budget.</div>';
+  }
+  // Preview 4: Budget
+  if(n===4 && S.budget) {
+    var bud = S.budget;
+    var pct = Math.min(95, Math.round(bud/150));
+    document.getElementById('pv4-h').textContent = '₹' + bud.toLocaleString('en-IN') + '/month';
+    document.getElementById('pv4-sub').textContent = 'How your budget is used';
+    var gr = Math.round(bud*0.6); var eo = Math.round(bud*0.3); var snk = Math.round(bud*0.1);
+    document.getElementById('pv4-items').innerHTML = '<div style="margin-bottom:10px">'+'<div style="font-size:11px;color:var(--mu);margin-bottom:4px">Groceries (60%)</div><div class="pv-bbar"><div class="pv-bfill" style="width:60%;background:var(--sw)"></div></div><div style="font-size:12px;font-weight:700;color:var(--ch)">₹'+gr.toLocaleString('en-IN')+'</div></div><div style="margin-bottom:10px"><div style="font-size:11px;color:var(--mu);margin-bottom:4px">Eat-outs (30%)</div><div class="pv-bbar"><div class="pv-bfill" style="width:30%;background:var(--ch)"></div></div><div style="font-size:12px;font-weight:700;color:var(--ch)">₹'+eo.toLocaleString('en-IN')+'</div></div><div><div style="font-size:11px;color:var(--mu);margin-bottom:4px">Buffer / snacks (10%)</div><div class="pv-bbar"><div class="pv-bfill" style="width:10%;background:var(--gr)"></div></div><div style="font-size:12px;font-weight:700;color:var(--ch)">₹'+snk.toLocaleString('en-IN')+'</div></div><div class="pv-tip" style="margin-top:12px"><strong>Next:</strong> Add any ingredient exclusions.</div>';
+  }
+  // Preview 5: Exclusions
+  if(n===5) {
+    var cnt = getTemplateCount();
+    document.getElementById('pv5-h').textContent = cnt + ' recipes available';
+    document.getElementById('pv5-sub').textContent = S.excl.length ? S.excl.length + ' ingredient' + (S.excl.length>1?'s':'')+' excluded' : 'No exclusions — full library';
+    var tags = S.excl.length ? S.excl.map(function(e){ return '<div class="pv-tag">✗ '+e+'</div>'; }).join('') : '<div class="pv-tag">All ingredients allowed</div>';
+    document.getElementById('pv5-items').innerHTML = '<div class="pv-tags" style="margin-bottom:10px">'+tags+'</div><div class="pv-template"><div class="pv-tn">Templates matched</div><div class="pv-td">'+cnt+' of 340 recipes in your library</div></div>';
+  }
+  updateContinueState();
+}
+
+function updateContinueState() {
+  var ok = canContinue();
+  var cb = document.getElementById('cont-btn');
+  var mb = document.getElementById('m-cont');
+  if(cb) cb.disabled = !ok;
+  if(mb) mb.disabled = !ok;
+}
+
+function goalLabel(g) { return g==='loss'?'Lose Weight':g==='gain'?'Gain Muscle':g==='maintain'?'Stay Healthy':'—'; }
+
+/* ── MOBILE SCALE ── */
+(function scaleMobile(){
+  var wrap = document.getElementById('m-wrap');
+  var area = document.querySelector('.mp-area');
+  if(!wrap||!area) return;
+  function fit(){
+    var w = area.offsetWidth - 12;
+    var scale = Math.min(w/375, 1);
+    wrap.style.transform = 'scale('+scale+')';
+    wrap.style.marginLeft = 0;
+    // adjust container height to prevent clipping
+    area.style.height = '';
+  }
+  fit(); window.addEventListener('resize', fit);
+})();
+
+/* ── DEV PANEL ── */
+function toggleDev(){ document.getElementById('devPanel').classList.toggle('open'); }
+function showTab(id,btn){
+  document.querySelectorAll('.d-sub').forEach(function(s){ s.classList.remove('act'); });
+  document.querySelectorAll('.d-tab').forEach(function(t){ t.classList.remove('act'); });
+  document.getElementById('d-'+id).classList.add('act'); btn.classList.add('act');
+}
+</script>
+</body>
+</html>

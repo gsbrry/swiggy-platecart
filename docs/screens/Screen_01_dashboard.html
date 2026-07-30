@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PlateCart · Screen 01 · Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+/* ── SWIGGY DESIGN SYSTEM TOKENS ── */
+:root {
+  --sw-orange:#FC8019;
+  --sw-orange-tint:rgba(252,128,25,.08);
+  --sw-charcoal:#282C3F;
+  --sw-muted:#686B78;
+  --sw-border:#E9E9EB;
+  --sw-bg:#FFFFFF;
+  --sw-page:#F4F6FB;
+  --sw-green:#60B246;
+  --sw-yellow:#F3C334;
+  --sw-font:'DM Sans','Basis Grotesque Pro',system-ui,sans-serif;
+  --sw-r:8px;
+  --meta-h:44px;
+  --dev-w:400px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-family:var(--sw-font);-webkit-font-smoothing:antialiased;background:#ECECEC}
+body{overflow:hidden;height:100vh;display:flex;flex-direction:column}
+
+/* ── META BAR ── */
+.meta{height:var(--meta-h);background:var(--sw-charcoal);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0;z-index:50}
+.meta-l{display:flex;align-items:center;gap:10px}
+.meta-logo{font-weight:700;font-size:13px;color:#fff;letter-spacing:-.02em}
+.meta-logo span{color:var(--sw-orange)}
+.meta-sep{color:rgba(255,255,255,.2);font-size:14px}
+.meta-screen{display:flex;align-items:center;gap:6px}
+.meta-badge{background:var(--sw-orange);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.06em}
+.meta-name{color:rgba(255,255,255,.7);font-size:12px;font-weight:500}
+.meta-c{display:flex;align-items:center;gap:8px}
+.ds-pill{border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);font-size:10px;padding:3px 9px;border-radius:99px;font-weight:500}
+.meta-r{display:flex;gap:6px}
+.meta-nav{color:rgba(255,255,255,.45);font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,.12);border-radius:99px;cursor:pointer;background:none;font-family:var(--sw-font);transition:.12s}
+.meta-nav:hover{color:#fff;border-color:rgba(255,255,255,.35)}
+
+/* ── SPLIT ── */
+.split{flex:1;display:flex;overflow:hidden}
+
+/* ── DESKTOP PANEL 85% ── */
+.dp{flex:0 0 85%;display:flex;flex-direction:column;border-right:1px solid #D5D5D5;overflow:hidden}
+.browser{background:#E0E0E0;padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #C8C8C8;flex-shrink:0}
+.b-dots{display:flex;gap:5px}
+.b-dot{width:10px;height:10px;border-radius:50%}
+.b-dot.r{background:#FF5F57}.b-dot.y{background:#FFBD2E}.b-dot.g{background:#28C840}
+.b-url{flex:1;background:#fff;border:1px solid #C8C8C8;border-radius:4px;padding:3px 10px;font-size:11px;color:#555;font-family:monospace}
+.b-url .secure{color:#60B246;margin-right:4px}
+.app-scroll{flex:1;overflow-y:auto;background:var(--sw-page)}
+.app-scroll::-webkit-scrollbar{width:4px}
+.app-scroll::-webkit-scrollbar-thumb{background:var(--sw-border);border-radius:2px}
+
+/* ── APP NAV ── */
+.anav{background:var(--sw-bg);border-bottom:1px solid var(--sw-border);position:sticky;top:0;z-index:20}
+.anav-inner{max-width:1100px;margin:0 auto;padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between}
+.anav-logo{font-size:19px;font-weight:700;color:var(--sw-charcoal);letter-spacing:-.03em}
+.anav-logo em{font-style:normal;color:var(--sw-orange)}
+.anav-links{display:flex;gap:2px}
+.anav-link{padding:6px 14px;border-radius:99px;font-size:13px;font-weight:500;color:var(--sw-muted);cursor:pointer;border:none;background:none;font-family:var(--sw-font);transition:.12s}
+.anav-link:hover{color:var(--sw-charcoal);background:var(--sw-page)}
+.anav-link.act{color:var(--sw-orange);font-weight:600}
+.anav-r{display:flex;align-items:center;gap:12px}
+.budget-pill{display:flex;align-items:center;gap:6px;background:var(--sw-page);border:1px solid var(--sw-border);border-radius:99px;padding:5px 12px;font-size:12px}
+.budget-pill b{font-weight:700;color:var(--sw-charcoal)}
+.budget-pill span{color:var(--sw-muted)}
+.icon-btn{width:34px;height:34px;border-radius:50%;background:var(--sw-page);border:1px solid var(--sw-border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--sw-charcoal);font-size:15px;position:relative}
+.notif-dot{position:absolute;top:7px;right:7px;width:6px;height:6px;background:var(--sw-orange);border-radius:50%;border:1.5px solid #fff}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--sw-orange);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* ── DASHBOARD CONTENT ── */
+.dash{max-width:1100px;margin:0 auto;padding:20px 24px 40px}
+
+/* Hero */
+.hero{background:var(--sw-bg);border:1px solid var(--sw-border);border-radius:var(--sw-r);padding:22px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.hero-l h1{font-size:20px;font-weight:700;color:var(--sw-charcoal);letter-spacing:-.02em;margin-bottom:6px}
+.hero-l p{font-size:13px;color:var(--sw-muted);display:flex;align-items:center;gap:8px}
+.restock-tag{background:var(--sw-orange-tint);color:var(--sw-orange);font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px}
+.hero-r{display:flex;align-items:center;gap:10px}
+.voice-hint{font-size:12px;color:var(--sw-muted);text-align:right;line-height:1.5}
+.voice-btn{display:flex;align-items:center;gap:10px;background:var(--sw-orange);color:#fff;border:none;border-radius:var(--sw-r);padding:11px 18px;cursor:pointer;font-family:var(--sw-font);font-size:13px;font-weight:700;transition:.12s;white-space:nowrap}
+.voice-btn:hover{opacity:.9}
+.voice-btn .mic{width:34px;height:34px;background:rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+
+/* Section headers */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.sh-t{font-size:15px;font-weight:700;color:var(--sw-charcoal);letter-spacing:-.01em}
+.sh-a{font-size:12px;font-weight:600;color:var(--sw-orange);cursor:pointer;text-decoration:none;background:none;border:none;font-family:var(--sw-font)}
+
+/* Meals grid */
+.meals-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.meal-card{background:var(--sw-bg);border:1px solid var(--sw-border);border-radius:var(--sw-r);padding:16px;position:relative}
+.meal-type{display:inline-flex;align-items:center;gap:4px;background:var(--sw-page);border-radius:99px;padding:3px 8px;font-size:9px;font-weight:700;color:var(--sw-muted);letter-spacing:.05em;margin-bottom:10px}
+.meal-name{font-size:15px;font-weight:700;color:var(--sw-charcoal);margin-bottom:3px;letter-spacing:-.01em}
+.meal-from{font-size:11px;color:var(--sw-muted);margin-bottom:12px}
+.meal-tags{display:flex;gap:5px;margin-bottom:12px}
+.meal-tag{font-size:10px;color:var(--sw-muted);background:var(--sw-page);padding:2px 7px;border-radius:99px}
+.meal-tag.g{color:var(--sw-green);background:#EDFAE3}
+.cart-btn{width:100%;padding:8px;background:var(--sw-orange);color:#fff;border:none;border-radius:var(--sw-r);font-family:var(--sw-font);font-size:12px;font-weight:700;cursor:pointer;transition:.12s}
+.cart-btn:hover{opacity:.9}
+.cart-btn.outline{background:var(--sw-page);color:var(--sw-orange);border:1.5px solid var(--sw-orange)}
+.eatout-card .meal-name{color:var(--sw-muted)}
+.eatout-chip{display:inline-flex;align-items:center;gap:4px;background:#FEF3E2;color:var(--sw-orange);font-size:10px;font-weight:600;padding:4px 10px;border-radius:99px;margin-bottom:12px}
+
+/* Week strip */
+.week-strip{background:var(--sw-bg);border:1px solid var(--sw-border);border-radius:var(--sw-r);padding:16px 18px;margin-bottom:16px}
+.week-days{display:flex;gap:6px;margin-top:11px}
+.day{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:9px 4px;border-radius:var(--sw-r);cursor:pointer;border:1px solid transparent;transition:.12s}
+.day:hover:not(.today){background:var(--sw-page)}
+.day-n{font-size:9px;font-weight:700;color:var(--sw-muted);letter-spacing:.05em}
+.day-d{font-size:14px;font-weight:700;color:var(--sw-charcoal)}
+.day-dot{width:5px;height:5px;border-radius:50%;background:var(--sw-border)}
+.day.done .day-dot{background:var(--sw-green)}
+.day.today{background:var(--sw-orange);border-color:var(--sw-orange)}
+.day.today .day-n,.day.today .day-d{color:#fff}
+.day.today .day-dot{background:rgba(255,255,255,.6)}
+.day.eatout .day-dot{background:var(--sw-yellow)}
+
+/* Bottom row */
+.bottom-row{display:grid;grid-template-columns:280px 1fr;gap:12px}
+
+/* Budget card */
+.budget-card{background:var(--sw-bg);border:1px solid var(--sw-border);border-radius:var(--sw-r);padding:18px 20px;display:flex;flex-direction:column;align-items:center}
+.ring-wrap{position:relative;width:130px;height:130px;margin:8px auto}
+.ring-wrap svg{width:130px;height:130px}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-amt{font-size:18px;font-weight:700;color:var(--sw-charcoal);letter-spacing:-.03em;line-height:1}
+.ring-lbl{font-size:10px;color:var(--sw-muted);margin-top:2px}
+.ring-legend{display:flex;gap:14px;margin-top:10px}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--sw-muted)}
+.leg-dot{width:7px;height:7px;border-radius:50%}
+.eatout-row{margin-top:12px;width:100%;padding:10px 12px;background:var(--sw-page);border-radius:var(--sw-r);display:flex;align-items:center;justify-content:space-between}
+.eatout-label{font-size:12px;color:var(--sw-charcoal);font-weight:500}
+.eatout-dots{display:flex;gap:4px}
+.eo-dot{width:10px;height:10px;border-radius:50%;background:var(--sw-border)}
+.eo-dot.used{background:var(--sw-orange)}
+
+/* Stats card */
+.stats-card{background:var(--sw-bg);border:1px solid var(--sw-border);border-radius:var(--sw-r);padding:18px 20px}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:11px}
+.stat{background:var(--sw-page);border-radius:var(--sw-r);padding:12px}
+.stat-v{font-size:22px;font-weight:700;color:var(--sw-charcoal);letter-spacing:-.03em;line-height:1;margin-bottom:4px}
+.stat-v.o{color:var(--sw-orange)}
+.stat-v.g{color:var(--sw-green)}
+.stat-l{font-size:11px;color:var(--sw-muted);line-height:1.35}
+.nudge{margin-top:12px;background:#FFF8F2;border:1px solid #FCDBBD;border-radius:var(--sw-r);padding:11px 13px;display:flex;align-items:flex-start;gap:8px}
+.nudge-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.nudge-text{font-size:12px;color:var(--sw-charcoal);line-height:1.45}
+.nudge-text strong{color:var(--sw-orange)}
+.nudge-act{display:inline-block;margin-top:5px;font-size:11px;font-weight:700;color:var(--sw-orange);cursor:pointer;background:none;border:none;font-family:var(--sw-font)}
+
+/* ── MOBILE PANEL 15% ── */
+.mp{flex:0 0 15%;display:flex;flex-direction:column;align-items:center;padding:12px 10px;background:#E0E0E0;overflow:hidden;gap:0}
+.mp-label{font-size:9px;font-weight:700;color:#999;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;align-self:flex-start}
+.phone{background:#1C1C1E;border-radius:40px;padding:10px 7px 12px;box-shadow:0 8px 30px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.06);width:100%;max-width:186px}
+.p-island{width:68px;height:22px;background:#000;border-radius:11px;margin:0 auto 6px;position:relative;z-index:1}
+.p-screen{background:var(--sw-bg);border-radius:28px;overflow:hidden;height:340px;position:relative}
+.p-inner{width:375px;transform-origin:top left;transform:scale(.447);position:absolute;top:0;left:0}
+
+/* Mobile UI */
+.m-sb{background:#fff;padding:10px 14px 6px;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;color:#1C1C1E}
+.m-sb-r{display:flex;gap:3px;font-size:11px}
+.m-nav{background:#fff;border-bottom:1px solid var(--sw-border);padding:8px 14px 10px;display:flex;align-items:center;justify-content:space-between}
+.m-logo{font-size:16px;font-weight:700;color:var(--sw-charcoal)}.m-logo em{font-style:normal;color:var(--sw-orange)}
+.m-icons{display:flex;gap:10px;font-size:18px;color:var(--sw-charcoal)}
+.m-body{background:var(--sw-page);height:620px;overflow:hidden}
+.m-hero{background:#fff;padding:12px 14px 14px;border-bottom:1px solid var(--sw-border)}
+.m-greet{font-size:16px;font-weight:700;color:var(--sw-charcoal);margin-bottom:3px}
+.m-sub{font-size:12px;color:var(--sw-muted);display:flex;align-items:center;gap:6px}
+.m-rtag{background:var(--sw-orange-tint);color:var(--sw-orange);font-size:10px;font-weight:600;padding:2px 6px;border-radius:99px}
+.m-sec{padding:12px 14px 0}
+.m-sec-t{font-size:13px;font-weight:700;color:var(--sw-charcoal);margin-bottom:9px}
+.m-meals{display:flex;gap:10px;overflow:hidden;padding-bottom:12px}
+.m-mc{width:150px;flex-shrink:0;background:#fff;border:1px solid var(--sw-border);border-radius:10px;padding:12px}
+.m-mt{font-size:9px;font-weight:700;color:var(--sw-muted);letter-spacing:.05em;margin-bottom:6px}
+.m-mn{font-size:13px;font-weight:700;color:var(--sw-charcoal);margin-bottom:4px}
+.m-mf{font-size:10px;color:var(--sw-muted);margin-bottom:10px}
+.m-cb{width:100%;padding:7px;background:var(--sw-orange);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:700}
+.m-budget{margin:0 14px 12px;background:#fff;border:1px solid var(--sw-border);border-radius:10px;padding:12px 14px}
+.m-bh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.m-bh h3{font-size:13px;font-weight:700;color:var(--sw-charcoal)}
+.m-bh span{font-size:12px;font-weight:700;color:var(--sw-orange)}
+.m-prog{height:5px;background:var(--sw-border);border-radius:3px;overflow:hidden}
+.m-prog-f{height:100%;background:var(--sw-orange);border-radius:3px;width:43%}
+.m-progsub{display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:var(--sw-muted)}
+.m-weektab{margin:0 14px 12px;background:#fff;border:1px solid var(--sw-border);border-radius:10px;padding:10px 12px}
+.m-week-row{display:flex;gap:5px}
+.m-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 2px;border-radius:6px}
+.m-day.today{background:var(--sw-orange)}
+.m-dn{font-size:8px;font-weight:700;color:var(--sw-muted);letter-spacing:.04em}
+.m-dd{font-size:12px;font-weight:700;color:var(--sw-charcoal)}
+.m-ddot{width:4px;height:4px;border-radius:50%;background:var(--sw-border)}
+.m-day.today .m-dn,.m-day.today .m-dd{color:#fff}
+.m-day.today .m-ddot{background:rgba(255,255,255,.55)}
+.m-day.done .m-ddot{background:var(--sw-green)}
+.m-tabs{background:#fff;border-top:1px solid var(--sw-border);display:flex;height:56px;position:absolute;bottom:0;left:0;right:0}
+.m-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;color:var(--sw-muted);font-weight:500}
+.m-tab.act{color:var(--sw-orange)}
+.m-tab-i{font-size:20px}
+.m-fab{position:absolute;bottom:68px;right:14px;width:52px;height:52px;background:var(--sw-orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 14px rgba(252,128,25,.45);color:#fff;z-index:5}
+
+/* ── DEV BUTTON ── */
+.dev-btn{position:fixed;bottom:20px;right:20px;z-index:200;background:var(--sw-charcoal);color:#fff;border:none;border-radius:var(--sw-r);padding:9px 16px;font-family:var(--sw-font);font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,.3);letter-spacing:.04em;transition:.12s}
+.dev-btn:hover{background:#1a1e2e;transform:translateY(-1px)}
+.dev-dot{width:6px;height:6px;border-radius:50%;background:var(--sw-orange);flex-shrink:0}
+
+/* ── DEV PANEL ── */
+.dev-panel{position:fixed;top:var(--meta-h);right:0;width:var(--dev-w);height:calc(100vh - var(--meta-h));background:#0D1117;color:#E8E8F0;z-index:150;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border-left:1px solid #1E2938;font-size:12px}
+.dev-panel.open{transform:translateX(0)}
+.dev-ph{padding:13px 16px;border-bottom:1px solid #1E2938;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dev-pt{font-family:var(--sw-font);font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.dev-s-tag{background:var(--sw-orange);color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700}
+.dev-close{background:none;border:none;color:#555;font-size:18px;cursor:pointer;line-height:1;padding:4px}
+.dev-close:hover{color:#fff}
+.dev-tabs{display:flex;border-bottom:1px solid #1E2938;padding:0 16px;flex-shrink:0;overflow-x:auto}
+.d-tab{padding:9px 12px;font-family:var(--sw-font);font-size:10px;font-weight:700;color:#555;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;letter-spacing:.06em;transition:.12s}
+.d-tab:hover{color:#888}
+.d-tab.act{color:var(--sw-orange);border-bottom-color:var(--sw-orange)}
+.dev-body{flex:1;overflow-y:auto;padding:16px}
+.dev-body::-webkit-scrollbar{width:3px}
+.dev-body::-webkit-scrollbar-thumb{background:#1E2938;border-radius:2px}
+.d-sub{display:none}.d-sub.act{display:block}
+.d-sec{margin-bottom:20px}
+.d-lbl{font-family:var(--sw-font);font-size:8.5px;font-weight:700;color:var(--sw-orange);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.code{background:#161B22;border:1px solid #1E2938;border-radius:6px;padding:12px;font-family:'Courier New',monospace;font-size:11px;line-height:1.65;color:#A8C8B0;white-space:pre;overflow-x:auto}
+.code .co{color:#3A5040}.code .om{color:var(--sw-orange);font-weight:700}
+.code .pa{color:#93C5FD}.code .st{color:#FCA5A5}
+.code .vl{color:#E8D5A8}.code .ok{color:#6EE7B7}
+.code .wn{color:#FDE68A}
+.dlist{list-style:none;display:flex;flex-direction:column;gap:8px}
+.dlist li{display:flex;gap:7px;font-size:11.5px;line-height:1.5;color:#94A3B8}
+.dlist li::before{content:'→';color:var(--sw-orange);flex-shrink:0;margin-top:1px}
+.dlist.warn li::before{content:'⚠';color:#FDE68A}
+.dlist.bad li::before{content:'✗';color:#FCA5A5}
+.dlist.ok li::before{content:'✓';color:#6EE7B7}
+.d-sub-head{font-family:var(--sw-font);font-size:11px;font-weight:700;color:#CBD5E1;margin:14px 0 6px}
+</style>
+</head>
+<body>
+
+<!-- META BAR -->
+<header class="meta">
+  <div class="meta-l">
+    <div class="meta-logo">Plate<span>Cart</span></div>
+    <div class="meta-sep">/</div>
+    <div class="meta-screen">
+      <div class="meta-badge">01 / 10</div>
+      <div class="meta-name">Dashboard</div>
+    </div>
+  </div>
+  <div class="meta-c">
+    <div class="ds-pill">Swiggy Design System</div>
+  </div>
+  <div class="meta-r">
+    <button class="meta-nav">← Onboarding</button>
+    <button class="meta-nav">Meal Plan →</button>
+  </div>
+</header>
+
+<!-- SPLIT CONTAINER -->
+<div class="split">
+
+  <!-- DESKTOP PANEL 85% -->
+  <div class="dp">
+    <div class="browser">
+      <div class="b-dots"><div class="b-dot r"></div><div class="b-dot y"></div><div class="b-dot g"></div></div>
+      <div class="b-url"><span class="secure">🔒</span> platecart.app/dashboard</div>
+    </div>
+    <div class="app-scroll">
+
+      <!-- APP NAV -->
+      <nav class="anav">
+        <div class="anav-inner">
+          <div class="anav-logo">Plate<em>Cart</em></div>
+          <div class="anav-links">
+            <button class="anav-link act">Dashboard</button>
+            <button class="anav-link">Meal Plan</button>
+            <button class="anav-link">Templates</button>
+            <button class="anav-link">Budget</button>
+          </div>
+          <div class="anav-r">
+            <div class="budget-pill">
+              <b>₹2,150</b><span>/ ₹5,000</span>
+            </div>
+            <div class="icon-btn">
+              🔔<div class="notif-dot"></div>
+            </div>
+            <div class="avatar">RV</div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- DASHBOARD -->
+      <div class="dash">
+
+        <!-- HERO -->
+        <div class="hero">
+          <div class="hero-l">
+            <h1>Good morning, Raphy 👋</h1>
+            <p>
+              <span class="restock-tag">Restock in 1 day</span>
+              Wed 2 Jul · Weight Loss Plan · Week 3
+            </p>
+          </div>
+          <div class="hero-r">
+            <div class="voice-hint">Say a dish name or<br>tap to add to cart</div>
+            <button class="voice-btn">
+              <div class="mic">🎙️</div>
+              Voice Order
+            </button>
+          </div>
+        </div>
+
+        <!-- TODAY'S MEALS -->
+        <div class="sh">
+          <div class="sh-t">Today's Meals</div>
+          <button class="sh-a">Edit plan →</button>
+        </div>
+        <div class="meals-row">
+          <!-- Breakfast -->
+          <div class="meal-card">
+            <div class="meal-type">🌅 BREAKFAST</div>
+            <div class="meal-name">Oats Porridge</div>
+            <div class="meal-from">From template: High Protein Mornings</div>
+            <div class="meal-tags">
+              <div class="meal-tag g">Veg</div>
+              <div class="meal-tag">310 kcal</div>
+              <div class="meal-tag">8 min</div>
+            </div>
+            <button class="cart-btn">Add ingredients to Instamart</button>
+          </div>
+          <!-- Lunch -->
+          <div class="meal-card">
+            <div class="meal-type">☀️ LUNCH</div>
+            <div class="meal-name">Mixed Veggie Salad</div>
+            <div class="meal-from">From template: Weight Loss Week</div>
+            <div class="meal-tags">
+              <div class="meal-tag g">Veg</div>
+              <div class="meal-tag">240 kcal</div>
+              <div class="meal-tag">15 min</div>
+            </div>
+            <button class="cart-btn">Add ingredients to Instamart</button>
+          </div>
+          <!-- Dinner (eat-out slot) -->
+          <div class="meal-card eatout-card">
+            <div class="meal-type">🌙 DINNER</div>
+            <div class="meal-name">Dal Khichdi</div>
+            <div class="meal-from">From template: Light Dinners</div>
+            <div class="meal-tags">
+              <div class="meal-tag g">Veg</div>
+              <div class="meal-tag">380 kcal</div>
+              <div class="meal-tag">20 min</div>
+            </div>
+            <button class="cart-btn">Add ingredients to Instamart</button>
+          </div>
+        </div>
+
+        <!-- WEEK STRIP -->
+        <div class="week-strip">
+          <div class="sh" style="margin-bottom:0">
+            <div class="sh-t">This Week</div>
+            <button class="sh-a">Full plan →</button>
+          </div>
+          <div class="week-days">
+            <div class="day done"><div class="day-n">MON</div><div class="day-d">30</div><div class="day-dot"></div></div>
+            <div class="day done"><div class="day-n">TUE</div><div class="day-d">1</div><div class="day-dot"></div></div>
+            <div class="day today"><div class="day-n">WED</div><div class="day-d">2</div><div class="day-dot"></div></div>
+            <div class="day"><div class="day-n">THU</div><div class="day-d">3</div><div class="day-dot"></div></div>
+            <div class="day"><div class="day-n">FRI</div><div class="day-d">4</div><div class="day-dot"></div></div>
+            <div class="day eatout"><div class="day-n">SAT</div><div class="day-d">5</div><div class="day-dot"></div></div>
+            <div class="day eatout"><div class="day-n">SUN</div><div class="day-d">6</div><div class="day-dot"></div></div>
+          </div>
+        </div>
+
+        <!-- BOTTOM ROW: Budget + Stats -->
+        <div class="bottom-row">
+
+          <!-- Budget Ring -->
+          <div class="budget-card">
+            <div class="sh" style="width:100%;margin-bottom:0">
+              <div class="sh-t">Monthly Budget</div>
+              <button class="sh-a">Details →</button>
+            </div>
+            <div class="ring-wrap">
+              <svg viewBox="0 0 130 130">
+                <circle cx="65" cy="65" r="50" fill="none" stroke="#E9E9EB" stroke-width="10"/>
+                <!-- 43% spent = 314.16*0.43 = 135.1 of 314.16 -->
+                <circle cx="65" cy="65" r="50" fill="none" stroke="#FC8019" stroke-width="10"
+                  stroke-dasharray="135 179" stroke-dashoffset="-78.5" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-center">
+                <div class="ring-amt">₹2,150</div>
+                <div class="ring-lbl">of ₹5,000 · 43%</div>
+              </div>
+            </div>
+            <div class="ring-legend">
+              <div class="leg-item"><div class="leg-dot" style="background:var(--sw-orange)"></div>Spent</div>
+              <div class="leg-item"><div class="leg-dot" style="background:var(--sw-border)"></div>Remaining</div>
+            </div>
+            <div class="eatout-row" style="margin-top:10px">
+              <div class="eatout-label">Eat-outs this week</div>
+              <div class="eatout-dots">
+                <div class="eo-dot used"></div>
+                <div class="eo-dot"></div>
+                <div class="eo-dot"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Card -->
+          <div class="stats-card">
+            <div class="sh" style="margin-bottom:0">
+              <div class="sh-t">Activity & Insights</div>
+              <button class="sh-a">Budget tracker →</button>
+            </div>
+            <div class="stats-grid">
+              <div class="stat">
+                <div class="stat-v">16</div>
+                <div class="stat-l">Days on\nplan this month</div>
+              </div>
+              <div class="stat">
+                <div class="stat-v o">₹2,850</div>
+                <div class="stat-l">Groceries\nthis month</div>
+              </div>
+              <div class="stat">
+                <div class="stat-v g">+₹440</div>
+                <div class="stat-l">Saved vs\nlast month</div>
+              </div>
+            </div>
+            <div class="nudge">
+              <div class="nudge-icon">💡</div>
+              <div class="nudge-text">
+                You've wasted <strong>spinach 3 times</strong> this month. Your next Instamart order will have a smaller quantity — approve or adjust before confirming.
+                <br><button class="nudge-act">Review restock list →</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE PANEL 15% -->
+  <div class="mp">
+    <div class="mp-label">Mobile · 375px</div>
+    <div class="phone">
+      <div class="p-island"></div>
+      <div class="p-screen">
+        <div class="p-inner">
+
+          <!-- Mobile UI (375px wide, scaled ~0.45) -->
+          <div class="m-sb">
+            <span>9:41</span>
+            <div class="m-sb-r">
+              <span>●●●●</span>
+              <span>WiFi</span>
+              <span>🔋</span>
+            </div>
+          </div>
+          <div class="m-nav">
+            <div class="m-logo">Plate<em>Cart</em></div>
+            <div class="m-icons"><span>🔔</span><span>👤</span></div>
+          </div>
+          <div class="m-body">
+            <!-- Hero -->
+            <div class="m-hero">
+              <div class="m-greet">Morning, Raphy 👋</div>
+              <div class="m-sub">
+                <div class="m-rtag">Restock in 1 day</div>
+                Wed 2 Jul
+              </div>
+            </div>
+            <!-- Today meals -->
+            <div class="m-sec">
+              <div class="m-sec-t">Today's Meals</div>
+              <div class="m-meals">
+                <div class="m-mc">
+                  <div class="m-mt">🌅 BREAKFAST</div>
+                  <div class="m-mn">Oats Porridge</div>
+                  <div class="m-mf">High Protein Mornings</div>
+                  <button class="m-cb">Add to cart</button>
+                </div>
+                <div class="m-mc">
+                  <div class="m-mt">☀️ LUNCH</div>
+                  <div class="m-mn">Mixed Veggie Salad</div>
+                  <div class="m-mf">Weight Loss Week</div>
+                  <button class="m-cb">Add to cart</button>
+                </div>
+                <div class="m-mc" style="opacity:.5">
+                  <div class="m-mt">🌙 DINNER</div>
+                  <div class="m-mn">Dal Khichdi</div>
+                  <div class="m-mf">Light Dinners</div>
+                  <button class="m-cb">Add to cart</button>
+                </div>
+              </div>
+            </div>
+            <!-- Week row -->
+            <div class="m-weektab">
+              <div class="m-week-row">
+                <div class="m-day done"><div class="m-dn">M</div><div class="m-dd">30</div><div class="m-ddot"></div></div>
+                <div class="m-day done"><div class="m-dn">T</div><div class="m-dd">1</div><div class="m-ddot"></div></div>
+                <div class="m-day today"><div class="m-dn">W</div><div class="m-dd">2</div><div class="m-ddot"></div></div>
+                <div class="m-day"><div class="m-dn">T</div><div class="m-dd">3</div><div class="m-ddot"></div></div>
+                <div class="m-day"><div class="m-dn">F</div><div class="m-dd">4</div><div class="m-ddot"></div></div>
+                <div class="m-day"><div class="m-dn">S</div><div class="m-dd">5</div><div class="m-ddot"></div></div>
+                <div class="m-day"><div class="m-dn">S</div><div class="m-dd">6</div><div class="m-ddot"></div></div>
+              </div>
+            </div>
+            <!-- Budget -->
+            <div class="m-budget">
+              <div class="m-bh"><h3>Monthly Budget</h3><span>43%</span></div>
+              <div class="m-prog"><div class="m-prog-f"></div></div>
+              <div class="m-progsub"><span>₹2,150 spent</span><span>₹2,850 left</span></div>
+            </div>
+          </div>
+          <!-- Bottom tabs -->
+          <div class="m-tabs">
+            <div class="m-tab act"><div class="m-tab-i">🏠</div>Home</div>
+            <div class="m-tab"><div class="m-tab-i">📋</div>Plan</div>
+            <div class="m-tab"><div class="m-tab-i">📚</div>Templates</div>
+            <div class="m-tab"><div class="m-tab-i">💰</div>Budget</div>
+            <div class="m-tab"><div class="m-tab-i">👤</div>Profile</div>
+          </div>
+          <!-- FAB voice -->
+          <div class="m-fab">🎙️</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /split -->
+
+<!-- DEV BUTTON -->
+<button class="dev-btn" onclick="toggleDev()">
+  <div class="dev-dot"></div>DEV
+</button>
+
+<!-- DEV PANEL -->
+<aside class="dev-panel" id="devPanel">
+  <div class="dev-ph">
+    <div class="dev-pt">
+      Developer Guide
+      <span class="dev-s-tag">DASHBOARD</span>
+    </div>
+    <button class="dev-close" onclick="toggleDev()">✕</button>
+  </div>
+  <div class="dev-tabs">
+    <button class="d-tab act" onclick="showTab('api',this)">API</button>
+    <button class="d-tab" onclick="showTab('schema',this)">Schema</button>
+    <button class="d-tab" onclick="showTab('pitfalls',this)">Pitfalls</button>
+    <button class="d-tab" onclick="showTab('security',this)">Security</button>
+    <button class="d-tab" onclick="showTab('ui',this)">UI Rules</button>
+  </div>
+  <div class="dev-body">
+
+    <!-- API TAB -->
+    <div class="d-sub act" id="d-api">
+      <div class="d-sec">
+        <div class="d-lbl">API Calls on Page Load</div>
+        <div class="code"><span class="om">GET</span> <span class="pa">/api/user/profile</span>
+<span class="co">// Clerk JWT in Authorization header</span>
+<span class="co">// Returns user's goal, budget, diet type</span>
+<span class="vl">Response:</span> {
+  id, name, goal, diet_type,
+  monthly_budget, household_size,
+  eatout_per_week, exclusions[]
+}
+
+<span class="om">GET</span> <span class="pa">/api/meal-plans/current</span>
+<span class="co">// Today's slots only — do NOT fetch all 7 days</span>
+<span class="vl">Response:</span> {
+  week_start, id,
+  slots: [{
+    day_of_week, meal_type,
+    template: { dish_name, tags[], is_eatout }
+  }]
+}
+
+<span class="om">GET</span> <span class="pa">/api/budget/summary</span>
+<span class="co">// Cache at edge for 60s max</span>
+<span class="vl">Response:</span> {
+  monthly_budget, spent_groceries,
+  spent_eatout, eatout_count_this_week
+}
+
+<span class="om">GET</span> <span class="pa">/api/waste/patterns</span>
+<span class="co">// Only if user has 2+ order cycles done</span>
+<span class="vl">Response:</span> {
+  patterns: [{
+    ingredient, waste_count, suggestion
+  }]
+}</div>
+      </div>
+      <div class="d-sec">
+        <div class="d-lbl">On User Action</div>
+        <div class="code"><span class="om">POST</span> <span class="pa">/api/cart/build</span>
+<span class="co">// Triggered by "Add ingredients" button</span>
+Body: { template_ids: [string], date: string }
+
+<span class="om">POST</span> <span class="pa">/api/cart/add-to-instamart</span>
+<span class="co">// Calls Swiggy MCP — ALWAYS server-side</span>
+Body: { items: [{name, qty, unit}] }
+
+<span class="om">POST</span> <span class="pa">/api/voice/parse</span>
+<span class="co">// Voice → dish name (after speech-to-text)</span>
+Body: { transcript: string }</div>
+      </div>
+      <div class="d-sec">
+        <div class="d-lbl">Next.js Route Handler Example</div>
+        <div class="code"><span class="co">// app/api/meal-plans/current/route.ts</span>
+import { auth } from '<span class="st">@clerk/nextjs</span>'
+
+export async function GET() {
+  const { userId } = await auth()
+  <span class="co">// userId from JWT — never from body</span>
+  if (!userId) return Response.json(
+    { error: '<span class="wn">Unauthorized</span>' },
+    { status: <span class="st">401</span> }
+  )
+  const plan = await db.query.mealPlans.findFirst({
+    where: eq(mealPlans.userId, userId), <span class="ok">// ✓</span>
+    with: { slots: { with: { template: true } } }
+  })
+  return Response.json(plan)
+}</div>
+      </div>
+    </div>
+
+    <!-- SCHEMA TAB -->
+    <div class="d-sub" id="d-schema">
+      <div class="d-sec">
+        <div class="d-lbl">Tables Used on This Screen</div>
+        <div class="code"><span class="pa">users</span>
+  id, clerk_id, name, goal, diet_type
+  monthly_budget, household_size
+  eatout_per_week, exclusions[]
+
+<span class="pa">meal_plans</span>
+  id, user_id, week_start
+
+<span class="pa">meal_plan_slots</span>
+  id, meal_plan_id, day_of_week (1–7)
+  meal_type ENUM(breakfast, lunch, dinner)
+  template_id, is_eatout BOOL
+
+<span class="pa">templates</span>  (read-only on this screen)
+  id, dish_name, tags[], fork_count
+
+<span class="pa">orders_log</span>
+  user_id, ordered_at, total_amount
+  source ENUM(instamart, food)
+
+<span class="pa">waste_log</span>
+  user_id, ingredient_name
+  waste_level ENUM(none, some, most)
+  logged_at</div>
+      </div>
+      <div class="d-sec">
+        <div class="d-lbl">Drizzle Schema Snippet</div>
+        <div class="code"><span class="co">// lib/db/schema.ts</span>
+export const mealPlanSlots = pgTable(
+  '<span class="st">meal_plan_slots</span>', {
+  id: uuid().primaryKey().defaultRandom(),
+  mealPlanId: uuid().references(
+    () => mealPlans.id
+  ).notNull(),
+  dayOfWeek: integer().notNull(), <span class="co">// 1–7</span>
+  mealType: mealTypeEnum.notNull(),
+  templateId: uuid().references(
+    () => templates.id
+  ),
+  isEatout: boolean().default(false)
+})</div>
+      </div>
+      <div class="d-sec">
+        <div class="d-lbl">Optimised Query (no N+1)</div>
+        <div class="code"><span class="co">// Get today's slots + templates in ONE query</span>
+const today = new Date().getDay() || 7
+const slots = await db.query
+  .mealPlanSlots.findMany({
+  where: and(
+    eq(mps.mealPlanId, plan.id),
+    eq(mps.dayOfWeek, today)
+  ),
+  with: { template: true } <span class="ok">// single JOIN</span>
+})</div>
+      </div>
+    </div>
+
+    <!-- PITFALLS TAB -->
+    <div class="d-sub" id="d-pitfalls">
+      <div class="d-sec">
+        <div class="d-lbl">Common Mistakes — Fix Before They Happen</div>
+        <ul class="dlist warn">
+          <li><strong>N+1 query:</strong> Never fetch templates per slot individually. Use <code>with: { template: true }</code> in a single Drizzle query.</li>
+          <li><strong>Loading all 7 days:</strong> Dashboard fetches TODAY only. Week strip is cosmetic — lazy-load the other 6 days on hover/tap.</li>
+          <li><strong>Stale budget:</strong> Budget ring can show 60s-old data (edge cache). Invalidate immediately after an Instamart order is placed.</li>
+          <li><strong>Voice on page load:</strong> Never call <code>getUserMedia</code> on mount. iOS Safari silently ignores it; Chrome shows a permission prompt users didn't expect. Only request on explicit button tap.</li>
+          <li><strong>Timezone bug:</strong> <code>week_start</code> must use the user's local timezone for day-of-week lookup. Server is UTC — always pass <code>Intl.DateTimeFormat().resolvedOptions().timeZone</code> from the client.</li>
+          <li><strong>Empty state:</strong> New users have no meal plan. Show "Build your first plan" CTA inline — never render empty card slots.</li>
+          <li><strong>Race on edit:</strong> If user edits plan on web while mobile is viewing, the mobile cache won't update. Add a 30s poll or SWR revalidation on window focus.</li>
+          <li><strong>Waste nudge flash:</strong> Only show the waste nudge after 2+ completed restock cycles. Checking on first load makes it appear on day 1.</li>
+        </ul>
+      </div>
+      <div class="d-sec">
+        <div class="d-lbl">Performance Targets</div>
+        <ul class="dlist ok">
+          <li>Dashboard initial load: &lt;1.2s LCP on 4G India (typical Swiggy target)</li>
+          <li>Budget ring SVG: rendered server-side with known percentage, no layout shift</li>
+          <li>Meal cards: skeleton loaders (orange at 8% opacity) until API responds</li>
+          <li>Voice button: shows "listening…" state within 80ms of tap (UI must respond before browser responds)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SECURITY TAB -->
+    <div class="d-sub" id="d-security">
+      <div class="d-sec">
+        <div class="d-lbl">Authentication & Authorization</div>
+        <ul class="dlist">
+          <li><strong>Clerk JWT:</strong> Every API route calls <code>auth()</code> from <code>@clerk/nextjs/server</code>. If <code>userId</code> is null, return 401 immediately — do not proceed.</li>
+          <li><strong>Row-level security:</strong> Every Drizzle query includes <code>where: eq(table.userId, userId)</code> using the ID from the JWT, never from the request body or URL params.</li>
+          <li><strong>Swiggy MCP key:</strong> API key stored in <code>.env.local</code> as <code>SWIGGY_MCP_API_KEY</code>. Never prefixed with <code>NEXT_PUBLIC_</code>. Only called from <code>/api/cart/add-to-instamart</code> — never from browser.</li>
+        </ul>
+      </div>
+      <div class="d-sec">
+        <div class="d-lbl">Data Exposure</div>
+        <ul class="dlist warn">
+          <li><strong>Budget is PII-adjacent:</strong> Never log <code>monthly_budget</code> or <code>total_amount</code> in error messages, Sentry traces, or console logs. Use masked values (e.g. "budget:present") in logs.</li>
+          <li><strong>Voice transcript:</strong> Speech-to-text output goes to <code>/api/voice/parse</code>. Sanitize with a strict allowlist before any DB lookup — no raw SQL interpolation.</li>
+          <li><strong>Waste patterns:</strong> Only return patterns for the authenticated user. Aggregate query must have <code>WHERE user_id = $1</code> before GROUP BY.</li>
+        </ul>
+      </div>
+      <div class="d-sec">
+        <div class="d-lbl">Rate Limits & Headers</div>
+        <div class="code"><span class="co">// middleware.ts — apply to all /api routes</span>
+import { ratelimit } from '<span class="st">@/lib/ratelimit</span>'
+
+const limits = {
+  '<span class="pa">/api/budget/summary</span>': 100, <span class="co">// per min</span>
+  '<span class="pa">/api/voice/parse</span>':     20,  <span class="co">// per min</span>
+  '<span class="pa">/api/cart/*</span>':           10,  <span class="co">// per min</span>
+}
+
+<span class="co">// Required response headers</span>
+<span class="ok">X-Content-Type-Options: nosniff</span>
+<span class="ok">X-Frame-Options: DENY</span>
+<span class="ok">Strict-Transport-Security: max-age=31536000</span>
+<span class="wn">Content-Security-Policy: script-src 'self'</span></div>
+      </div>
+      <div class="d-sec">
+        <div class="d-lbl">Input Validation</div>
+        <ul class="dlist ok">
+          <li>All API inputs validated with Zod before touching the DB</li>
+          <li>Voice transcript: max 200 chars, strip non-alphanumeric except spaces</li>
+          <li>Template IDs: validate as UUID format before query</li>
+          <li>Date params: validate as ISO date string, reject if &gt;30 days in past</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- UI RULES TAB -->
+    <div class="d-sub" id="d-ui">
+      <div class="d-sec">
+        <div class="d-lbl">Swiggy DS Rules — Dashboard Specific</div>
+        <ul class="dlist">
+          <li><strong>Orange usage:</strong> Only on voice button, budget ring fill, "Add to Instamart" buttons, active nav link, restock tag, eat-out dots. Never as card background, heading colour, or decoration.</li>
+          <li><strong>Cards:</strong> Background <code>#FFFFFF</code>, border <code>1px solid #E9E9EB</code>, border-radius <code>8px</code>, no box-shadow. Shadow is reserved for modals and dropdowns only.</li>
+          <li><strong>Touch targets:</strong> All interactive elements minimum 44px height. Voice button: 48px on desktop, 56px on mobile.</li>
+          <li><strong>Typography:</strong> Charcoal <code>#282C3F</code> for all headings and primary data. Muted <code>#686B78</code> for labels, from-template text, meta info. Never pure black (<code>#000</code>) on white.</li>
+          <li><strong>Meal card CTA:</strong> "Add ingredients to Instamart" — not "Add to cart" (be specific). Button text must be exact — same label appears in cart confirmation.</li>
+          <li><strong>Week strip:</strong> Today pill is orange fill with white text. Done days show a green dot (not full colour fill). Future days show a grey dot. Eat-out days show a yellow dot.</li>
+          <li><strong>Budget ring:</strong> SVG circle, not a CSS progress bar. Percentage shown in the ring centre. Legend below: two dots (spent orange, remaining grey).</li>
+          <li><strong>Voice button state:</strong> Default → Listening (pulse animation on mic circle) → Processing (spinner) → Result (dish name appears). Never show a modal for voice — result shows inline in hero.</li>
+          <li><strong>Mobile FAB:</strong> Orange circle, 52px, positioned bottom-right above tab bar. Triggers the same voice flow as the desktop voice button.</li>
+          <li><strong>Empty states:</strong> Meal slot with no template → show "+ Add a meal" in muted text, no empty white card.</li>
+        </ul>
+      </div>
+      <div class="d-sec">
+        <div class="d-lbl">Accessibility</div>
+        <ul class="dlist ok">
+          <li>Voice button: <code>aria-label="Voice order — say a dish name"</code>, role="button"</li>
+          <li>Budget ring SVG: <code>role="img"</code> with <code>&lt;title&gt;Budget: 43% spent&lt;/title&gt;</code></li>
+          <li>Week strip day pills: <code>aria-label="Wednesday 2 July, today"</code> on active day</li>
+          <li>All colour contrast ratios: minimum 4.5:1 for body text (charcoal on white = 10.5:1 ✓)</li>
+          <li>Nudge alert: <code>role="alert"</code> so screen readers announce waste pattern on load</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</aside>
+
+<script>
+function toggleDev() {
+  document.getElementById('devPanel').classList.toggle('open');
+}
+function showTab(id, btn) {
+  document.querySelectorAll('.d-sub').forEach(s => s.classList.remove('act'));
+  document.querySelectorAll('.d-tab').forEach(t => t.classList.remove('act'));
+  document.getElementById('d-' + id).classList.add('act');
+  btn.classList.add('act');
+}
+</script>
+</body>
+</html>

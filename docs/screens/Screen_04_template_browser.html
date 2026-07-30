@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PlateCart · Screen 04 · Template Browser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sw:#FC8019;--swt:rgba(252,128,25,.08);--swb:rgba(252,128,25,.25);
+  --ch:#282C3F;--mu:#686B78;--bo:#E9E9EB;--bg:#FFFFFF;--pg:#F4F6FB;
+  --gr:#60B246;--f:'DM Sans',system-ui,sans-serif;--r:8px;
+  --meta:44px;--dev:400px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-family:var(--f);-webkit-font-smoothing:antialiased}
+body{overflow:hidden;height:100vh;display:flex;flex-direction:column;background:#D4D4D4}
+.icon{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.icon-lg{width:22px;height:22px}.icon-sm{width:15px;height:15px}.icon-xs{width:13px;height:13px}.icon-xl{width:28px;height:28px}
+
+/* META */
+.meta{height:var(--meta);background:var(--ch);display:flex;align-items:center;flex-shrink:0;z-index:50;overflow:hidden}
+.meta-l{display:flex;align-items:center;gap:8px;padding:0 14px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.1)}
+.ml{font-weight:700;font-size:12px;color:#fff;letter-spacing:-.02em}.ml em{font-style:normal;color:var(--sw)}
+.mb{background:var(--sw);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.05em}
+.screen-links{display:flex;align-items:center;gap:2px;overflow-x:auto;flex:1;padding:0 10px;scrollbar-width:none}
+.screen-links::-webkit-scrollbar{display:none}
+.sl{font-size:10px;font-weight:500;color:rgba(255,255,255,.38);padding:4px 9px;border-radius:99px;text-decoration:none;white-space:nowrap;border:1px solid transparent;transition:.12s}
+.sl:hover{color:rgba(255,255,255,.7);background:rgba(255,255,255,.06)}
+.sl.cur{color:var(--sw);background:rgba(252,128,25,.12);border-color:rgba(252,128,25,.3);font-weight:700}
+.sl.done{color:rgba(255,255,255,.55)}
+.meta-r{padding:0 14px;flex-shrink:0;border-left:1px solid rgba(255,255,255,.1)}
+.ds-pill{border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.45);font-size:9px;padding:3px 8px;border-radius:99px}
+
+/* SPLIT */
+.split{flex:1;display:flex;overflow:hidden}
+
+/* DESKTOP 85% */
+.dp{flex:0 0 85%;display:flex;flex-direction:column;border-right:1px solid #BEBEBE;overflow:hidden}
+.browser{background:#D0D0D0;padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #BEBEBE;flex-shrink:0}
+.b-dots{display:flex;gap:5px}
+.b-dot{width:10px;height:10px;border-radius:50%}
+.b-dot.r{background:#FF5F57}.b-dot.y{background:#FFBD2E}.b-dot.g{background:#28C840}
+.b-url{flex:1;background:#fff;border:1px solid #BEBEBE;border-radius:4px;padding:3px 10px;font-size:11px;color:#555;font-family:monospace;display:flex;align-items:center;gap:5px}
+.app-scroll{flex:1;overflow-y:auto;background:var(--pg)}
+.app-scroll::-webkit-scrollbar{width:4px}
+.app-scroll::-webkit-scrollbar-thumb{background:var(--bo);border-radius:2px}
+
+/* APP NAV */
+.anav{background:var(--bg);border-bottom:1px solid var(--bo);position:sticky;top:0;z-index:20}
+.anav-in{max-width:1160px;margin:0 auto;padding:0 20px;height:54px;display:flex;align-items:center;justify-content:space-between}
+.alogo{font-size:18px;font-weight:700;color:var(--ch);letter-spacing:-.03em}.alogo em{font-style:normal;color:var(--sw)}
+.alinks{display:flex;gap:2px}
+.alnk{padding:5px 13px;border-radius:99px;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;border:none;background:none;font-family:var(--f);transition:.12s}
+.alnk:hover{color:var(--ch);background:var(--pg)}.alnk.act{color:var(--sw);font-weight:600}
+.anav-r{display:flex;align-items:center;gap:10px}
+.bp{display:flex;align-items:center;gap:5px;background:var(--pg);border:1px solid var(--bo);border-radius:99px;padding:5px 11px;font-size:11.5px}
+.bp b{font-weight:700;color:var(--ch)}.bp span{color:var(--mu)}
+.av{width:32px;height:32px;border-radius:50%;background:var(--sw);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* BROWSER CONTENT */
+.content{max-width:1160px;margin:0 auto;padding:18px 20px 40px}
+
+/* SEARCH BAR */
+.search-wrap{position:relative;margin-bottom:14px}
+.search-input{width:100%;background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:11px 14px 11px 42px;font-family:var(--f);font-size:14px;color:var(--ch);outline:none;transition:.14s}
+.search-input:focus{border-color:var(--sw);box-shadow:0 0 0 3px var(--swt)}
+.search-input::placeholder{color:var(--mu)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mu)}
+.search-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--mu);cursor:pointer;background:none;border:none;display:none}
+.search-clear.vis{display:flex}
+
+/* FILTER + VIEW TOGGLE */
+.filter-row{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.filters{display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.fc{font-size:12px;font-weight:600;padding:6px 14px;border-radius:99px;border:1.5px solid var(--bo);color:var(--mu);cursor:pointer;white-space:nowrap;background:var(--bg);transition:.12s;display:flex;align-items:center;gap:5px}
+.fc:hover{border-color:#C0C0C4;color:var(--ch)}
+.fc.act{border-color:var(--sw);background:var(--swt);color:var(--sw)}
+.fc .icon-xs{color:inherit}
+.view-toggle{display:flex;gap:4px;flex-shrink:0}
+.vt{width:32px;height:32px;border:1.5px solid var(--bo);border-radius:6px;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mu);transition:.12s}
+.vt:hover{border-color:#C0C0C4;color:var(--ch)}
+.vt.act{border-color:var(--sw);background:var(--swt);color:var(--sw)}
+.sort-btn{display:flex;align-items:center;gap:5px;padding:6px 12px;border:1.5px solid var(--bo);border-radius:6px;background:var(--bg);font-family:var(--f);font-size:12px;font-weight:500;color:var(--mu);cursor:pointer;white-space:nowrap;transition:.12s}
+.sort-btn:hover{border-color:#C0C0C4;color:var(--ch)}
+
+/* RESULTS CONTEXT */
+.results-ctx{font-size:12px;color:var(--mu);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.results-ctx strong{color:var(--ch)}
+
+/* ── LANE VIEW ── */
+.lane{margin-bottom:28px}
+.lane-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.lane-title{font-size:16px;font-weight:700;color:var(--ch);letter-spacing:-.015em}
+.lane-sub{font-size:11px;color:var(--mu);margin-left:8px;font-weight:400}
+.lane-see-all{font-size:12px;font-weight:600;color:var(--sw);cursor:pointer;background:none;border:none;font-family:var(--f);display:flex;align-items:center;gap:3px}
+.lane-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.lane-scroll::-webkit-scrollbar{display:none}
+
+/* ── TEMPLATE CARD (in lane) ── */
+.tc{width:178px;flex-shrink:0;background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);cursor:pointer;transition:all .14s;position:relative}
+.tc:hover{box-shadow:0 2px 12px rgba(40,44,63,.1);transform:translateY(-1px)}
+.tc-thumb{height:88px;background:var(--pg);border-radius:var(--r) var(--r) 0 0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.tc-thumb-icon{color:var(--bo)}
+.tc-diet-dot{position:absolute;top:8px;left:8px;width:8px;height:8px;border-radius:50%}
+.tc-fork-count{position:absolute;top:7px;right:8px;display:flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:var(--mu);background:rgba(255,255,255,.9);padding:2px 6px;border-radius:99px}
+.tc-fork-count .icon-xs{color:var(--mu)}
+.tc-body{padding:10px 10px 8px}
+.tc-name{font-size:12.5px;font-weight:700;color:var(--ch);letter-spacing:-.01em;margin-bottom:5px;line-height:1.35;min-height:34px}
+.tc-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px}
+.tc-tag{font-size:9.5px;color:var(--mu);background:var(--pg);padding:2px 6px;border-radius:99px;font-weight:500}
+.tc-tag.veg{color:var(--gr);background:rgba(96,178,70,.1)}
+.tc-meta{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--mu);margin-bottom:9px}
+.tc-kcal{font-weight:700;color:var(--ch)}
+.tc-add{width:100%;padding:7px;background:var(--sw);color:#fff;border:none;border-radius:6px;font-family:var(--f);font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:.12s}
+.tc-add:hover{opacity:.9}
+.tc-add .icon-xs{stroke:#fff}
+.tc-saved{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mu);transition:.12s}
+.tc-saved:hover{color:var(--sw);background:#fff}
+.tc-saved.active{color:var(--sw)}
+
+/* ── GRID VIEW ── */
+.grid-view{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;display:none}
+.grid-view.vis{display:grid}
+.gc-tc{background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);cursor:pointer;transition:all .14s;display:flex;gap:12px;padding:12px;align-items:flex-start}
+.gc-tc:hover{box-shadow:0 2px 10px rgba(40,44,63,.08)}
+.gc-thumb{width:52px;height:52px;border-radius:6px;background:var(--pg);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--bo)}
+.gc-body{flex:1;min-width:0}
+.gc-name{font-size:12.5px;font-weight:700;color:var(--ch);letter-spacing:-.01em;margin-bottom:4px;line-height:1.3}
+.gc-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px}
+.gc-tag{font-size:9px;color:var(--mu);background:var(--pg);padding:1px 5px;border-radius:99px}
+.gc-tag.veg{color:var(--gr);background:rgba(96,178,70,.1)}
+.gc-meta{font-size:10px;color:var(--mu);display:flex;align-items:center;gap:5px}
+.gc-kcal{font-weight:700;color:var(--ch)}
+.gc-forks{display:flex;align-items:center;gap:3px}
+.gc-add{margin-top:8px;padding:6px 10px;background:var(--pg);border:1.5px solid var(--bo);border-radius:6px;font-family:var(--f);font-size:11px;font-weight:600;color:var(--ch);cursor:pointer;width:100%;text-align:center;transition:.12s}
+.gc-add:hover{border-color:var(--sw);color:var(--sw);background:var(--swt)}
+
+/* ADD TO PLAN DROPDOWN */
+.atp-overlay{position:fixed;inset:0;z-index:100;display:none}
+.atp-overlay.vis{display:block}
+.atp-drop{position:fixed;background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);box-shadow:0 8px 24px rgba(40,44,63,.15);padding:0;z-index:101;width:200px;overflow:hidden}
+.atp-head{padding:10px 14px;border-bottom:1px solid var(--bo);font-size:11.5px;font-weight:700;color:var(--ch)}
+.atp-option{display:block;padding:9px 14px;font-size:12px;color:var(--ch);cursor:pointer;transition:.1s;border:none;background:none;font-family:var(--f);width:100%;text-align:left}
+.atp-option:hover{background:var(--pg);color:var(--sw)}
+.atp-day-label{padding:5px 14px 2px;font-size:9.5px;font-weight:700;color:var(--mu);letter-spacing:.05em;text-transform:uppercase}
+
+/* ── MOBILE PANEL ── */
+.mp{flex:0 0 15%;background:#E0E0E0;border-left:1px solid #BEBEBE;display:flex;flex-direction:column;overflow:hidden}
+.mp-hdr{padding:8px 10px 4px;flex-shrink:0}
+.mp-lbl{font-size:8px;font-weight:700;color:#999;letter-spacing:.08em;text-transform:uppercase}
+.mp-hint{font-size:7.5px;color:#BBB;margin-top:1px}
+.mp-area{flex:1;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding:5px 6px}
+.m-wrap{transform-origin:top center;width:375px}
+.m-bg{background:var(--pg);width:375px}
+
+/* MOBILE UI */
+.m-sb{background:var(--bg);padding:10px 14px 6px;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;color:#1C1C1E;border-bottom:1px solid var(--bo)}
+.m-sb-r{display:flex;gap:3px;font-size:10px;align-items:center}
+.m-anav{background:var(--bg);padding:8px 14px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bo)}
+.m-alogo{font-size:16px;font-weight:700;color:var(--ch)}.m-alogo em{font-style:normal;color:var(--sw)}
+.m-search-wrap{padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--bo);position:relative}
+.m-search{width:100%;background:var(--pg);border:1.5px solid var(--bo);border-radius:6px;padding:8px 10px 8px 32px;font-family:var(--f);font-size:13px;color:var(--ch);outline:none}
+.m-search::placeholder{color:var(--mu)}
+.m-search-ic{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--mu)}
+.m-filters{display:flex;gap:6px;overflow-x:auto;padding:8px 14px;background:var(--bg);border-bottom:1px solid var(--bo);scrollbar-width:none}
+.m-filters::-webkit-scrollbar{display:none}
+.m-fc{font-size:11px;font-weight:600;padding:5px 11px;border-radius:99px;border:1.5px solid var(--bo);color:var(--mu);white-space:nowrap;background:var(--bg)}
+.m-fc.act{border-color:var(--sw);background:var(--swt);color:var(--sw)}
+.m-lanes{padding:12px 14px;display:flex;flex-direction:column;gap:18px}
+.m-lane-title{font-size:13px;font-weight:700;color:var(--ch);margin-bottom:8px}
+.m-lane-scroll{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.m-lane-scroll::-webkit-scrollbar{display:none}
+.m-tc{width:150px;flex-shrink:0;background:var(--bg);border:1px solid var(--bo);border-radius:var(--r)}
+.m-tc-thumb{height:68px;background:var(--pg);border-radius:var(--r) var(--r) 0 0;display:flex;align-items:center;justify-content:center;color:var(--bo)}
+.m-tc-body{padding:8px}
+.m-tc-name{font-size:11px;font-weight:700;color:var(--ch);margin-bottom:3px;line-height:1.3}
+.m-tc-meta{font-size:9.5px;color:var(--mu);display:flex;align-items:center;gap:4px;margin-bottom:6px}
+.m-tc-kcal{font-weight:700;color:var(--ch)}
+.m-tc-add{width:100%;padding:6px;background:var(--sw);color:#fff;border:none;border-radius:5px;font-family:var(--f);font-size:10.5px;font-weight:700}
+.m-tabs{background:var(--bg);border-top:1px solid var(--bo);display:flex;height:54px}
+.m-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;color:var(--mu);font-weight:500}
+.m-tab.act{color:var(--sw)}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ch);color:#fff;font-size:12px;font-weight:600;padding:10px 20px;border-radius:99px;opacity:0;transition:all .3s;pointer-events:none;z-index:300;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast .icon-sm{stroke:#fff}
+
+/* DEV */
+.dev-btn{position:fixed;bottom:20px;right:20px;z-index:200;background:var(--ch);color:#fff;border:none;border-radius:var(--r);padding:9px 16px;font-family:var(--f);font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,.3);letter-spacing:.04em;transition:.12s}
+.dev-btn:hover{background:#1a1e2e;transform:translateY(-1px)}
+.dev-dot{width:6px;height:6px;border-radius:50%;background:var(--sw)}
+.dev-panel{position:fixed;top:var(--meta);right:0;width:var(--dev);height:calc(100vh - var(--meta));background:#0D1117;z-index:150;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border-left:1px solid #1E2938;font-size:12px}
+.dev-panel.open{transform:translateX(0)}
+.dev-ph{padding:12px 16px;border-bottom:1px solid #1E2938;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dev-pt{font-family:var(--f);font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.dev-stag{background:var(--sw);color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700}
+.dev-cls{background:none;border:none;color:#555;font-size:18px;cursor:pointer;line-height:1;padding:4px}
+.dev-cls:hover{color:#fff}
+.dev-tabs{display:flex;border-bottom:1px solid #1E2938;padding:0 16px;flex-shrink:0}
+.d-tab{padding:9px 11px;font-family:var(--f);font-size:10px;font-weight:700;color:#555;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;letter-spacing:.06em;transition:.12s}
+.d-tab:hover{color:#888}.d-tab.act{color:var(--sw);border-bottom-color:var(--sw)}
+.dev-body{flex:1;overflow-y:auto;padding:16px}
+.dev-body::-webkit-scrollbar{width:3px}
+.dev-body::-webkit-scrollbar-thumb{background:#1E2938;border-radius:2px}
+.d-sub{display:none}.d-sub.act{display:block}
+.d-sec{margin-bottom:18px}
+.d-lbl{font-family:var(--f);font-size:8.5px;font-weight:700;color:var(--sw);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.code{background:#161B22;border:1px solid #1E2938;border-radius:6px;padding:11px;font-family:'Courier New',monospace;font-size:10.5px;line-height:1.65;color:#A8C8B0;white-space:pre;overflow-x:auto}
+.code .co{color:#3A5040}.code .om{color:var(--sw);font-weight:700}
+.code .pa{color:#93C5FD}.code .st{color:#FCA5A5}
+.code .vl{color:#E8D5A8}.code .ok{color:#6EE7B7}.code .wn{color:#FDE68A}
+.dl{list-style:none;display:flex;flex-direction:column;gap:7px}
+.dl li{display:flex;gap:7px;font-size:11px;line-height:1.5;color:#94A3B8}
+.dl li::before{content:'→';color:var(--sw);flex-shrink:0;margin-top:1px}
+.dl.warn li::before{content:'⚠';color:#FDE68A}
+.dl.ok li::before{content:'✓';color:#6EE7B7}
+</style>
+</head>
+<body>
+
+<!-- SVG SYMBOLS -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></symbol>
+  <symbol id="i-git-fork" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><path d="M6 9v3m6 9v-3a3 3 0 0 0-3-3H6"/><path d="M18 9a9 9 0 0 1-9 9"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="i-coffee" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 0 0 10-10H2a10 10 0 0 0 10 10z"/><path d="M12 12V2"/></symbol>
+  <symbol id="i-utensils" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+  <symbol id="i-layout" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></symbol>
+  <symbol id="i-trending-up" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+</svg>
+
+<!-- META -->
+<header class="meta">
+  <div class="meta-l"><div class="ml">Plate<em>Cart</em></div><div class="mb">04 / 10</div></div>
+  <nav class="screen-links">
+    <a class="sl done" href="screen_01_dashboard.html">01 Dashboard</a>
+    <a class="sl done" href="screen_02_onboarding.html">02 Onboarding</a>
+    <a class="sl done" href="screen_03_meal_plan.html">03 Meal Plan</a>
+    <a class="sl cur"  href="screen_04_template_browser.html">04 Templates</a>
+    <a class="sl" href="screen_05_template_detail.html">05 Detail</a>
+    <a class="sl" href="screen_06_create_template.html">06 Create</a>
+    <a class="sl" href="screen_07_my_templates.html">07 My Templates</a>
+    <a class="sl" href="screen_08_cart_preview.html">08 Cart</a>
+    <a class="sl" href="screen_09_budget_tracker.html">09 Budget</a>
+    <a class="sl" href="screen_10_settings.html">10 Settings</a>
+  </nav>
+  <div class="meta-r"><div class="ds-pill">Swiggy Design System</div></div>
+</header>
+
+<div class="split">
+
+<!-- DESKTOP 85% -->
+<div class="dp">
+  <div class="browser">
+    <div class="b-dots"><div class="b-dot r"></div><div class="b-dot y"></div><div class="b-dot g"></div></div>
+    <div class="b-url">
+      <svg style="width:11px;height:11px;stroke:#60B246;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span id="d-url">platecart.app/templates</span>
+    </div>
+  </div>
+  <div class="app-scroll">
+
+    <!-- NAV -->
+    <nav class="anav">
+      <div class="anav-in">
+        <div class="alogo">Plate<em>Cart</em></div>
+        <div class="alinks">
+          <button class="alnk">Dashboard</button>
+          <button class="alnk">Meal Plan</button>
+          <button class="alnk act">Templates</button>
+          <button class="alnk">Budget</button>
+        </div>
+        <div class="anav-r">
+          <div class="bp"><b>₹2,150</b><span>/ ₹5,000</span></div>
+          <div class="av">RV</div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- SEARCH -->
+      <div class="search-wrap">
+        <svg class="icon-sm search-icon"><use href="#i-search"/></svg>
+        <input class="search-input" id="search-input" type="text" placeholder="Search 340 recipes — try 'dal', 'protein', 'quick breakfast'…" oninput="onSearch(this.value)">
+        <button class="search-clear" id="search-clear" onclick="clearSearch()"><svg class="icon-sm"><use href="#i-x"/></svg></button>
+      </div>
+
+      <!-- FILTER ROW -->
+      <div class="filter-row">
+        <div class="filters">
+          <div class="fc act" onclick="setFilter(this,'all')"><svg class="icon-xs"><use href="#i-book"/></svg>All</div>
+          <div class="fc" onclick="setFilter(this,'veg')"><svg class="icon-xs"><use href="#i-leaf"/></svg>Vegetarian</div>
+          <div class="fc" onclick="setFilter(this,'highprot')"><svg class="icon-xs"><use href="#i-zap"/></svg>High Protein</div>
+          <div class="fc" onclick="setFilter(this,'quick')"><svg class="icon-xs"><use href="#i-clock"/></svg>Under 15 min</div>
+          <div class="fc" onclick="setFilter(this,'light')"><svg class="icon-xs"><use href="#i-flame"/></svg>Light &lt;300 kcal</div>
+          <div class="fc" onclick="setFilter(this,'loss')"><svg class="icon-xs"><use href="#i-trending-up"/></svg>Weight Loss</div>
+        </div>
+        <button class="sort-btn" onclick="showToast('Sort options coming soon')">
+          <svg class="icon-xs"><use href="#i-sliders"/></svg>Sort
+        </button>
+        <div class="view-toggle">
+          <div class="vt act" id="vt-lane" onclick="setView('lane')" title="Lane view"><svg class="icon-sm"><use href="#i-list"/></svg></div>
+          <div class="vt" id="vt-grid" onclick="setView('grid')" title="Grid view"><svg class="icon-sm"><use href="#i-grid"/></svg></div>
+        </div>
+      </div>
+
+      <!-- RESULTS CONTEXT -->
+      <div class="results-ctx">
+        <span id="results-label"><strong>340 templates</strong> available · Vegetarian · Weight Loss goal</span>
+        <span id="results-clear" style="display:none;cursor:pointer;color:var(--sw);font-weight:600" onclick="clearSearch()">Clear search</span>
+      </div>
+
+      <!-- LANE VIEW -->
+      <div id="lane-view">
+
+        <!-- LANE 1: FOR YOU -->
+        <div class="lane" id="lane-foryou">
+          <div class="lane-header">
+            <div>
+              <span class="lane-title">For You</span>
+              <span class="lane-sub">Based on your Weight Loss · Vegetarian goal</span>
+            </div>
+            <button class="lane-see-all" onclick="showToast('Showing all personalised templates')">
+              See all<svg class="icon-xs"><use href="#i-chevron-right"/></svg>
+            </button>
+          </div>
+          <div class="lane-scroll" id="lane-foryou-scroll"></div>
+        </div>
+
+        <!-- LANE 2: MOST FORKED -->
+        <div class="lane" id="lane-popular">
+          <div class="lane-header">
+            <div>
+              <span class="lane-title">Most Forked This Week</span>
+              <span class="lane-sub">Community favourites</span>
+            </div>
+            <button class="lane-see-all" onclick="showToast('Showing all trending templates')">
+              See all<svg class="icon-xs"><use href="#i-chevron-right"/></svg>
+            </button>
+          </div>
+          <div class="lane-scroll" id="lane-popular-scroll"></div>
+        </div>
+
+        <!-- LANE 3: QUICK -->
+        <div class="lane" id="lane-quick">
+          <div class="lane-header">
+            <div>
+              <span class="lane-title">Ready in Under 15 min</span>
+              <span class="lane-sub">When you have no time</span>
+            </div>
+            <button class="lane-see-all" onclick="showToast('Showing all quick templates')">
+              See all<svg class="icon-xs"><use href="#i-chevron-right"/></svg>
+            </button>
+          </div>
+          <div class="lane-scroll" id="lane-quick-scroll"></div>
+        </div>
+
+        <!-- LANE 4: HIGH PROTEIN -->
+        <div class="lane" id="lane-protein">
+          <div class="lane-header">
+            <div>
+              <span class="lane-title">High Protein Picks</span>
+              <span class="lane-sub">20g+ protein per serving</span>
+            </div>
+            <button class="lane-see-all" onclick="showToast('Showing all high-protein templates')">
+              See all<svg class="icon-xs"><use href="#i-chevron-right"/></svg>
+            </button>
+          </div>
+          <div class="lane-scroll" id="lane-protein-scroll"></div>
+        </div>
+
+      </div><!-- /lane-view -->
+
+      <!-- GRID VIEW (hidden by default) -->
+      <div class="grid-view" id="grid-view"></div>
+
+      <!-- SEARCH RESULTS (hidden by default) -->
+      <div id="search-results" style="display:none">
+        <div class="grid-view vis" id="search-grid"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE PANEL -->
+<div class="mp">
+  <div class="mp-hdr">
+    <div class="mp-lbl">Mobile · 375px</div>
+    <div class="mp-hint">Full screen · no frame</div>
+  </div>
+  <div class="mp-area">
+  <div class="m-wrap" id="m-wrap">
+  <div class="m-bg">
+    <div class="m-sb"><span>9:41</span><div class="m-sb-r"><span>&bull;&bull;&bull;&bull;</span><span>WiFi</span></div></div>
+    <div class="m-anav">
+      <div class="m-alogo">Plate<em>Cart</em></div>
+      <svg class="icon" style="color:var(--ch)"><use href="#i-user"/></svg>
+    </div>
+    <div class="m-search-wrap">
+      <svg class="icon-sm m-search-ic"><use href="#i-search"/></svg>
+      <input class="m-search" type="text" placeholder="Search recipes…" readonly>
+    </div>
+    <div class="m-filters">
+      <div class="m-fc act">All</div>
+      <div class="m-fc">Veg</div>
+      <div class="m-fc">Protein</div>
+      <div class="m-fc">&lt;15 min</div>
+      <div class="m-fc">Light</div>
+    </div>
+    <div class="m-lanes" id="m-lanes"></div>
+    <div class="m-tabs">
+      <div class="m-tab"><div><svg class="icon" style="color:var(--mu)"><use href="#i-home"/></svg></div>Home</div>
+      <div class="m-tab"><div><svg class="icon" style="color:var(--mu)"><use href="#i-layout"/></svg></div>Plan</div>
+      <div class="m-tab act"><div><svg class="icon" style="color:var(--sw)"><use href="#i-book"/></svg></div>Templates</div>
+      <div class="m-tab"><div><svg class="icon" style="color:var(--mu)"><use href="#i-wallet"/></svg></div>Budget</div>
+      <div class="m-tab"><div><svg class="icon" style="color:var(--mu)"><use href="#i-user"/></svg></div>Profile</div>
+    </div>
+  </div>
+  </div>
+  </div>
+</div>
+
+</div><!-- /split -->
+
+<!-- ADD TO PLAN DROPDOWN -->
+<div class="atp-overlay" id="atp-overlay" onclick="closeATP()"></div>
+<div class="atp-drop" id="atp-drop" style="display:none">
+  <div class="atp-head" id="atp-title">Add to plan</div>
+  <div class="atp-day-label">This week</div>
+  <button class="atp-option" onclick="addToPlan('Wed Breakfast')">Wednesday Breakfast</button>
+  <button class="atp-option" onclick="addToPlan('Wed Lunch')">Wednesday Lunch</button>
+  <button class="atp-option" onclick="addToPlan('Thu Breakfast')">Thursday Breakfast</button>
+  <button class="atp-option" onclick="addToPlan('Thu Lunch')">Thursday Lunch</button>
+  <button class="atp-option" onclick="addToPlan('Fri Breakfast')">Friday Breakfast</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><svg class="icon-sm"><use href="#i-check"/></svg><span id="toast-msg"></span></div>
+
+<!-- DEV -->
+<button class="dev-btn" onclick="toggleDev()"><div class="dev-dot"></div>DEV</button>
+<aside class="dev-panel" id="devPanel">
+  <div class="dev-ph"><div class="dev-pt">Dev Guide <span class="dev-stag">TEMPLATE BROWSER</span></div><button class="dev-cls" onclick="toggleDev()">&#10005;</button></div>
+  <div class="dev-tabs">
+    <button class="d-tab act" onclick="showTab('api',this)">API</button>
+    <button class="d-tab" onclick="showTab('schema',this)">Schema</button>
+    <button class="d-tab" onclick="showTab('pitfalls',this)">Pitfalls</button>
+    <button class="d-tab" onclick="showTab('security',this)">Security</button>
+    <button class="d-tab" onclick="showTab('ui',this)">UI Rules</button>
+  </div>
+  <div class="dev-body">
+    <div class="d-sub act" id="d-api">
+      <div class="d-sec"><div class="d-lbl">Lane loading — staggered, not all at once</div>
+      <div class="code"><span class="co">// Load "For You" lane first on mount</span>
+<span class="om">GET</span> <span class="pa">/api/templates</span>?lane=<span class="st">foryou</span>&amp;limit=<span class="vl">8</span>
+<span class="co">// Personalised: uses auth user's goal + diet_type</span>
+<span class="co">// Returns templates sorted by relevance score</span>
+
+<span class="om">GET</span> <span class="pa">/api/templates</span>?lane=<span class="st">popular</span>&amp;limit=<span class="vl">8</span>
+<span class="co">// Sorted by fork_count DESC, last 7 days</span>
+
+<span class="om">GET</span> <span class="pa">/api/templates</span>?lane=<span class="st">quick</span>&amp;prep_max=<span class="vl">15</span>&amp;limit=<span class="vl">8</span>
+<span class="om">GET</span> <span class="pa">/api/templates</span>?lane=<span class="st">protein</span>&amp;min_protein=<span class="vl">20</span>&amp;limit=<span class="vl">8</span>
+
+<span class="co">// Search — debounced 300ms, min 2 chars</span>
+<span class="om">GET</span> <span class="pa">/api/templates</span>?q=<span class="st">"dal"</span>&amp;limit=<span class="vl">20</span>&amp;cursor=<span class="st">uuid</span>
+
+<span class="co">// Filter chips change the query params</span>
+<span class="om">GET</span> <span class="pa">/api/templates</span>?diet=<span class="st">veg</span>&amp;limit=<span class="vl">8</span>&amp;lane=<span class="st">foryou</span>
+
+<span class="co">// Fork a template</span>
+<span class="om">POST</span> <span class="pa">/api/templates/:id/fork</span>
+<span class="ok">201</span>: { forked_template_id, fork_count }
+
+<span class="co">// Add to meal plan slot (from browser)</span>
+<span class="om">PATCH</span> <span class="pa">/api/meal-plans/current/slots</span>
+Body: { template_id, day_of_week, meal_type }</div></div>
+      <div class="d-sec"><div class="d-lbl">Pagination — cursor-based</div>
+      <div class="code"><span class="co">// Never use offset pagination — breaks on inserts</span>
+<span class="co">// Use cursor (last item's ID) for "See all" + search</span>
+Response: {
+  templates: [...],
+  next_cursor: <span class="st">"uuid"</span>,  <span class="co">// null if no more</span>
+  total_count: <span class="vl">340</span>
+}
+
+<span class="co">// Load more: pass cursor from previous response</span>
+<span class="om">GET</span> <span class="pa">/api/templates</span>?q=<span class="st">"dal"</span>&amp;cursor=<span class="st">"last-uuid"</span></div></div>
+    </div>
+    <div class="d-sub" id="d-schema">
+      <div class="d-sec"><div class="d-lbl">Templates table — key fields for this screen</div>
+      <div class="code">templates
+  id, creator_id, dish_name
+  tags         text[]
+  diet_type    ENUM
+  avg_kcal     integer
+  prep_minutes integer
+  protein_g    integer   <span class="co">// for high-protein filter</span>
+  fork_count   integer
+  buy_count    integer   <span class="co">// times added to Instamart</span>
+  is_public    boolean   <span class="co">// false = only creator sees</span>
+  created_at   timestamp
+
+<span class="co">// No "likes" or "ratings" — fork_count IS the trust signal</span>
+<span class="co">// buy_count is secondary: "bought 847 times" matters more</span></div></div>
+      <div class="d-sec"><div class="d-lbl">Relevance scoring for "For You" lane</div>
+      <div class="code"><span class="co">// Server-side scoring (not exposed to client)</span>
+score = 
+  fork_count * 0.4
+  + (diet_match ? 30 : 0)
+  + (goal_tag_match ? 25 : 0)
+  + (kcal_in_range ? 20 : 0)
+  + recency_boost   <span class="co">// decays over 30 days</span>
+
+<span class="co">// Never expose the scoring formula to the client</span></div></div>
+    </div>
+    <div class="d-sub" id="d-pitfalls">
+      <div class="d-sec"><div class="d-lbl">High-impact mistakes</div>
+      <ul class="dl warn">
+        <li><strong>Loading all 340 on mount:</strong> The browser will load "For You" lane (8 items) first, then lazy-load other lanes as the user scrolls. Never fetch all templates on mount.</li>
+        <li><strong>Offset pagination:</strong> If a new template is added between page 1 and page 2 fetches, offset pagination shows duplicates. Use cursor-based pagination.</li>
+        <li><strong>Search on every keystroke:</strong> Debounce search at 300ms minimum. Minimum 2 characters before triggering. Short searches on a 340-row table with full-text index are still expensive at scale.</li>
+        <li><strong>Fork count stale:</strong> Fork count is an optimistic update on the client (increment immediately on click). Sync to server in the background. Never wait for the API before showing the updated count.</li>
+        <li><strong>Filter chips reload all lanes:</strong> Applying a filter should re-fetch only the active lane, not all 4 simultaneously.</li>
+        <li><strong>Horizontal lane overflow:</strong> Always set overflow-x:auto on lanes and scrollbar-width:none. Never let the lane overflow the viewport width.</li>
+      </ul></div>
+    </div>
+    <div class="d-sub" id="d-security">
+      <div class="d-sec"><div class="d-lbl">Visibility rules</div>
+      <ul class="dl">
+        <li>Public templates (is_public=true): readable without auth. Safe to cache at edge (Vercel CDN).</li>
+        <li>Private templates: only returned if auth user's clerk_id matches creator_id. Never include in public lane responses.</li>
+        <li>Fork endpoint: requires auth. Validate the source template is public or belongs to the user before creating a fork.</li>
+        <li>Creator info: only expose display_name. Never expose email, clerk_id, or full name in template responses.</li>
+      </ul></div>
+      <div class="d-sec"><div class="d-lbl">Rate limits</div>
+      <div class="code">GET /api/templates            <span class="wn">200/min anon, 500/min auth</span>
+GET /api/templates?q=*        <span class="wn">60/min — search is expensive</span>
+POST /api/templates/:id/fork  <span class="wn">20/min per user</span></div></div>
+    </div>
+    <div class="d-sub" id="d-ui">
+      <div class="d-sec"><div class="d-lbl">Swiggy DS — template browser rules</div>
+      <ul class="dl">
+        <li><strong>Lanes are the default view.</strong> Grid view is opt-in via toggle. Most users will never switch — don't make grid the default.</li>
+        <li><strong>Card thumbnail:</strong> Monotone icon on var(--pg) background. No food photos in v1 — they require a CDN, moderation, and upload flow. Add in Phase 2 once templates have community traction.</li>
+        <li><strong>Partial next card:</strong> Each lane scroll must clip the last card at ~70% to signal there's more. Achieved by setting lane-scroll overflow-x:auto with no padding-right.</li>
+        <li><strong>Fork count:</strong> Primary trust signal on every card. More prominent than kcal. Show as "⑂ 1,204" using the fork icon. Buy count is secondary: shown only on detail page.</li>
+        <li><strong>"Add to plan" micro-dropdown:</strong> Opens inline, positioned relative to the card. Never navigate away from the browser to assign a template.</li>
+        <li><strong>Diet dot on card thumbnail:</strong> Small 8px circle, green for veg, charcoal for non-veg. Not a chip — chips are for the card body.</li>
+        <li><strong>Search results:</strong> Switch to grid view automatically. Lane view with filtered results doesn't make UX sense.</li>
+        <li><strong>Filter chips:</strong> Only one active at a time. They filter all lanes simultaneously — they do not open a new page or modal.</li>
+      </ul></div>
+    </div>
+  </div>
+</aside>
+
+<script>
+/* ── TEMPLATE DATA ── */
+var TEMPLATES=[
+  {id:1,name:'Oats & Fruit Porridge',kcal:310,time:8,tags:['Veg','High-fibre'],forks:1204,buy:847,type:'breakfast',filter:'veg quick'},
+  {id:2,name:'Mixed Veggie Salad',kcal:240,time:15,tags:['Veg','Light'],forks:847,buy:623,type:'lunch',filter:'veg light loss'},
+  {id:3,name:'Dal Khichdi',kcal:380,time:20,tags:['Veg','Protein'],forks:768,buy:521,type:'dinner',filter:'veg highprot'},
+  {id:4,name:'Upma with Veggies',kcal:280,time:12,tags:['Veg','South Indian'],forks:623,buy:389,type:'breakfast',filter:'veg quick'},
+  {id:5,name:'Grilled Tofu Bowl',kcal:350,time:18,tags:['Veg','High Protein'],forks:589,buy:312,type:'lunch',filter:'veg highprot'},
+  {id:6,name:'Banana Smoothie Bowl',kcal:290,time:5,tags:['Veg','Quick'],forks:521,buy:445,type:'breakfast',filter:'veg quick'},
+  {id:7,name:'Moong Dal Soup',kcal:200,time:25,tags:['Veg','Light'],forks:467,buy:301,type:'dinner',filter:'veg light loss'},
+  {id:8,name:'Poha with Peanuts',kcal:260,time:10,tags:['Veg','Quick'],forks:445,buy:287,type:'breakfast',filter:'veg quick loss'},
+  {id:9,name:'Palak Paneer',kcal:340,time:22,tags:['Veg','Iron-rich'],forks:412,buy:298,type:'dinner',filter:'veg highprot'},
+  {id:10,name:'Sprout Salad',kcal:180,time:8,tags:['Veg','Raw','Protein'],forks:389,buy:267,type:'lunch',filter:'veg light quick highprot loss'},
+  {id:11,name:'Rajma Chawal',kcal:420,time:30,tags:['Veg','Protein'],forks:367,buy:245,type:'dinner',filter:'veg highprot'},
+  {id:12,name:'Idli Sambhar',kcal:240,time:15,tags:['Veg','South Indian'],forks:356,buy:234,type:'breakfast',filter:'veg light quick'},
+  {id:13,name:'Masoor Dal Tadka',kcal:310,time:20,tags:['Veg','Protein'],forks:334,buy:221,type:'dinner',filter:'veg highprot'},
+  {id:14,name:'Greek Yogurt Bowl',kcal:195,time:5,tags:['Veg','Protein','Quick'],forks:312,buy:198,type:'breakfast',filter:'veg light quick highprot loss'},
+  {id:15,name:'Paneer Bhurji',kcal:380,time:15,tags:['Veg','High Protein'],forks:301,buy:187,type:'lunch',filter:'veg highprot quick'},
+  {id:16,name:'Cucumber Raita',kcal:90,time:5,tags:['Veg','Light','Quick'],forks:289,buy:176,type:'lunch',filter:'veg light quick loss'},
+];
+
+// Lane assignments (by index into TEMPLATES)
+var LANES={
+  foryou:[0,1,2,3,6,7,9,13],
+  popular:[0,2,4,7,1,11,5,14],
+  quick:[0,3,5,7,9,11,13,15],
+  protein:[2,4,8,10,12,14,2,9]
+};
+
+// Thumbnail icon per meal type
+var THUMB_ICONS={breakfast:'i-coffee',lunch:'i-bowl',dinner:'i-utensils'};
+
+var state={filter:'all',view:'lane',search:'',atpTemplate:null,saved:{}};
+
+/* ── CARD BUILDERS ── */
+function thumbIcon(t){
+  return THUMB_ICONS[t.type]||'i-utensils';
+}
+
+function buildLaneCard(t){
+  var saved=state.saved[t.id];
+  var icon=thumbIcon(t);
+  return'<div class="tc" onclick="openDetail('+t.id+')">'
+    +'<div class="tc-thumb"><svg class="icon-xl tc-thumb-icon"><use href="#'+icon+'"/></svg>'
+    +'<div class="tc-diet-dot" style="background:var(--gr)"></div>'
+    +'<div class="tc-fork-count"><svg class="icon-xs"><use href="#i-git-fork"/></svg>'+fmtForks(t.forks)+'</div>'
+    +'</div>'
+    +'<div class="tc-body">'
+    +'<div class="tc-name">'+t.name+'</div>'
+    +'<div class="tc-tags">'+t.tags.slice(0,2).map(function(tg){return'<span class="tc-tag'+(tg==='Veg'?' veg':'')+'">'+tg+'</span>';}).join('')+'</div>'
+    +'<div class="tc-meta"><svg class="icon-xs" style="color:var(--mu)"><use href="#i-flame"/></svg><span class="tc-kcal">'+t.kcal+'</span><span>kcal</span><span style="color:var(--bo)">·</span><svg class="icon-xs" style="color:var(--mu)"><use href="#i-clock"/></svg><span>'+t.time+'m</span></div>'
+    +'<button class="tc-add" onclick="event.stopPropagation();openATP(event,'+t.id+')">'
+    +'<svg class="icon-xs"><use href="#i-plus"/></svg>Add to plan'
+    +'</button>'
+    +'</div>'
+    +'</div>';
+}
+
+function buildGridCard(t){
+  var icon=thumbIcon(t);
+  return'<div class="gc-tc" onclick="openDetail('+t.id+')">'
+    +'<div class="gc-thumb"><svg class="icon-lg" style="color:var(--bo)"><use href="#'+icon+'"/></svg></div>'
+    +'<div class="gc-body">'
+    +'<div class="gc-name">'+t.name+'</div>'
+    +'<div class="gc-tags">'+t.tags.slice(0,2).map(function(tg){return'<span class="gc-tag'+(tg==='Veg'?' veg':'')+'">'+tg+'</span>';}).join('')+'</div>'
+    +'<div class="gc-meta"><span class="gc-kcal">'+t.kcal+'kcal</span><span>·</span><span>'+t.time+'m</span><span>·</span><div class="gc-forks"><svg class="icon-xs" style="color:var(--mu)"><use href="#i-git-fork"/></svg>'+fmtForks(t.forks)+'</div></div>'
+    +'<button class="gc-add" onclick="event.stopPropagation();openATP(event,'+t.id+')">+ Add to plan</button>'
+    +'</div>'
+    +'</div>';
+}
+
+function fmtForks(n){return n>=1000?(n/1000).toFixed(1)+'k':String(n);}
+
+/* ── RENDER LANES ── */
+function renderLanes(filter){
+  var lanes=['foryou','popular','quick','protein'];
+  lanes.forEach(function(laneId){
+    var el=document.getElementById('lane-'+laneId+'-scroll');
+    if(!el)return;
+    var ids=LANES[laneId];
+    var filtered=ids.map(function(i){return TEMPLATES[i];}).filter(function(t){
+      if(filter==='all')return true;
+      return t.filter&&t.filter.indexOf(filter)>-1;
+    });
+    el.innerHTML=filtered.slice(0,8).map(buildLaneCard).join('');
+  });
+}
+
+function renderGrid(filter){
+  var el=document.getElementById('grid-view');
+  if(!el)return;
+  var filtered=TEMPLATES.filter(function(t){
+    if(filter==='all')return true;
+    return t.filter&&t.filter.indexOf(filter)>-1;
+  });
+  el.innerHTML=filtered.map(buildGridCard).join('');
+}
+
+/* ── FILTERS ── */
+function setFilter(el,f){
+  state.filter=f;
+  document.querySelectorAll('.fc').forEach(function(c){c.classList.remove('act');});
+  el.classList.add('act');
+  var lbl=document.getElementById('results-label');
+  var counts={all:'340',veg:'287',highprot:'96',quick:'124',light:'102',loss:'156'};
+  if(lbl)lbl.innerHTML='<strong>'+(counts[f]||'340')+' templates</strong> found';
+  if(state.search){doSearch(state.search);}
+  else{renderLanes(f);renderGrid(f);}
+}
+
+/* ── VIEW TOGGLE ── */
+function setView(v){
+  state.view=v;
+  document.getElementById('vt-lane').classList.toggle('act',v==='lane');
+  document.getElementById('vt-grid').classList.toggle('act',v==='grid');
+  document.getElementById('lane-view').style.display=v==='lane'?'block':'none';
+  var gv=document.getElementById('grid-view');
+  if(gv)gv.classList.toggle('vis',v==='grid');
+}
+
+/* ── SEARCH ── */
+function onSearch(q){
+  state.search=q;
+  var clearBtn=document.getElementById('search-clear');
+  var clearLink=document.getElementById('results-clear');
+  if(clearBtn)clearBtn.classList.toggle('vis',q.length>0);
+  if(clearLink)clearLink.style.display=q.length>0?'':'none';
+  if(q.length<2){
+    document.getElementById('search-results').style.display='none';
+    document.getElementById('lane-view').style.display=state.view==='lane'?'block':'none';
+    document.getElementById('grid-view').classList.toggle('vis',state.view==='grid');
+    return;
+  }
+  if(state._searchTimer)clearTimeout(state._searchTimer);
+  state._searchTimer=setTimeout(function(){doSearch(q);},300);
+}
+
+function doSearch(q){
+  var ql=q.toLowerCase();
+  var results=TEMPLATES.filter(function(t){
+    var matchQ=t.name.toLowerCase().indexOf(ql)>-1||t.tags.some(function(tg){return tg.toLowerCase().indexOf(ql)>-1;});
+    var matchF=state.filter==='all'||(t.filter&&t.filter.indexOf(state.filter)>-1);
+    return matchQ&&matchF;
+  });
+  var el=document.getElementById('search-grid');
+  if(el)el.innerHTML=results.map(buildGridCard).join('')||(results.length===0?'<div style="grid-column:1/-1;padding:24px;text-align:center;font-size:13px;color:var(--mu)">No templates match "<strong>'+q+'</strong>"</div>':'');
+  document.getElementById('search-results').style.display='block';
+  document.getElementById('lane-view').style.display='none';
+  var gv=document.getElementById('grid-view');if(gv)gv.classList.remove('vis');
+  var lbl=document.getElementById('results-label');
+  if(lbl)lbl.innerHTML='<strong>'+results.length+' templates</strong> match "'+q+'"';
+  document.getElementById('d-url').textContent='platecart.app/templates?q='+encodeURIComponent(q);
+}
+
+function clearSearch(){
+  var inp=document.getElementById('search-input');if(inp)inp.value='';
+  onSearch('');
+  document.getElementById('d-url').textContent='platecart.app/templates';
+}
+
+/* ── ADD TO PLAN DROPDOWN ── */
+var atpTplId=null;
+function openATP(e,tid){
+  atpTplId=tid;
+  var t=TEMPLATES.find(function(x){return x.id===tid;});
+  var drop=document.getElementById('atp-drop');
+  var title=document.getElementById('atp-title');
+  if(title&&t)title.textContent='Add "'+t.name.split(' ').slice(0,3).join(' ')+'…" to plan';
+  var rect=e.target.getBoundingClientRect();
+  drop.style.display='block';
+  drop.style.top=(rect.bottom+4)+'px';
+  drop.style.left=Math.min(rect.left,window.innerWidth-210)+'px';
+  document.getElementById('atp-overlay').classList.add('vis');
+}
+function closeATP(){
+  document.getElementById('atp-drop').style.display='none';
+  document.getElementById('atp-overlay').classList.remove('vis');
+}
+function addToPlan(slot){
+  var t=TEMPLATES.find(function(x){return x.id===atpTplId;});
+  closeATP();
+  showToast((t?t.name.split(' ').slice(0,2).join(' '):'Template')+' added to '+slot);
+}
+function openDetail(tid){
+  showToast('Opening template detail…');
+}
+
+/* ── MOBILE LANES ── */
+function renderMobileLanes(){
+  var el=document.getElementById('m-lanes');
+  if(!el)return;
+  var laneDefs=[
+    {label:'For You',ids:[0,1,6,9]},
+    {label:'Most Forked',ids:[0,2,4,7]},
+  ];
+  el.innerHTML=laneDefs.map(function(ld){
+    var cards=ld.ids.map(function(i){
+      var t=TEMPLATES[i];
+      var icon=thumbIcon(t);
+      return'<div class="m-tc">'
+        +'<div class="m-tc-thumb"><svg class="icon-lg" style="color:var(--bo)"><use href="#'+icon+'"/></svg></div>'
+        +'<div class="m-tc-body">'
+        +'<div class="m-tc-name">'+t.name+'</div>'
+        +'<div class="m-tc-meta"><svg class="icon-xs" style="color:var(--mu)"><use href="#i-git-fork"/></svg>'+fmtForks(t.forks)+'<span>·</span><svg class="icon-xs" style="color:var(--mu)"><use href="#i-flame"/></svg><span class="m-tc-kcal">'+t.kcal+'</span></div>'
+        +'<button class="m-tc-add">+ Add to plan</button>'
+        +'</div>'
+        +'</div>';
+    }).join('');
+    return'<div><div class="m-lane-title">'+ld.label+'</div><div class="m-lane-scroll">'+cards+'</div></div>';
+  }).join('');
+}
+
+/* ── TOAST ── */
+function showToast(msg){
+  var t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  if(t._timer)clearTimeout(t._timer);
+  t._timer=setTimeout(function(){t.classList.remove('show');},2500);
+}
+
+/* ── SCALE ── */
+(function(){
+  var wrap=document.getElementById('m-wrap');
+  var area=document.querySelector('.mp-area');
+  if(!wrap||!area)return;
+  function fit(){var w=area.offsetWidth-10;var s=Math.min(w/375,.85);wrap.style.transform='scale('+s+')';wrap.style.marginLeft=0;}
+  fit();window.addEventListener('resize',fit);
+})();
+
+/* ── DEV ── */
+function toggleDev(){document.getElementById('devPanel').classList.toggle('open');}
+function showTab(id,btn){document.querySelectorAll('.d-sub').forEach(function(s){s.classList.remove('act');});document.querySelectorAll('.d-tab').forEach(function(t){t.classList.remove('act');});document.getElementById('d-'+id).classList.add('act');btn.classList.add('act');}
+
+/* ── INIT ── */
+renderLanes('all');
+renderGrid('all');
+renderMobileLanes();
+</script>
+</body>
+</html>

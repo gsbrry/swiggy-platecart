@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlateCart — Product Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ─── TOKENS ─────────────────────────────────────────── */
+:root {
+  --ink:       #0E0E16;
+  --canvas:    #F1F1F6;
+  --white:     #FFFFFF;
+  --violet:    #4F46E5;
+  --violet-lt: #EEF2FF;
+  --ember:     #EF5A22;
+  --ember-lt:  #FEF0EB;
+  --emerald:   #10B981;
+  --border:    #E1E1EA;
+  --muted:     #787891;
+  --s-bg:      #0E0E16;
+  --s-text:    #E8E8F5;
+  --s-muted:   #4A4A6A;
+  --s-border:  #1C1C2C;
+  --s-hover:   #171726;
+  --f: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+/* ─── RESET ──────────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: var(--f);
+  background: var(--canvas);
+  color: var(--ink);
+  font-size: 14.5px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── LAYOUT ─────────────────────────────────────────── */
+/* RULE: use display:block when sidebar is position:fixed.
+   CSS Grid removes fixed children from flow — .main would
+   collapse into the 252px column and the margin-left would
+   push it off-screen, creating the white overlay gap. */
+.wrap {
+  display: block;
+  min-height: 100vh;
+}
+
+/* ─── SIDEBAR ────────────────────────────────────────── */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 252px;
+  height: 100vh;
+  background: var(--s-bg);
+  background-image: radial-gradient(circle, rgba(255,255,255,0.045) 1px, transparent 1px);
+  background-size: 22px 22px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar::-webkit-scrollbar { width:3px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--s-border); }
+
+.s-brand {
+  padding: 28px 24px 22px;
+  border-bottom: 1px solid var(--s-border);
+  flex-shrink: 0;
+}
+
+.s-logo {
+  font-family: var(--f);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--s-text);
+  letter-spacing: -0.025em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.s-logo em {
+  font-style: normal;
+  color: var(--violet);
+}
+
+.s-logo span {
+  display: inline-block;
+  background: var(--ember);
+  color: #fff;
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.06em;
+  vertical-align: middle;
+  margin-left: 6px;
+  margin-top: -2px;
+}
+
+.s-sub {
+  font-size: 0.7rem;
+  color: var(--s-muted);
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+
+.s-nav { padding: 16px 0 24px; flex: 1; }
+
+.s-group { margin-bottom: 6px; }
+
+.s-group-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 24px 4px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--s-muted);
+  margin-bottom: 2px;
+}
+
+.s-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-violet { background: var(--violet); }
+.dot-ember  { background: var(--ember); }
+.dot-white  { background: rgba(255,255,255,0.25); }
+
+.s-link {
+  display: flex;
+  align-items: center;
+  padding: 7px 24px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--s-muted);
+  text-decoration: none;
+  transition: all 0.12s;
+  border-left: 2px solid transparent;
+  position: relative;
+}
+
+.s-link:hover {
+  background: var(--s-hover);
+  color: var(--s-text);
+}
+
+.s-link.active {
+  color: var(--s-text);
+  background: rgba(79,70,229,0.12);
+  border-left-color: var(--violet);
+}
+
+.s-link.active-ember {
+  color: var(--s-text);
+  background: rgba(239,90,34,0.1);
+  border-left-color: var(--ember);
+}
+
+.s-divider {
+  height: 1px;
+  background: var(--s-border);
+  margin: 10px 24px;
+}
+
+.s-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--s-border);
+  flex-shrink: 0;
+}
+
+.s-footer p {
+  font-size: 0.65rem;
+  color: var(--s-muted);
+  line-height: 1.6;
+}
+
+.s-footer strong { color: rgba(232,232,245,0.4); font-weight: 500; }
+
+/* ─── MAIN ───────────────────────────────────────────── */
+.main {
+  margin-left: 252px;
+  padding: 0;
+}
+
+/* ─── HERO ───────────────────────────────────────────── */
+.hero {
+  background: var(--ink);
+  background-image: radial-gradient(circle at 70% 50%, #1C1C3A 0%, var(--ink) 60%);
+  padding: 64px 56px 56px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--violet), var(--ember), transparent);
+}
+
+.hero-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 24px; height: 1px;
+  background: var(--violet);
+}
+
+h1 {
+  font-family: var(--f);
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+h1 em {
+  font-style: normal;
+  color: var(--violet);
+}
+
+.hero-tagline {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.5);
+  max-width: 500px;
+  line-height: 1.55;
+  margin-bottom: 36px;
+  font-weight: 400;
+}
+
+.mcp-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mcp-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+}
+
+.mcp-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+}
+
+.mcp-dot.v { background: var(--violet); }
+.mcp-dot.e { background: var(--ember); }
+.mcp-dot.g { background: var(--emerald); }
+
+.hero-meta {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  gap: 32px;
+}
+
+.hero-stat-val {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.hero-stat-lbl {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+/* ─── CONTENT WRAPPER ────────────────────────────────── */
+.content { padding: 0 56px 80px; }
+
+/* ─── SECTION ────────────────────────────────────────── */
+.section {
+  padding-top: 56px;
+  scroll-margin-top: 32px;
+}
+
+.sect-head {
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.sect-stripe {
+  height: 2px;
+  width: 40px;
+  border-radius: 1px;
+  margin-bottom: 14px;
+}
+
+.stripe-v { background: var(--violet); }
+.stripe-e { background: var(--ember); }
+.stripe-i { background: var(--ink); }
+.stripe-m { background: rgba(120,120,145,0.4); }
+
+.sect-label {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+h2 {
+  font-family: var(--f);
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+.sect-desc {
+  margin-top: 10px;
+  color: var(--muted);
+  max-width: 620px;
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+/* ─── GRID 2-COL ─────────────────────────────────────── */
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+/* ─── CARD ───────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 22px;
+  transition: box-shadow 0.15s;
+}
+
+.card:hover { box-shadow: 0 2px 16px rgba(14,14,22,0.07); }
+
+.card-icon {
+  width: 32px; height: 32px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.ci-v { background: var(--violet-lt); }
+.ci-e { background: var(--ember-lt); }
+
+.card h3 {
+  font-family: var(--f);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.card ul { list-style: none; }
+
+.card ul li {
+  font-size: 0.8rem;
+  color: var(--muted);
+  padding: 3px 0 3px 14px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 10px;
+  width: 5px; height: 1px;
+  background: var(--border);
+}
+
+/* ─── SCREEN MAP ─────────────────────────────────────── */
+.screen-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.screen-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.screen-n {
+  font-family: var(--f);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--border);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-top: 2px;
+  min-width: 22px;
+}
+
+.screen-name {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 3px;
+  letter-spacing: -0.01em;
+}
+
+.screen-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
+
+/* ─── TECH CARDS ─────────────────────────────────────── */
+.tech-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+
+.tech-role {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 4px;
+}
+
+.tech-name {
+  font-family: var(--f);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+
+.tech-card p { font-size: 0.78rem; color: var(--muted); line-height: 1.55; }
+
+/* ─── ARCH DIAGRAM ───────────────────────────────────── */
+.arch {
+  background: #0A0A12;
+  border-radius: 12px;
+  padding: 32px;
+  margin-top: 16px;
+  overflow-x: auto;
+}
+
+.arch pre {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: #7B8FA8;
+  line-height: 1.8;
+  white-space: pre;
+}
+
+.arch .ac { color: #4F46E5; }   /* violet */
+.arch .ae { color: #EF5A22; }   /* ember */
+.arch .ag { color: #10B981; }   /* emerald */
+.arch .aw { color: #C8C8E8; }   /* white-ish */
+.arch .am { color: #3A3A5A; }   /* muted */
+
+/* ─── DB TABLES ──────────────────────────────────────── */
+.db-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.db-tbl {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.db-head {
+  background: var(--ink);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.db-head-name {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #E8E8F5;
+}
+
+.db-head-note {
+  font-size: 0.62rem;
+  color: #4A4A6A;
+  font-weight: 500;
+}
+
+.db-rows { padding: 6px 0; }
+
+.db-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 16px;
+  border-bottom: 1px solid #F5F5F9;
+  transition: background 0.1s;
+}
+
+.db-row:last-child { border-bottom: none; }
+.db-row:hover { background: #FAFAFD; }
+
+.db-col { font-family: var(--mono); font-size: 0.73rem; color: var(--ink); }
+.db-type { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); }
+.db-pk { font-size: 0.58rem; font-weight: 700; color: var(--violet); background: var(--violet-lt); padding: 1px 5px; border-radius: 3px; }
+
+/* ─── API ROUTES ─────────────────────────────────────── */
+.api-list { display: flex; flex-direction: column; gap: 4px; margin-top: 16px; }
+
+.api-route {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.method {
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 4px;
+  min-width: 48px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.m-get    { background: #E8F5ED; color: #1A7A3A; }
+.m-post   { background: var(--violet-lt); color: var(--violet); }
+.m-patch  { background: #FFF8E6; color: #9A6800; }
+.m-delete { background: #FEE9E9; color: #A03030; }
+
+.api-path {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--ink);
+  flex: 1;
+}
+
+.api-desc { font-size: 0.72rem; color: var(--muted); }
+
+/* ─── CODE BLOCK ─────────────────────────────────────── */
+.code-block {
+  background: #0A0A12;
+  border-radius: 10px;
+  padding: 24px 28px;
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+.code-block pre {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: #7B8FA8;
+  line-height: 1.75;
+  white-space: pre;
+}
+
+.cc { color: #2D4A38; }
+.ck { color: #A8C5B0; }
+.ct { color: #C8906A; }
+.cd { color: #EF5A22; }
+
+/* ─── TEAM CARDS ─────────────────────────────────────── */
+.team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+
+.team-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+
+.team-role {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.team-name {
+  font-family: var(--f);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+
+.team-says {
+  font-size: 0.79rem;
+  color: var(--muted);
+  border-left: 2px solid var(--border);
+  padding-left: 12px;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* ─── SPRINT PLAN ────────────────────────────────────── */
+.sprint-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+
+.sprint {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  overflow: hidden;
+}
+
+.sprint-left {
+  background: #F8F8FC;
+  border-right: 1px solid var(--border);
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sprint-week {
+  font-family: var(--f);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.sprint-phase-tag {
+  display: inline-block;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-top: 5px;
+}
+
+.spt-v { background: var(--violet-lt); color: var(--violet); }
+.spt-e { background: var(--ember-lt); color: var(--ember); }
+.spt-n { background: #F0F0F5; color: var(--muted); }
+
+.sprint-right { padding: 16px 20px; }
+
+.sprint-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+
+.sprint-tasks { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.sprint-tasks span {
+  font-size: 0.72rem;
+  background: #F4F4F9;
+  color: var(--muted);
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* ─── DIVIDER ────────────────────────────────────────── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+/* ─── INLINE BADGE ───────────────────────────────────── */
+.badge {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.badge-v { background: var(--violet-lt); color: var(--violet); }
+.badge-e { background: var(--ember-lt); color: var(--ember); }
+
+/* ─── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 960px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .hero { padding: 40px 28px; }
+  h1 { font-size: 3.2rem; }
+  .content { padding: 0 28px 60px; }
+  .grid2, .grid3, .screen-list, .team-grid, .db-grid { grid-template-columns: 1fr; }
+  .sprint { grid-template-columns: 1fr; }
+  .sprint-left { border-right: none; border-bottom: 1px solid var(--border); }
+}
+
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<!-- ══════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════ -->
+<nav class="sidebar">
+  <div class="s-brand">
+    <div class="s-logo">Plate<em>Cart</em><span>BRIEF</span></div>
+    <div class="s-sub">Product Brief · RV · 2026</div>
+  </div>
+
+  <div class="s-nav">
+
+    <div class="s-group">
+      <div class="s-group-label">
+        <span class="s-dot dot-white"></span>Overview
+      </div>
+      <a class="s-link" href="#idea">App Idea</a>
+      <a class="s-link" href="#opportunity">Opportunity</a>
+    </div>
+
+    <div class="s-divider"></div>
+
+    <div class="s-group">
+      <div class="s-group-label">
+        <span class="s-dot dot-violet"></span>Phase 1
+      </div>
+      <a class="s-link" href="#p1">Core Features</a>
+      <a class="s-link" href="#screens">Screen Map</a>
+    </div>
+
+    <div class="s-divider"></div>
+
+    <div class="s-group">
+      <div class="s-group-label">
+        <span class="s-dot dot-ember"></span>Phase 2
+      </div>
+      <a class="s-link" href="#p2">Social Layer</a>
+    </div>
+
+    <div class="s-divider"></div>
+
+    <div class="s-group">
+      <div class="s-group-label">
+        <span class="s-dot dot-white"></span>Technical
+      </div>
+      <a class="s-link" href="#stack">Tech Stack</a>
+      <a class="s-link" href="#architecture">Architecture</a>
+      <a class="s-link" href="#database">Database</a>
+      <a class="s-link" href="#api">API Layer</a>
+      <a class="s-link" href="#folders">Folder Structure</a>
+    </div>
+
+    <div class="s-divider"></div>
+
+    <div class="s-group">
+      <div class="s-group-label">
+        <span class="s-dot dot-white"></span>Team & Plan
+      </div>
+      <a class="s-link" href="#team">Virtual Team</a>
+      <a class="s-link" href="#execution">Execution Plan</a>
+    </div>
+
+  </div>
+
+  <div class="s-footer">
+    <p><strong>Built on</strong> Swiggy Builders Club MCP API — 3 servers, 18+ tools across Food, Instamart, Dineout.</p>
+    <p style="margin-top:8px;"><strong>Stack</strong> Next.js 14 · Neon · Drizzle · Clerk · Vercel</p>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════ -->
+<div class="main">
+
+  <!-- HERO -->
+  <header class="hero" id="idea">
+    <div class="hero-eyebrow">Swiggy Builders Club · Indian Market · Web-first</div>
+    <h1>Plate<em>Cart</em></h1>
+    <p class="hero-tagline">Your diet goal becomes your grocery cart. Voice command an ingredient list, check your budget, confirm one tap — Instamart fulfills. User-generated recipe templates power the library.</p>
+
+    <div class="mcp-row">
+      <div class="mcp-pill"><span class="mcp-dot v"></span>Instamart MCP — Cart & Search</div>
+      <div class="mcp-pill"><span class="mcp-dot e"></span>Food MCP — Restaurant Orders</div>
+      <div class="mcp-pill"><span class="mcp-dot g"></span>Dineout MCP — Table Booking</div>
+    </div>
+
+    <div class="hero-meta">
+      <div>
+        <div class="hero-stat-val">18+</div>
+        <div class="hero-stat-lbl">API Tools</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">3</div>
+        <div class="hero-stat-lbl">MCP Servers</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">12</div>
+        <div class="hero-stat-lbl">Week Build</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">10</div>
+        <div class="hero-stat-lbl">Screens</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- OPPORTUNITY -->
+    <div class="section" id="opportunity">
+      <div class="sect-head">
+        <div class="sect-stripe stripe-i"></div>
+        <div class="sect-label">Overview</div>
+        <h2>The Opportunity</h2>
+        <p class="sect-desc">Swiggy solved "order food now." Nobody has solved "eat well consistently without overspending." Swiggy's Builders Club opens 18+ MCP API tools for the first time to external developers — cart-add, item search, restaurant discovery. PlateCart is the planning layer that sits on top: diet goal → weekly meal plan → 3-day restock → budget tracking. Phase 2 adds a shoppable template economy where creators publish forkable meal plans.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- PHASE 1 FEATURES -->
+    <div class="section" id="p1">
+      <div class="sect-head">
+        <div class="sect-stripe stripe-v"></div>
+        <div class="sect-label">Phase 1 &nbsp;<span class="badge badge-v">Build Now</span></div>
+        <h2>Core Features</h2>
+      </div>
+
+      <div class="grid2">
+
+        <div class="card">
+          <div class="card-icon ci-v">🎯</div>
+          <h3>Onboarding — Set Your Profile Once</h3>
+          <ul>
+            <li>Goal: weight loss / gain / maintenance</li>
+            <li>Diet type: veg, non-veg, vegan, keto</li>
+            <li>Household size (adjusts quantities)</li>
+            <li>Monthly grocery budget in ₹</li>
+            <li>Eating-out frequency per week</li>
+            <li>Allergies and ingredient exclusions</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon ci-v">📋</div>
+          <h3>Weekly Meal Plan Builder</h3>
+          <ul>
+            <li>7-day grid: breakfast, lunch, dinner per day</li>
+            <li>Each meal = a dish template from the library</li>
+            <li>Template auto-maps to ingredients + quantities</li>
+            <li>Mix home-cooking days with eat-out slots</li>
+            <li>Eat-out slots use Swiggy Food API suggestions</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon ci-v">🎙️</div>
+          <h3>Voice Command → Instamart Cart</h3>
+          <ul>
+            <li>"I want to make a salad" → ingredients mapped</li>
+            <li>Checks estimated inventory from last order date</li>
+            <li>Adds missing items to Instamart cart via MCP API</li>
+            <li>Cart preview screen shown before anything is placed</li>
+            <li>User confirms → cart populated, pays on Instamart</li>
+            <li>Web Speech API (browser-native, zero cost in Phase 1)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon ci-v">🔄</div>
+          <h3>3-Day Replenishment Cycle</h3>
+          <ul>
+            <li>Reminder every 3 days: "Time to restock"</li>
+            <li>Cart built from meal plan + inventory estimate</li>
+            <li>User reviews, edits inline, confirms — one flow</li>
+            <li>Monthly spend tracker: ₹ used vs ₹ budget</li>
+            <li>Eat-out slots tracked separately (3×/week default)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon ci-v">🗑️</div>
+          <h3>Smart Waste Tracker</h3>
+          <ul>
+            <li>Post-cycle prompt: "Did you finish everything?"</li>
+            <li>One-tap: All used / Some wasted / Most wasted</li>
+            <li>After 2+ waste events on same item → quantity reduced</li>
+            <li>Pattern nudge: "You tend to over-buy spinach"</li>
+            <li>No logging forms — one tap is all it ever asks</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon ci-v">📚</div>
+          <h3>Template Library (User-Generated)</h3>
+          <ul>
+            <li>Create: dish name, tags, ingredients + qty, cook instructions</li>
+            <li>Tags: diet type, goal, cuisine, prep time</li>
+            <li>Phase 1: free templates only — no payment infra yet</li>
+            <li>Search and filter by goal, cuisine, diet type</li>
+            <li>Copy/fork into your own meal plan</li>
+            <li>Solves recipe database problem via crowdsourcing</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- SCREENS -->
+    <div class="section" id="screens">
+      <div class="sect-head">
+        <div class="sect-stripe stripe-v"></div>
+        <div class="sect-label">Phase 1 &nbsp;<span class="badge badge-v">10 Screens</span></div>
+        <h2>Screen Map</h2>
+      </div>
+
+      <div class="screen-list">
+        <div class="screen-item">
+          <div class="screen-n">01</div>
+          <div>
+            <div class="screen-name">Onboarding Flow</div>
+            <div class="screen-desc">5 steps, one screen each. Goal → diet type → household → budget → exclusions. One-time, editable later in Settings.</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-n">02</div>
+          <div>
+            <div class="screen-name">Dashboard</div>
+            <div class="screen-desc">Today's meals + budget ring + restock countdown + voice command button. Everything visible at a glance. Daily home screen.</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-n">03</div>
+          <div>
+            <div class="screen-name">Weekly Meal Plan</div>
+            <div class="screen-desc">7-column grid. Tap any slot to assign a template. Eat-out slots shown in ember. "Copy last week" shortcut.</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-n">04</div>
+          <div>
+            <div class="screen-name">Template Browser</div>
+            <div class="screen-desc">Search + filter pills (goal, cuisine, diet). Cards show dish name, goal tag, fork count. Most forked on top.</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-n">05</div>
+          <div>
+            <div class="screen-name">Template Detail</div>
+            <div class="screen-desc">Full ingredient list with quantities. Cook instructions. Tags. Creator name. "Add to meal plan" CTA. Fork count shown.</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-n">06</div>
+          <div>
+            <div class="screen-name">Create Template</div>
+            <div class="screen-desc">Dish name → tags → ingredient rows (name + qty + unit, add more) → cook instructions. Save as draft or publish.</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-n">07</div>
+          <div>
+            <div class="screen-name">My Templates</div>
+            <div class="screen-desc">Templates created + forked. Fork count on created ones. Edit / unpublish controls. Quick add-to-plan shortcut.</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-n">08</div>
+          <div>
+            <div class="screen-name">Cart Preview</div>
+            <div class="screen-desc">Items adding to Instamart. Estimated vs likely-at-home. Running cost. "Confirm & Add to Instamart" CTA. Edit inline.</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-n">09</div>
+          <div>
+            <div class="screen-name">Budget Tracker</div>
+            <div class="screen-desc">Monthly spend ring: groceries vs eat-out vs remaining. Per-cycle breakdown. Waste events log. Trend vs last month.</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-n">10</div>
+          <div>
+            <div class="screen-name">Settings</div>
+            <div class="screen-desc">Edit all onboarding fields. Change goal. Update budget. Notification prefs. Swiggy MCP connection status.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- PHASE 2 -->
+    <div class="section" id="p2">
+      <div class="sect-head">
+        <div class="sect-stripe stripe-e"></div>
+        <div class="sect-label">Phase 2 &nbsp;<span class="badge badge-e">After 100 Active Users</span></div>
+        <h2>Social Layer</h2>
+        <p class="sect-desc">Gate Phase 2 behind a hard metric: 100 users completing the 3-day replenishment cycle. If that's not hit by Week 10, stay in Phase 1. Social features without a user base are just infrastructure debt.</p>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-icon ci-e">👥</div>
+          <h3>Follow & Discover</h3>
+          <ul>
+            <li>Follow users → see their public templates in feed</li>
+            <li>Bookmark templates for later reference</li>
+            <li>Creator profile with all public templates</li>
+            <li>Trending: most forked this week by goal tag</li>
+            <li>"Someone forked your template" notifications</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-icon ci-e">🔀</div>
+          <h3>Fork with Attribution</h3>
+          <ul>
+            <li>Fork → creates your own editable copy</li>
+            <li>"Forked from @username" always shown</li>
+            <li>Modify ingredients for allergy / budget / taste</li>
+            <li>Fork tree visible on template detail page</li>
+            <li>Original creator sees cumulative fork count</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-icon ci-e">✅</div>
+          <h3>Bought X Times (Trust Signal)</h3>
+          <ul>
+            <li>Every Instamart cart-add tied to a template = +1</li>
+            <li>Shown on cards alongside fork count</li>
+            <li>Harder to fake than likes — real purchase behavior</li>
+            <li>Filter: "Most bought this week for weight loss"</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-icon ci-e">💰</div>
+          <h3>Paid Templates — Gate Behind Traction</h3>
+          <ul>
+            <li>Only for creators with 50+ forks on free templates</li>
+            <li>Razorpay / UPI integration for Indian market</li>
+            <li>Creator payout after platform fee</li>
+            <li>Do not build payout infra until Phase 2 social is proven</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- TECH STACK -->
+    <div class="section" id="stack">
+      <div class="sect-head">
+        <div class="sect-stripe stripe-i"></div>
+        <div class="sect-label">Technical</div>
+        <h2>Tech Stack</h2>
+      </div>
+
+      <div class="grid3">
+        <div class="tech-card">
+          <div class="tech-role">Frontend</div>
+          <div class="tech-name">Next.js 14</div>
+          <p>App Router. Web-first, responsive. Scales to React Native later. Vercel deploys with zero config.</p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-role">Styling</div>
+          <div class="tech-name">Tailwind + Shadcn/ui</div>
+          <p>Tailwind for layout. Shadcn for accessible, unstyled-by-default components — your design, not theirs.</p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-role">Backend</div>
+          <div class="tech-name">Next.js API Routes</div>
+          <p>Same monorepo. No separate server in Phase 1. Upgrade only if needed — don't add complexity early.</p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-role">Database</div>
+          <div class="tech-name">Neon PostgreSQL</div>
+          <p>Serverless Postgres. Vercel-native. Scales to zero — near-zero cost while building. Branch for dev/staging.</p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-role">ORM</div>
+          <div class="tech-name">Drizzle ORM</div>
+          <p>Chosen over Prisma: no connection pool issues with serverless Postgres under load. TypeScript-native.</p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-role">Auth</div>
+          <div class="tech-name">Clerk</div>
+          <p>Google login + Phone/OTP (critical for India). Free tier covers Phase 1 and 2. Faster than NextAuth.</p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-role">Voice — Phase 1</div>
+          <div class="tech-name">Web Speech API</div>
+          <p>Browser-native. Free. Upgrade to Sarvam AI in Phase 2 for Hindi and regional language support.</p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-role">Commerce Layer</div>
+          <div class="tech-name">Swiggy MCP</div>
+          <p>3 servers, 18+ tools. Cart-add, item search, restaurant discovery. Server-side only — keys never in browser.</p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-role">Deployment</div>
+          <div class="tech-name">Vercel</div>
+          <p>Free tier to start. Preview deploys on every PR. Edge functions for API routes. Native Neon integration.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ARCHITECTURE -->
+    <div class="section" id="architecture">
+      <div class="sect-head">
+        <div class="sect-stripe stripe-i"></div>
+        <div class="sect-label">Technical</div>
+        <h2>Architecture</h2>
+      </div>
+
+      <div class="arch">
+        <pre>
+  <span class="aw">┌──────────────────────────────────────────────────────────────────┐</span>
+  <span class="aw">│</span>                  <span class="ac">BROWSER</span>  —  Next.js Frontend                     <span class="aw">│</span>
+  <span class="aw">│</span>   Dashboard · Meal Plan · Template Browser · Cart Preview         <span class="aw">│</span>
+  <span class="aw">│</span>   <span class="ag">Web Speech API</span> (voice — runs in browser, never server-side)      <span class="aw">│</span>
+  <span class="aw">└────────────────────────────┬─────────────────────────────────────┘</span>
+                               <span class="aw">│  HTTPS  (all requests authenticated via Clerk)</span>
+  <span class="aw">┌────────────────────────────▼─────────────────────────────────────┐</span>
+  <span class="aw">│</span>             <span class="ac">NEXT.JS API ROUTES</span>  —  Backend Logic Layer              <span class="aw">│</span>
+  <span class="aw">│</span>                                                                    <span class="aw">│</span>
+  <span class="aw">│</span>  /api/auth/*         → Clerk webhook — create user on signup       <span class="aw">│</span>
+  <span class="aw">│</span>  /api/meal-plans/*   → CRUD meal plans + slot assignments          <span class="aw">│</span>
+  <span class="aw">│</span>  /api/templates/*    → CRUD + search + fork                        <span class="aw">│</span>
+  <span class="aw">│</span>  /api/cart/*         → Build list → call Swiggy MCP → confirm      <span class="aw">│</span>
+  <span class="aw">│</span>  /api/voice/*        → Speech text → dish → ingredient list        <span class="aw">│</span>
+  <span class="aw">│</span>  /api/budget/*       → Spend tracking + waste patterns             <span class="aw">│</span>
+  <span class="aw">└────────┬──────────────────┬────────────────────┬───────────────────┘</span>
+           <span class="aw">│</span>                  <span class="aw">│</span>                    <span class="aw">│</span>
+  <span class="aw">┌────────▼───────┐</span>  <span class="aw">┌──────▼──────┐</span>  <span class="aw">┌──────▼──────────────────┐</span>
+  <span class="aw">│</span>  <span class="ac">NEON POSTGRES</span>  <span class="aw">│</span>  <span class="aw">│</span>   <span class="ag">CLERK</span>    <span class="aw">│</span>  <span class="aw">│</span>  <span class="ae">SWIGGY BUILDERS CLUB</span>   <span class="aw">│</span>
+  <span class="aw">│</span>  Drizzle ORM   <span class="aw">│</span>  <span class="aw">│</span>   Auth +   <span class="aw">│</span>  <span class="aw">│</span>  MCP API — Server-side  <span class="aw">│</span>
+  <span class="aw">│</span>                <span class="aw">│</span>  <span class="aw">│</span>  Sessions  <span class="aw">│</span>  <span class="aw">│</span>                         <span class="aw">│</span>
+  <span class="aw">│</span>  users         <span class="aw">│</span>  <span class="aw">└─────────────┘</span>  <span class="aw">│</span>  <span class="ac">■</span> Instamart  cart-add    <span class="aw">│</span>
+  <span class="aw">│</span>  templates     <span class="aw">│</span>                   <span class="aw">│</span>  <span class="ae">■</span> Food       restaurant    <span class="aw">│</span>
+  <span class="aw">│</span>  meal_plans    <span class="aw">│</span>                   <span class="aw">│</span>  <span class="ag">■</span> Dineout    booking       <span class="aw">│</span>
+  <span class="aw">│</span>  orders_log    <span class="aw">│</span>                   <span class="aw">│</span>                         <span class="aw">│</span>
+  <span class="aw">│</span>  waste_log     <span class="aw">│</span>                   <span class="aw">│</span>  Keys: server-side ONLY  <span class="aw">│</span>
+  <span class="aw">└────────────────┘</span>                   <span class="aw">└─────────────────────────┘</span>
+        </pre>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- DATABASE -->
+    <div class="section" id="database">
+      <div class="sect-head">
+        <div class="sect-stripe stripe-i"></div>
+        <div class="sect-label">Technical — Neon PostgreSQL via Drizzle</div>
+        <h2>Database Schema</h2>
+      </div>
+
+      <div class="db-grid">
+        <div class="db-tbl">
+          <div class="db-head"><span class="db-head-name">users</span><span class="db-head-note">core profile</span></div>
+          <div class="db-rows">
+            <div class="db-row"><span class="db-col">id</span><span class="db-type">uuid &nbsp;<span class="db-pk">PK</span></span></div>
+            <div class="db-row"><span class="db-col">clerk_id</span><span class="db-type">text UNIQUE</span></div>
+            <div class="db-row"><span class="db-col">goal</span><span class="db-type">enum</span></div>
+            <div class="db-row"><span class="db-col">diet_type</span><span class="db-type">enum</span></div>
+            <div class="db-row"><span class="db-col">household_size</span><span class="db-type">int</span></div>
+            <div class="db-row"><span class="db-col">monthly_budget</span><span class="db-type">numeric</span></div>
+            <div class="db-row"><span class="db-col">eatout_per_week</span><span class="db-type">int</span></div>
+            <div class="db-row"><span class="db-col">exclusions</span><span class="db-type">text[]</span></div>
+          </div>
+        </div>
+
+        <div class="db-tbl">
+          <div class="db-head"><span class="db-head-name">templates</span><span class="db-head-note">user-generated dishes</span></div>
+          <div class="db-rows">
+            <div class="db-row"><span class="db-col">id</span><span class="db-type">uuid &nbsp;<span class="db-pk">PK</span></span></div>
+            <div class="db-row"><span class="db-col">creator_id</span><span class="db-type">uuid → users</span></div>
+            <div class="db-row"><span class="db-col">forked_from_id</span><span class="db-type">uuid → templates</span></div>
+            <div class="db-row"><span class="db-col">dish_name</span><span class="db-type">text</span></div>
+            <div class="db-row"><span class="db-col">tags</span><span class="db-type">text[]</span></div>
+            <div class="db-row"><span class="db-col">is_public · is_paid</span><span class="db-type">boolean</span></div>
+            <div class="db-row"><span class="db-col">price</span><span class="db-type">numeric</span></div>
+            <div class="db-row"><span class="db-col">fork_count · buy_count</span><span class="db-type">int</span></div>
+          </div>
+        </div>
+
+        <div class="db-tbl">
+          <div class="db-head"><span class="db-head-name">template_ingredients</span><span class="db-head-note">per dish</span></div>
+          <div class="db-rows">
+            <div class="db-row"><span class="db-col">id</span><span class="db-type">uuid &nbsp;<span class="db-pk">PK</span></span></div>
+            <div class="db-row"><span class="db-col">template_id</span><span class="db-type">uuid → templates</span></div>
+            <div class="db-row"><span class="db-col">ingredient_name</span><span class="db-type">text</span></div>
+            <div class="db-row"><span class="db-col">quantity</span><span class="db-type">numeric</span></div>
+            <div class="db-row"><span class="db-col">unit</span><span class="db-type">text (g/kg/ml/pcs)</span></div>
+            <div class="db-row"><span class="db-col">instamart_search_hint</span><span class="db-type">text</span></div>
+          </div>
+        </div>
+
+        <div class="db-tbl">
+          <div class="db-head"><span class="db-head-name">meal_plan_slots</span><span class="db-head-note">weekly grid</span></div>
+          <div class="db-rows">
+            <div class="db-row"><span class="db-col">id</span><span class="db-type">uuid &nbsp;<span class="db-pk">PK</span></span></div>
+            <div class="db-row"><span class="db-col">meal_plan_id</span><span class="db-type">uuid → meal_plans</span></div>
+            <div class="db-row"><span class="db-col">day_of_week</span><span class="db-type">int (1–7)</span></div>
+            <div class="db-row"><span class="db-col">meal_type</span><span class="db-type">enum (B / L / D)</span></div>
+            <div class="db-row"><span class="db-col">template_id</span><span class="db-type">uuid → templates</span></div>
+            <div class="db-row"><span class="db-col">is_eatout</span><span class="db-type">boolean</span></div>
+          </div>
+        </div>
+
+        <div class="db-tbl">
+          <div class="db-head"><span class="db-head-name">orders_log</span><span class="db-head-note">spend tracking</span></div>
+          <div class="db-rows">
+            <div class="db-row"><span class="db-col">id</span><span class="db-type">uuid &nbsp;<span class="db-pk">PK</span></span></div>
+            <div class="db-row"><span class="db-col">user_id</span><span class="db-type">uuid → users</span></div>
+            <div class="db-row"><span class="db-col">ordered_at</span><span class="db-type">timestamp</span></div>
+            <div class="db-row"><span class="db-col">total_amount</span><span class="db-type">numeric</span></div>
+            <div class="db-row"><span class="db-col">source</span><span class="db-type">enum (instamart/food)</span></div>
+            <div class="db-row"><span class="db-col">template_ids</span><span class="db-type">uuid[]</span></div>
+          </div>
+        </div>
+
+        <div class="db-tbl">
+          <div class="db-head"><span class="db-head-name">waste_log</span><span class="db-head-note">over-buy patterns</span></div>
+          <div class="db-rows">
+            <div class="db-row"><span class="db-col">id</span><span class="db-type">uuid &nbsp;<span class="db-pk">PK</span></span></div>
+            <div class="db-row"><span class="db-col">user_id</span><span class="db-type">uuid → users</span></div>
+            <div class="db-row"><span class="db-col">ingredient_name</span><span class="db-type">text</span></div>
+            <div class="db-row"><span class="db-col">waste_level</span><span class="db-type">enum (none/some/most)</span></div>
+            <div class="db-row"><span class="db-col">logged_at</span><span class="db-type">timestamp</span></div>
+            <div class="db-row" style="opacity:0.4;"><span class="db-col">— Phase 2 —</span><span class="db-type"></span></div>
+            <div class="db-row" style="opacity:0.4;"><span class="db-col">follows · bookmarks</span><span class="db-type">add later</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- API LAYER -->
+    <div class="section" id="api">
+      <div class="sect-head">
+        <div class="sect-stripe stripe-i"></div>
+        <div class="sect-label">Technical — Next.js API Routes</div>
+        <h2>API Layer</h2>
+      </div>
+
+      <div class="api-list">
+        <div class="api-route"><span class="method m-post">POST</span><span class="api-path">/api/auth/webhook</span><span class="api-desc">Clerk webhook → create user row in Neon on signup</span></div>
+        <div class="api-route"><span class="method m-get">GET</span><span class="api-path">/api/user/profile</span><span class="api-desc">Fetch current user profile + onboarding data</span></div>
+        <div class="api-route"><span class="method m-patch">PATCH</span><span class="api-path">/api/user/profile</span><span class="api-desc">Update goal, budget, exclusions, household size</span></div>
+        <div class="api-route"><span class="method m-get">GET</span><span class="api-path">/api/meal-plans/current</span><span class="api-desc">Fetch this week's meal plan for current user</span></div>
+        <div class="api-route"><span class="method m-post">POST</span><span class="api-path">/api/meal-plans</span><span class="api-desc">Create new weekly meal plan</span></div>
+        <div class="api-route"><span class="method m-patch">PATCH</span><span class="api-path">/api/meal-plans/:id/slots</span><span class="api-desc">Assign or remove a template from a meal slot</span></div>
+        <div class="api-route"><span class="method m-get">GET</span><span class="api-path">/api/templates</span><span class="api-desc">List public templates with filters (goal, cuisine, diet)</span></div>
+        <div class="api-route"><span class="method m-get">GET</span><span class="api-path">/api/templates/:id</span><span class="api-desc">Template detail — ingredients + cook instructions</span></div>
+        <div class="api-route"><span class="method m-post">POST</span><span class="api-path">/api/templates</span><span class="api-desc">Create new template (auth required)</span></div>
+        <div class="api-route"><span class="method m-post">POST</span><span class="api-path">/api/templates/:id/fork</span><span class="api-desc">Fork a template into current user's library</span></div>
+        <div class="api-route"><span class="method m-post">POST</span><span class="api-path">/api/cart/build</span><span class="api-desc">Takes template IDs + quantities → builds Instamart item list</span></div>
+        <div class="api-route"><span class="method m-post">POST</span><span class="api-path">/api/cart/add-to-instamart</span><span class="api-desc">Calls Swiggy MCP to add items to user's Instamart cart</span></div>
+        <div class="api-route"><span class="method m-post">POST</span><span class="api-path">/api/voice/parse</span><span class="api-desc">Voice transcript → dish name → template match</span></div>
+        <div class="api-route"><span class="method m-get">GET</span><span class="api-path">/api/budget/summary</span><span class="api-desc">Monthly spend: groceries vs eat-out vs remaining</span></div>
+        <div class="api-route"><span class="method m-post">POST</span><span class="api-path">/api/waste/log</span><span class="api-desc">Records waste event for an ingredient after cycle</span></div>
+        <div class="api-route"><span class="method m-get">GET</span><span class="api-path">/api/waste/patterns</span><span class="api-desc">Over-buy patterns for current user (≥2 waste events on same item)</span></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- FOLDER STRUCTURE -->
+    <div class="section" id="folders">
+      <div class="sect-head">
+        <div class="sect-stripe stripe-i"></div>
+        <div class="sect-label">Technical — Next.js Monorepo</div>
+        <h2>Folder Structure</h2>
+      </div>
+
+      <div class="code-block">
+        <pre>
+<span class="cd">platecart/</span>
+├── <span class="cd">app/</span>                           <span class="cc"># Next.js App Router</span>
+│   ├── <span class="cd">(auth)/</span>
+│   │   ├── sign-in/page.tsx
+│   │   └── sign-up/page.tsx
+│   ├── <span class="cd">(app)/</span>                     <span class="cc"># Protected routes (Clerk guard)</span>
+│   │   ├── layout.tsx
+│   │   ├── dashboard/page.tsx
+│   │   ├── meal-plan/page.tsx
+│   │   ├── templates/
+│   │   │   ├── page.tsx           <span class="cc"># Template browser</span>
+│   │   │   ├── [id]/page.tsx      <span class="cc"># Template detail</span>
+│   │   │   └── create/page.tsx
+│   │   ├── my-templates/page.tsx
+│   │   ├── cart/page.tsx          <span class="cc"># Cart preview + confirm</span>
+│   │   ├── budget/page.tsx
+│   │   └── settings/page.tsx
+│   ├── <span class="cd">api/</span>                       <span class="cc"># Backend — all server-side</span>
+│   │   ├── auth/webhook/route.ts
+│   │   ├── user/profile/route.ts
+│   │   ├── meal-plans/route.ts
+│   │   ├── templates/
+│   │   │   ├── route.ts
+│   │   │   └── [id]/fork/route.ts
+│   │   ├── cart/
+│   │   │   ├── build/route.ts
+│   │   │   └── add-to-instamart/route.ts  <span class="cc"># Swiggy MCP called here</span>
+│   │   ├── voice/parse/route.ts
+│   │   └── waste/log/route.ts
+│   └── globals.css
+│
+├── <span class="cd">components/</span>
+│   ├── <span class="cd">ui/</span>                        <span class="cc"># Shadcn base components</span>
+│   ├── <span class="cd">dashboard/</span>
+│   │   ├── BudgetRing.tsx
+│   │   ├── TodaysMeals.tsx
+│   │   └── RestockCountdown.tsx
+│   ├── <span class="cd">meal-plan/</span>
+│   │   ├── WeekGrid.tsx
+│   │   └── MealSlot.tsx
+│   ├── <span class="cd">templates/</span>
+│   │   ├── TemplateCard.tsx
+│   │   ├── TemplateFilters.tsx
+│   │   └── IngredientRow.tsx
+│   ├── cart/CartPreview.tsx
+│   └── voice/VoiceButton.tsx
+│
+├── <span class="cd">lib/</span>
+│   ├── db/
+│   │   ├── schema.ts              <span class="cc"># All Drizzle table definitions</span>
+│   │   ├── index.ts               <span class="cc"># Neon connection (pooled)</span>
+│   │   └── migrations/
+│   ├── swiggy/
+│   │   ├── mcp-client.ts          <span class="cc"># Swiggy MCP wrapper — server only</span>
+│   │   ├── instamart.ts           <span class="cc"># Cart add / item search</span>
+│   │   └── food.ts                <span class="cc"># Restaurant search</span>
+│   ├── voice/dish-mapper.ts       <span class="cc"># Speech → dish → template lookup</span>
+│   ├── budget/calculator.ts       <span class="cc"># Spend tracking logic</span>
+│   └── waste/patterns.ts          <span class="cc"># Over-buy pattern detection</span>
+│
+├── hooks/
+│   ├── useVoiceInput.ts
+│   ├── useMealPlan.ts
+│   └── useBudget.ts
+│
+├── .env.local                     <span class="cc"># NEVER commit</span>
+│   <span class="ck">DATABASE_URL</span>=postgresql://...   <span class="cc"># Neon</span>
+│   <span class="ck">CLERK_SECRET_KEY</span>=sk_...
+│   <span class="ck">SWIGGY_MCP_API_KEY</span>=...          <span class="cc"># Server-side only — no NEXT_PUBLIC_</span>
+│
+├── drizzle.config.ts
+├── tailwind.config.ts
+└── package.json</pre>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- VIRTUAL TEAM -->
+    <div class="section" id="team">
+      <div class="sect-head">
+        <div class="sect-stripe stripe-m"></div>
+        <div class="sect-label">Team &nbsp;·&nbsp; Note: brain.obio.in TEAM_INDEX.md returned 404 — fix GitHub path and run the full session through Alex → Patty</div>
+        <h2>Virtual Team</h2>
+        <p class="sect-desc">Five roles. Each covers a real gap in this build. No overlap. Once your brain.obio.in roster is accessible, replace these with your named team using the 6-step workflow.</p>
+      </div>
+
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-role">MCP Architecture</div>
+          <div class="team-name">The Agent Architect</div>
+          <div class="team-says">"The MCP gives you 18+ tools across 3 servers. Your edge is orchestrating all three in one session — that's what Swiggy's own app can't do because each vertical is siloed in their UI. Start with Instamart cart-add only. Don't build Food or Dineout flows until the Instamart loop works end-to-end with real users."</div>
+        </div>
+        <div class="team-card">
+          <div class="team-role">India GTM Strategy</div>
+          <div class="team-name">The Distribution Lead</div>
+          <div class="team-says">"You're not competing with restaurants — you're competing for an app install on a phone that already has Swiggy and Zomato. The first-session hook must show value in under 60 seconds: first restock cart built, items listed, ₹ impact visible. That's the moment. Everything before it is friction. WhatsApp entry points in Phase 2."</div>
+        </div>
+        <div class="team-card">
+          <div class="team-role">User Trust & Behavior</div>
+          <div class="team-name">The Trust Engineer</div>
+          <div class="team-says">"The agent can see what to buy. The user still needs to feel in control — especially when it's their money. Never auto-add to cart. The waste-tracking one-tap works precisely because it's one tap. Reduce every action to minimum viable friction or users will quietly stop after week two. Confirm before pay, always, no exceptions."</div>
+        </div>
+        <div class="team-card">
+          <div class="team-role">Content & Creator Economy</div>
+          <div class="team-name">The Template Strategist</div>
+          <div class="team-says">"Free templates solve your recipe-database problem without you building it. But seed the library yourself — publish 30 high-quality templates before launch. Target Indian diet goals specifically: South Indian weight-loss plans, high-protein plans for gym-goers. Generic templates won't spread. Give creators a reason to publish before there's a follower count to show them."</div>
+        </div>
+        <div class="team-card">
+          <div class="team-role">Monetization Pressure</div>
+          <div class="team-name">The Business Skeptic</div>
+          <div class="team-says">"Swiggy owns the transaction. You will not earn a cut of order value. Your money comes from the planning layer — subscription for premium features: advanced budget analytics, voice in regional languages, unlimited public templates. Define your ₹/month target before writing code. If the model depends on Swiggy's margin, this doesn't work."</div>
+        </div>
+        <div class="team-card">
+          <div class="team-role">Session Synthesis (Alex role)</div>
+          <div class="team-name">The Decision Filter</div>
+          <div class="team-says">"One decision per session. Today's: Phase 1 scope is locked — Instamart cart loop, free templates, waste tracker. Phase 2 is not being built yet. The next session decides monetization model before a single Phase 2 feature is specced. That's the sequence. Don't let paid templates creep in through the back door while Phase 1 is still being built."</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- EXECUTION PLAN -->
+    <div class="section" id="execution">
+      <div class="sect-head">
+        <div class="sect-stripe stripe-m"></div>
+        <div class="sect-label">12-Week Build Plan</div>
+        <h2>Execution Plan</h2>
+        <p class="sect-desc">Phase 1 ships Week 8. Phase 2 planning only starts Week 10 if Phase 1 gates are passed. One shippable outcome per sprint — not a list of features.</p>
+      </div>
+
+      <div class="sprint-list">
+
+        <div class="sprint">
+          <div class="sprint-left">
+            <div class="sprint-week">Week 1</div>
+            <div class="sprint-phase-tag spt-n">Foundation</div>
+          </div>
+          <div class="sprint-right">
+            <div class="sprint-title">Project Setup — Next.js + Vercel + Neon + Clerk</div>
+            <div class="sprint-tasks">
+              <span>Next.js 14 init</span><span>Vercel deploy</span><span>Neon DB</span><span>Drizzle schema v1</span><span>Clerk auth</span><span>Swiggy Builders Club application submitted</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sprint">
+          <div class="sprint-left">
+            <div class="sprint-week">Week 2</div>
+            <div class="sprint-phase-tag spt-n">Foundation</div>
+          </div>
+          <div class="sprint-right">
+            <div class="sprint-title">Onboarding + User Profile</div>
+            <div class="sprint-tasks">
+              <span>5-step onboarding</span><span>Profile API routes</span><span>Users table seeded</span><span>Settings screen</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sprint">
+          <div class="sprint-left">
+            <div class="sprint-week">Week 3</div>
+            <div class="sprint-phase-tag spt-v">Phase 1</div>
+          </div>
+          <div class="sprint-right">
+            <div class="sprint-title">Template Library — CRUD + Free Publishing</div>
+            <div class="sprint-tasks">
+              <span>Templates schema</span><span>Create template form</span><span>Template browser</span><span>Template detail</span><span>Seed 30 templates manually</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sprint">
+          <div class="sprint-left">
+            <div class="sprint-week">Week 4</div>
+            <div class="sprint-phase-tag spt-v">Phase 1</div>
+          </div>
+          <div class="sprint-right">
+            <div class="sprint-title">Meal Plan Builder — 7-day Grid</div>
+            <div class="sprint-tasks">
+              <span>Week grid UI</span><span>Slot assignment</span><span>Fork template into plan</span><span>Eat-out slot toggle</span><span>meal_plans schema</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sprint">
+          <div class="sprint-left">
+            <div class="sprint-week">Week 5</div>
+            <div class="sprint-phase-tag spt-v">Phase 1</div>
+          </div>
+          <div class="sprint-right">
+            <div class="sprint-title">Instamart Cart Integration — Core Flow</div>
+            <div class="sprint-tasks">
+              <span>Swiggy MCP connected</span><span>cart/build route</span><span>add-to-instamart route</span><span>Cart preview screen</span><span>Confirm flow end-to-end</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sprint">
+          <div class="sprint-left">
+            <div class="sprint-week">Week 6</div>
+            <div class="sprint-phase-tag spt-v">Phase 1</div>
+          </div>
+          <div class="sprint-right">
+            <div class="sprint-title">Voice Command → Cart</div>
+            <div class="sprint-tasks">
+              <span>Web Speech API</span><span>voice/parse route</span><span>Dish → template mapper</span><span>Voice button on Dashboard</span><span>Tested on 30 seeded dishes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sprint">
+          <div class="sprint-left">
+            <div class="sprint-week">Week 7</div>
+            <div class="sprint-phase-tag spt-v">Phase 1</div>
+          </div>
+          <div class="sprint-right">
+            <div class="sprint-title">Budget Tracker + Waste Nudge</div>
+            <div class="sprint-tasks">
+              <span>Orders log</span><span>Waste log + 1-tap prompt</span><span>Budget ring on Dashboard</span><span>Over-buy pattern detection</span><span>3-day restock reminder</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sprint">
+          <div class="sprint-left">
+            <div class="sprint-week">Week 8</div>
+            <div class="sprint-phase-tag spt-v">Phase 1</div>
+          </div>
+          <div class="sprint-right">
+            <div class="sprint-title">Polish + Private Beta — 20 Real Users</div>
+            <div class="sprint-tasks">
+              <span>All 10 screens complete</span><span>Mobile responsive</span><span>Error handling</span><span>20 beta users invited</span><span>Feedback loop opened</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sprint">
+          <div class="sprint-left">
+            <div class="sprint-week">Week 9</div>
+            <div class="sprint-phase-tag spt-n">Feedback</div>
+          </div>
+          <div class="sprint-right">
+            <div class="sprint-title">Watch Real Users — Fix Top 3 Friction Points</div>
+            <div class="sprint-tasks">
+              <span>Session recordings</span><span>Does voice command work in real use?</span><span>Does waste tracker get used?</span><span>Fix what breaks</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sprint">
+          <div class="sprint-left">
+            <div class="sprint-week">Week 10</div>
+            <div class="sprint-phase-tag spt-n">Decision</div>
+          </div>
+          <div class="sprint-right">
+            <div class="sprint-title">Phase 2 Go / No-Go Gate</div>
+            <div class="sprint-tasks">
+              <span>Gate: ≥100 users on 3-day cycle</span><span>Gate: ≥10 user-created templates</span><span>Pass → Phase 2 spec starts</span><span>Fail → 4 more weeks on Phase 1 retention</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sprint">
+          <div class="sprint-left">
+            <div class="sprint-week">Wk 11–12</div>
+            <div class="sprint-phase-tag spt-e">Phase 2</div>
+          </div>
+          <div class="sprint-right">
+            <div class="sprint-title">Social Layer — Follow · Fork Attribution · Trust Signal</div>
+            <div class="sprint-tasks">
+              <span>follows + bookmarks tables</span><span>Creator profile page</span><span>Fork attribution display</span><span>"Bought X times" counter</span><span>Trending templates feed</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="padding:48px 0 0; text-align:center; color: var(--muted); font-size:0.72rem; letter-spacing:0.04em; border-top:1px solid var(--border); margin-top:56px;">
+      PlateCart · Product Brief · Raphy Varghese · Built on Swiggy Builders Club MCP · 2026
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /wrap -->
+
+<script>
+// Scrollspy — active nav link
+const links = document.querySelectorAll('.s-link');
+const sections = [];
+
+links.forEach(link => {
+  const id = link.getAttribute('href').slice(1);
+  const el = document.getElementById(id);
+  if (el) sections.push({ id, el, link });
+});
+
+function onScroll() {
+  const scrollY = window.scrollY + 80;
+  let current = sections[0];
+  sections.forEach(s => {
+    if (scrollY >= s.el.offsetTop) current = s;
+  });
+  links.forEach(l => { l.classList.remove('active', 'active-ember'); });
+  if (current) {
+    const isP2 = current.id === 'p2';
+    current.link.classList.add(isP2 ? 'active-ember' : 'active');
+  }
+}
+
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+</script>
+
+</body>
+</html>

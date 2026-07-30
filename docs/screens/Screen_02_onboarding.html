@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PlateCart · Screen 02 · Onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sw:#FC8019;--swt:rgba(252,128,25,.07);--ch:#282C3F;
+  --mu:#686B78;--bo:#E9E9EB;--bg:#FFFFFF;--pg:#F4F6FB;
+  --gr:#60B246;--f:'DM Sans',system-ui,sans-serif;--r:8px;
+  --meta:44px;--dev:400px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-family:var(--f);-webkit-font-smoothing:antialiased}
+body{overflow:hidden;height:100vh;display:flex;flex-direction:column;background:#DCDCDC}
+
+/* ── ICON SYSTEM ── */
+.icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.icon-lg{width:24px;height:24px}
+.icon-xl{width:28px;height:28px}
+.icon-sm{width:16px;height:16px}
+.icon-xs{width:14px;height:14px}
+
+/* ── META ── */
+.meta{height:var(--meta);background:var(--ch);display:flex;align-items:center;flex-shrink:0;z-index:50;overflow:hidden}
+.meta-l{display:flex;align-items:center;gap:8px;padding:0 14px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.1)}
+.meta-logo{font-weight:700;font-size:12px;color:#fff;letter-spacing:-.02em}
+.meta-logo em{font-style:normal;color:var(--sw)}
+.meta-badge{background:var(--sw);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.05em}
+.screen-links{display:flex;align-items:center;gap:2px;overflow-x:auto;flex:1;padding:0 10px;scrollbar-width:none}
+.screen-links::-webkit-scrollbar{display:none}
+.sl{font-size:10px;font-weight:500;color:rgba(255,255,255,.38);padding:4px 9px;border-radius:99px;text-decoration:none;white-space:nowrap;border:1px solid transparent;transition:.12s}
+.sl:hover{color:rgba(255,255,255,.7);background:rgba(255,255,255,.06)}
+.sl.cur{color:var(--sw);background:rgba(252,128,25,.12);border-color:rgba(252,128,25,.3);font-weight:700}
+.sl.done{color:rgba(255,255,255,.55)}
+.meta-r{padding:0 14px;flex-shrink:0;border-left:1px solid rgba(255,255,255,.1)}
+.ds-pill{border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.45);font-size:9px;padding:3px 8px;border-radius:99px;white-space:nowrap}
+
+/* ── SPLIT ── */
+.split{flex:1;display:flex;overflow:hidden}
+
+/* ── DESKTOP 85% ── */
+.dp{flex:0 0 85%;display:flex;flex-direction:column;border-right:1px solid #BEBEBE;overflow:hidden}
+.browser{background:#D4D4D4;padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #BEBEBE;flex-shrink:0}
+.b-dots{display:flex;gap:5px}
+.b-dot{width:10px;height:10px;border-radius:50%}
+.b-dot.r{background:#FF5F57}.b-dot.y{background:#FFBD2E}.b-dot.g{background:#28C840}
+.b-url{flex:1;background:#fff;border:1px solid #BEBEBE;border-radius:4px;padding:3px 10px;font-size:11px;color:#555;font-family:monospace;display:flex;align-items:center;gap:5px}
+.b-secure{color:#60B246;width:11px;height:11px;flex-shrink:0}
+.app-scroll{flex:1;overflow-y:auto;background:var(--pg)}
+.app-scroll::-webkit-scrollbar{width:4px}
+.app-scroll::-webkit-scrollbar-thumb{background:var(--bo);border-radius:2px}
+
+/* ── ONBOARDING SHELL ── */
+.ob-shell{min-height:100%;display:flex;flex-direction:column;align-items:center;padding:28px 24px 40px}
+.ob-logo{font-size:20px;font-weight:700;color:var(--ch);letter-spacing:-.03em;margin-bottom:20px}
+.ob-logo em{font-style:normal;color:var(--sw)}
+
+/* PROGRESS */
+.ob-prog{display:flex;gap:5px;margin-bottom:5px}
+.prog-seg{height:5px;width:48px;border-radius:3px;background:var(--bo);transition:background .22s}
+.prog-seg.fill{background:var(--sw)}
+.ob-step-lbl{font-size:12px;color:var(--mu);margin-bottom:22px}
+.ob-step-lbl strong{color:var(--ch)}
+
+/* LAYOUT */
+.ob-layout{display:flex;gap:18px;width:100%;max-width:960px}
+.ob-left{flex:1;min-width:0}
+.ob-right{width:272px;flex-shrink:0}
+.step-h{font-size:22px;font-weight:700;color:var(--ch);letter-spacing:-.025em;margin-bottom:5px}
+.step-sub{font-size:13px;color:var(--mu);margin-bottom:18px;line-height:1.5}
+.step-content{display:none}.step-content.active{display:block}
+.step-preview{display:none}.step-preview.active{display:block}
+
+/* ── STEP 1: GOAL CARDS ── */
+.goal-cards{display:flex;flex-direction:column;gap:9px}
+.gc{background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:14px 16px;cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:12px;position:relative}
+.gc:hover{border-color:#C0C0C4;box-shadow:0 1px 6px rgba(40,44,63,.06)}
+.gc.sel{border-color:var(--sw);background:var(--swt)}
+.gc-iw{width:40px;height:40px;border-radius:var(--r);background:var(--pg);display:flex;align-items:center;justify-content:center;color:var(--mu);flex-shrink:0;transition:.14s}
+.gc.sel .gc-iw{background:rgba(252,128,25,.1);color:var(--sw)}
+.gc-body{flex:1}
+.gc-row{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.gc-t{font-size:14px;font-weight:700;color:var(--ch);letter-spacing:-.01em}
+.pop-tag{background:#FFF0E0;color:var(--sw);font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.04em}
+.gc-d{font-size:12px;color:var(--mu);line-height:1.4;margin-bottom:7px}
+.gc-chips{display:flex;gap:6px;flex-wrap:wrap}
+.gc-chip{font-size:10px;color:var(--mu);background:var(--pg);padding:2px 8px;border-radius:99px;display:flex;align-items:center;gap:3px}
+.gc.sel .gc-chip{background:rgba(252,128,25,.1);color:var(--sw)}
+.gc-ck{position:absolute;top:12px;right:12px;width:20px;height:20px;border-radius:50%;background:var(--sw);display:none;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+.gc.sel .gc-ck{display:flex}
+.gc-ck .icon-xs{stroke:#fff;stroke-width:2.5}
+
+/* ── STEP 2: DIET ── */
+.diet-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.dc{background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:13px;cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:10px}
+.dc:hover{border-color:#C0C0C4;background:#FAFAFA}
+.dc.sel{border-color:var(--sw);background:var(--swt)}
+.dc-iw{width:32px;height:32px;border-radius:6px;background:var(--pg);display:flex;align-items:center;justify-content:center;color:var(--mu);flex-shrink:0;transition:.14s}
+.dc.sel .dc-iw{background:rgba(252,128,25,.1);color:var(--sw)}
+.dc-t{font-size:13px;font-weight:700;color:var(--ch);margin-bottom:2px}
+.dc-d{font-size:11px;color:var(--mu)}
+.dc-ck{margin-left:auto;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--bo);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.14s}
+.dc.sel .dc-ck{background:var(--sw);border-color:var(--sw);color:#fff}
+.dc.sel .dc-ck .icon-xs{stroke:#fff;stroke-width:2.5}
+
+/* ── STEP 3: HOUSEHOLD ── */
+.hh-row{display:flex;gap:9px}
+.hh{flex:1;background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:16px 8px;cursor:pointer;transition:all .14s;display:flex;flex-direction:column;align-items:center;gap:8px}
+.hh:hover{border-color:#C0C0C4;background:#FAFAFA}
+.hh.sel{border-color:var(--sw);background:var(--swt)}
+.hh-iw{width:40px;height:40px;border-radius:50%;background:var(--pg);display:flex;align-items:center;justify-content:center;color:var(--mu);transition:.14s}
+.hh.sel .hh-iw{background:rgba(252,128,25,.1);color:var(--sw)}
+.hh-num{font-size:18px;font-weight:700;color:var(--ch);letter-spacing:-.02em}
+.hh.sel .hh-num{color:var(--sw)}
+.hh-lbl{font-size:11px;color:var(--mu);text-align:center}
+.hh-note{margin-top:14px;background:var(--pg);border-radius:var(--r);padding:11px 13px;font-size:12px;color:var(--mu);line-height:1.5;display:none}
+.hh-note strong{color:var(--ch)}
+
+/* ── STEP 4: BUDGET ── */
+.budget-segs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.bseg{flex:1;min-width:90px;background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:12px 8px;cursor:pointer;transition:all .14s;text-align:center}
+.bseg:hover{border-color:#C0C0C4;background:#FAFAFA}
+.bseg.sel{border-color:var(--sw);background:var(--swt)}
+.bseg-val{font-size:16px;font-weight:700;color:var(--ch);letter-spacing:-.02em;margin-bottom:3px}
+.bseg.sel .bseg-val{color:var(--sw)}
+.bseg-lbl{font-size:10px;color:var(--mu)}
+.custom-wrap{background:var(--pg);border-radius:var(--r);padding:14px;display:none}
+.custom-wrap.vis{display:block}
+.slider-row{display:flex;align-items:center;gap:12px;margin-top:8px}
+.slider-row input[type=range]{flex:1;accent-color:var(--sw);height:4px}
+.slider-val{font-size:15px;font-weight:700;color:var(--sw);min-width:65px;text-align:right}
+.budget-items{margin-top:12px;display:none}
+.budget-items.vis{display:block}
+.bi-label{font-size:10px;font-weight:700;color:var(--mu);letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px}
+.bi{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--bo);font-size:12px;color:var(--ch)}
+.bi:last-child{border-bottom:none}
+.bi-dot{width:6px;height:6px;border-radius:50%;background:var(--gr);flex-shrink:0;margin-top:4px}
+.bi-dot.or{background:var(--sw)}
+
+/* ── STEP 5: EXCLUSIONS ── */
+.excl-note{font-size:12px;color:var(--mu);background:var(--pg);border-radius:var(--r);padding:10px 12px;margin-bottom:12px;line-height:1.5}
+.excl-none{background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:11px 13px;cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.excl-none:hover{border-color:#C0C0C4}
+.excl-none.sel{border-color:var(--sw);background:var(--swt)}
+.excl-none-iw{width:32px;height:32px;border-radius:6px;background:var(--pg);display:flex;align-items:center;justify-content:center;color:var(--mu);flex-shrink:0;transition:.14s}
+.excl-none.sel .excl-none-iw{background:rgba(252,128,25,.1);color:var(--sw)}
+.excl-none-t{font-size:13px;font-weight:700;color:var(--ch)}
+.excl-none-d{font-size:11px;color:var(--mu)}
+.excl-none-ck{margin-left:auto;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--bo);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.14s}
+.excl-none.sel .excl-none-ck{background:var(--sw);border-color:var(--sw)}
+.excl-none.sel .excl-none-ck .icon-xs{stroke:#fff;stroke-width:2.5}
+.excl-grid{display:flex;flex-wrap:wrap;gap:7px}
+.etag{display:flex;align-items:center;gap:6px;background:var(--pg);border:1.5px solid var(--bo);border-radius:99px;padding:7px 12px;cursor:pointer;transition:all .14s;font-size:12px;font-weight:500;color:var(--ch)}
+.etag:hover{border-color:#C0C0C4;background:#EAEAEE}
+.etag.sel{border-color:var(--sw);background:var(--swt);color:var(--sw)}
+.etag .icon-sm{color:var(--mu);transition:.14s}
+.etag.sel .icon-sm{color:var(--sw)}
+.excl-count{margin-top:12px;font-size:12px;color:var(--mu)}
+
+/* ── STEP 6: COMPLETE ── */
+.complete-screen{text-align:center;padding:16px 0}
+.complete-ck{width:60px;height:60px;border-radius:50%;background:var(--gr);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.complete-ck .icon-lg{stroke:#fff;stroke-width:2.5}
+.complete-h{font-size:21px;font-weight:700;color:var(--ch);letter-spacing:-.025em;margin-bottom:5px}
+.complete-sub{font-size:13px;color:var(--mu);margin-bottom:20px}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;text-align:left}
+.sum-item{background:var(--pg);border-radius:var(--r);padding:11px}
+.sum-lbl{font-size:9.5px;font-weight:700;color:var(--mu);letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.sum-val{font-size:13px;font-weight:700;color:var(--ch)}
+.go-btn{width:100%;padding:13px;background:var(--sw);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+
+/* SOCIAL PROOF */
+.social-proof{margin-top:14px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mu)}
+.sp-avs{display:flex}.sp-av{width:20px;height:20px;border-radius:50%;background:var(--sw);border:2px solid #fff;color:#fff;font-size:7px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-left:-4px}
+.sp-av:first-child{margin-left:0}.sp-av.b{background:var(--gr)}.sp-av.c{background:var(--ch)}
+.priv{margin-top:10px;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mu)}
+.priv .icon-sm{color:var(--mu)}
+
+/* ── PREVIEW PANEL ── */
+.preview-card{background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);padding:16px;position:sticky;top:16px}
+.pv-title{font-size:9.5px;font-weight:700;color:var(--mu);letter-spacing:.07em;text-transform:uppercase;margin-bottom:11px}
+.pv-h{font-size:14px;font-weight:700;color:var(--ch);letter-spacing:-.02em;margin-bottom:3px}
+.pv-sub{font-size:11px;color:var(--mu);margin-bottom:12px}
+.pv-meal{background:var(--pg);border-radius:6px;padding:8px 10px;margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.pv-mi{font-size:12px;width:20px;color:var(--mu);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.pv-mi .icon-sm{color:var(--mu)}
+.pv-mt{flex:1}
+.pv-mn{font-size:11px;font-weight:700;color:var(--ch)}
+.pv-mm{font-size:10px;color:var(--mu)}
+.pv-mk{font-size:11px;font-weight:700;color:var(--sw);white-space:nowrap}
+.pv-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bo);font-size:11px}
+.pv-row:last-of-type{border-bottom:none}
+.pv-rl{color:var(--mu)}.pv-rv{font-weight:700;color:var(--ch)}.pv-rv.g{color:var(--gr)}
+.pv-tip{margin-top:10px;background:var(--swt);border-radius:6px;padding:9px 10px;font-size:11px;color:var(--ch);line-height:1.5}
+.pv-tip strong{color:var(--sw)}
+.pv-template{background:var(--pg);border-radius:6px;padding:8px;margin-bottom:5px}
+.pv-tn{font-size:11px;font-weight:700;color:var(--ch);margin-bottom:2px}
+.pv-td{font-size:10px;color:var(--mu)}
+.pv-bbar{height:5px;background:var(--bo);border-radius:3px;overflow:hidden;margin:6px 0}
+.pv-bfill{height:100%;border-radius:3px;transition:width .3s}
+.pv-hh-icon{width:48px;height:48px;border-radius:50%;background:var(--pg);display:flex;align-items:center;justify-content:center;color:var(--sw);margin:10px auto}
+
+/* NAV */
+.ob-nav{display:flex;align-items:center;justify-content:space-between;margin-top:18px;width:100%;max-width:960px}
+.ob-back{font-size:13px;font-weight:600;color:var(--mu);background:none;border:none;cursor:pointer;font-family:var(--f);display:flex;align-items:center;gap:5px;opacity:.55;transition:.14s}
+.ob-back:hover:not(:disabled){opacity:1;color:var(--ch)}
+.ob-back:disabled{opacity:.2;cursor:not-allowed}
+.ob-skip{font-size:12px;color:var(--mu);background:none;border:none;cursor:pointer;font-family:var(--f);text-decoration:underline;text-underline-offset:2px}
+.ob-continue{background:var(--sw);color:#fff;border:none;border-radius:var(--r);padding:11px 26px;font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:7px}
+.ob-continue:hover:not(:disabled){opacity:.9}
+.ob-continue:disabled{background:var(--pg);color:var(--mu);border:1.5px solid var(--bo);cursor:not-allowed}
+.ob-continue:disabled .icon-sm{color:var(--mu)}
+.ob-continue .icon-sm{stroke:#fff}
+
+/* ── MOBILE PANEL ── */
+.mp{flex:0 0 15%;background:#E4E4E4;border-left:1px solid #BEBEBE;display:flex;flex-direction:column;overflow:hidden}
+.mp-hdr{padding:8px 10px 4px;flex-shrink:0}
+.mp-lbl{font-size:8px;font-weight:700;color:#999;letter-spacing:.08em;text-transform:uppercase}
+.mp-hint{font-size:7.5px;color:#BBB;margin-top:1px}
+.mp-area{flex:1;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding:5px 6px}
+.m-wrap{transform-origin:top center;width:375px}
+.m-bg{background:#fff;width:375px}
+
+/* MOBILE UI */
+.m-sb{background:#fff;padding:10px 14px 6px;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;color:#1C1C1E}
+.m-sb-r{display:flex;gap:3px;font-size:10px;align-items:center}
+.m-prog-bar{height:4px;display:flex;gap:3px;padding:0 14px;margin-bottom:0}
+.m-ps{flex:1;background:var(--bo);border-radius:2px;transition:background .22s}
+.m-ps.fill{background:var(--sw)}
+.m-ob-top{padding:14px 16px 0}
+.m-back-row{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.m-back-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--pg);border-radius:50%;color:var(--ch);cursor:pointer;flex-shrink:0}
+.m-back-btn .icon-sm{stroke:var(--ch)}
+.m-step-info{font-size:11px;color:var(--mu)}
+.m-ob-logo{font-size:16px;font-weight:700;color:var(--ch);letter-spacing:-.02em;margin-bottom:12px}
+.m-ob-logo em{font-style:normal;color:var(--sw)}
+.m-ob-h{font-size:18px;font-weight:700;color:var(--ch);letter-spacing:-.02em;margin-bottom:4px;line-height:1.25}
+.m-ob-sub{font-size:11.5px;color:var(--mu);margin-bottom:16px;line-height:1.4}
+.m-step{display:none}.m-step.active{display:block}
+
+/* Mobile goal cards */
+.m-gc{background:#fff;border:1.5px solid var(--bo);border-radius:var(--r);padding:12px 13px;display:flex;align-items:center;gap:10px;margin:0 16px 8px;cursor:pointer;transition:all .14s}
+.m-gc.sel{border-color:var(--sw);background:var(--swt)}
+.m-gc-iw{width:34px;height:34px;background:var(--pg);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--mu);flex-shrink:0;transition:.14s}
+.m-gc.sel .m-gc-iw{background:rgba(252,128,25,.1);color:var(--sw)}
+.m-gc-t{font-size:13px;font-weight:700;color:var(--ch)}
+.m-gc-d{font-size:10px;color:var(--mu);margin-top:1px}
+.m-gc-ck{margin-left:auto;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--bo);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.14s}
+.m-gc.sel .m-gc-ck{background:var(--sw);border-color:var(--sw)}
+.m-gc.sel .m-gc-ck .icon-xs{stroke:#fff;stroke-width:2.5}
+
+/* Mobile diet */
+.m-diet-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 16px}
+.m-dc{background:#fff;border:1.5px solid var(--bo);border-radius:var(--r);padding:10px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .14s}
+.m-dc.sel{border-color:var(--sw);background:var(--swt)}
+.m-dc-iw{width:28px;height:28px;background:var(--pg);border-radius:5px;display:flex;align-items:center;justify-content:center;color:var(--mu);flex-shrink:0;transition:.14s}
+.m-dc.sel .m-dc-iw{background:rgba(252,128,25,.1);color:var(--sw)}
+.m-dc-t{font-size:11.5px;font-weight:700;color:var(--ch)}
+.m-dc-d{font-size:9.5px;color:var(--mu)}
+
+/* Mobile household */
+.m-hh-row{display:flex;gap:7px;padding:0 16px}
+.m-hh{flex:1;background:#fff;border:1.5px solid var(--bo);border-radius:var(--r);padding:12px 5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .14s}
+.m-hh.sel{border-color:var(--sw);background:var(--swt)}
+.m-hh-iw{width:34px;height:34px;border-radius:50%;background:var(--pg);display:flex;align-items:center;justify-content:center;color:var(--mu);transition:.14s}
+.m-hh.sel .m-hh-iw{background:rgba(252,128,25,.1);color:var(--sw)}
+.m-hh-n{font-size:16px;font-weight:700;color:var(--ch)}
+.m-hh.sel .m-hh-n{color:var(--sw)}
+.m-hh-l{font-size:9px;color:var(--mu);text-align:center}
+.m-note{margin:10px 16px 0;padding:9px 10px;background:var(--pg);border-radius:6px;font-size:11px;color:var(--mu);line-height:1.4}
+
+/* Mobile budget */
+.m-bsegs{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 16px}
+.m-bs{background:#fff;border:1.5px solid var(--bo);border-radius:var(--r);padding:10px;cursor:pointer;text-align:center;transition:all .14s}
+.m-bs.sel{border-color:var(--sw);background:var(--swt)}
+.m-bs-v{font-size:14px;font-weight:700;color:var(--ch)}
+.m-bs.sel .m-bs-v{color:var(--sw)}
+.m-bs-l{font-size:10px;color:var(--mu)}
+
+/* Mobile exclusions */
+.m-excl-note{margin:0 16px 10px;padding:8px 10px;background:var(--pg);border-radius:6px;font-size:11px;color:var(--mu);line-height:1.4}
+.m-excl-grid{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px}
+.m-et{background:var(--pg);border:1.5px solid var(--bo);border-radius:99px;padding:6px 11px;font-size:11px;font-weight:500;color:var(--ch);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .14s}
+.m-et.sel{border-color:var(--sw);background:var(--swt);color:var(--sw)}
+.m-et .icon-xs{color:var(--mu);transition:.14s}
+.m-et.sel .icon-xs{color:var(--sw)}
+
+/* Mobile complete */
+.m-complete{text-align:center;padding:18px 16px}
+.m-comp-ck{width:48px;height:48px;border-radius:50%;background:var(--gr);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.m-comp-ck .icon{stroke:#fff;stroke-width:2.5;width:22px;height:22px}
+.m-comp-h{font-size:17px;font-weight:700;color:var(--ch);margin-bottom:4px}
+.m-comp-s{font-size:11.5px;color:var(--mu);margin-bottom:14px}
+.m-sum{background:var(--pg);border-radius:var(--r);padding:9px 11px;margin-bottom:12px;text-align:left}
+.m-sum-row{display:flex;justify-content:space-between;font-size:10.5px;padding:4px 0;border-bottom:1px solid var(--bo)}
+.m-sum-row:last-child{border-bottom:none}
+.m-sum-l{color:var(--mu)}.m-sum-v{font-weight:700;color:var(--ch)}
+.m-go{width:100%;padding:12px;background:var(--sw);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px}
+.m-go .icon-sm{stroke:#fff}
+.m-social{padding:10px 16px 0;display:flex;align-items:center;gap:7px;font-size:11px;color:var(--mu)}
+.m-sp-avs{display:flex}
+.m-sp-av{width:18px;height:18px;border-radius:50%;border:1.5px solid #fff;color:#fff;font-size:7px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-left:-4px;background:var(--sw)}
+.m-sp-av:first-child{margin-left:0}.m-sp-av.b{background:var(--gr)}.m-sp-av.c{background:var(--ch)}
+.m-bottom-area{padding:14px 16px 12px}
+.m-continue{width:100%;padding:12px;background:var(--sw);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:7px}
+.m-continue .icon-sm{stroke:#fff}
+.m-continue:disabled{background:var(--pg);color:var(--mu);border:1.5px solid var(--bo);cursor:not-allowed}
+.m-continue:disabled .icon-sm{stroke:var(--mu)}
+.m-skip-lnk{display:block;text-align:center;font-size:11px;color:var(--mu);background:none;border:none;font-family:var(--f);cursor:pointer;padding:4px;text-decoration:underline;text-underline-offset:2px}
+.m-priv{display:flex;align-items:center;justify-content:center;gap:5px;font-size:10px;color:var(--mu);padding:7px 0 0}
+.m-priv .icon-xs{color:var(--mu)}
+
+/* ── DEV ── */
+.dev-btn{position:fixed;bottom:20px;right:20px;z-index:200;background:var(--ch);color:#fff;border:none;border-radius:var(--r);padding:9px 16px;font-family:var(--f);font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,.3);letter-spacing:.04em;transition:.12s}
+.dev-btn:hover{background:#1a1e2e;transform:translateY(-1px)}
+.dev-dot{width:6px;height:6px;border-radius:50%;background:var(--sw);flex-shrink:0}
+.dev-panel{position:fixed;top:var(--meta);right:0;width:var(--dev);height:calc(100vh - var(--meta));background:#0D1117;z-index:150;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border-left:1px solid #1E2938;font-size:12px}
+.dev-panel.open{transform:translateX(0)}
+.dev-ph{padding:12px 16px;border-bottom:1px solid #1E2938;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dev-pt{font-family:var(--f);font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.dev-stag{background:var(--sw);color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700}
+.dev-cls{background:none;border:none;color:#555;font-size:18px;cursor:pointer;line-height:1;padding:4px}
+.dev-cls:hover{color:#fff}
+.dev-tabs{display:flex;border-bottom:1px solid #1E2938;padding:0 16px;flex-shrink:0}
+.d-tab{padding:9px 11px;font-family:var(--f);font-size:10px;font-weight:700;color:#555;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;letter-spacing:.06em;transition:.12s}
+.d-tab:hover{color:#888}.d-tab.act{color:var(--sw);border-bottom-color:var(--sw)}
+.dev-body{flex:1;overflow-y:auto;padding:16px}
+.dev-body::-webkit-scrollbar{width:3px}
+.dev-body::-webkit-scrollbar-thumb{background:#1E2938;border-radius:2px}
+.d-sub{display:none}.d-sub.act{display:block}
+.d-sec{margin-bottom:18px}
+.d-lbl{font-family:var(--f);font-size:8.5px;font-weight:700;color:var(--sw);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.code{background:#161B22;border:1px solid #1E2938;border-radius:6px;padding:11px;font-family:'Courier New',monospace;font-size:10.5px;line-height:1.65;color:#A8C8B0;white-space:pre;overflow-x:auto}
+.code .co{color:#3A5040}.code .om{color:var(--sw);font-weight:700}
+.code .pa{color:#93C5FD}.code .st{color:#FCA5A5}
+.code .vl{color:#E8D5A8}.code .ok{color:#6EE7B7}.code .wn{color:#FDE68A}
+.dl{list-style:none;display:flex;flex-direction:column;gap:7px}
+.dl li{display:flex;gap:7px;font-size:11px;line-height:1.5;color:#94A3B8}
+.dl li::before{content:'→';color:var(--sw);flex-shrink:0;margin-top:1px}
+.dl.warn li::before{content:'⚠';color:#FDE68A}
+.dl.ok li::before{content:'✓';color:#6EE7B7}
+</style>
+</head>
+<body>
+
+<!-- ═══ SVG SYMBOL LIBRARY — monotone Lucide icons ═══ -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <!-- trending-down: lose weight -->
+  <symbol id="i-trending-down" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+    <polyline points="17 18 23 18 23 12"/>
+  </symbol>
+  <!-- zap: gain / energy -->
+  <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+  </symbol>
+  <!-- heart: stay healthy -->
+  <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </symbol>
+  <!-- leaf: vegetarian -->
+  <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/>
+    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+  </symbol>
+  <!-- utensils: non-veg -->
+  <symbol id="i-utensils" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
+    <path d="M7 2v20"/>
+    <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/>
+  </symbol>
+  <!-- sprout: vegan -->
+  <symbol id="i-sprout" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/>
+    <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/>
+    <path d="M14.1 6a7 7 0 0 1 1.1 7.9c-1.5-1.5-2.1-3.5-2.3-5.8C13 7.6 13.5 6.8 14.1 6z"/>
+  </symbol>
+  <!-- flame: keto -->
+  <symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/>
+  </symbol>
+  <!-- moon: jain (spiritual diet) -->
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </symbol>
+  <!-- shield: gluten-free -->
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+  </symbol>
+  <!-- user: 1 person -->
+  <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+    <circle cx="12" cy="7" r="4"/>
+  </symbol>
+  <!-- users: 2-3 people -->
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+    <circle cx="9" cy="7" r="4"/>
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+  </symbol>
+  <!-- home: 4+ family -->
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+    <polyline points="9 22 9 12 15 12 15 22"/>
+  </symbol>
+  <!-- wallet: budget -->
+  <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+    <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+    <path d="M18 12a2 2 0 0 0 0 4h4v-4z"/>
+  </symbol>
+  <!-- ban: no exclusions -->
+  <symbol id="i-ban" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+  </symbol>
+  <!-- tag: exclusion tag icon -->
+  <symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+    <line x1="7" y1="7" x2="7.01" y2="7"/>
+  </symbol>
+  <!-- x: remove/deselect -->
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"/>
+    <line x1="6" y1="6" x2="18" y2="18"/>
+  </symbol>
+  <!-- check: selected state -->
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </symbol>
+  <!-- check-circle: completion -->
+  <symbol id="i-check-circle" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+    <polyline points="22 4 12 14.01 9 11.01"/>
+  </symbol>
+  <!-- arrow-left: back nav -->
+  <symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12"/>
+    <polyline points="12 19 5 12 12 5"/>
+  </symbol>
+  <!-- arrow-right: continue nav -->
+  <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12"/>
+    <polyline points="12 5 19 12 12 19"/>
+  </symbol>
+  <!-- lock: privacy -->
+  <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+  </symbol>
+  <!-- sun: meal/day icon -->
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </symbol>
+  <!-- moon-meal: dinner icon -->
+  <symbol id="i-moon-sm" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </symbol>
+  <!-- circle: neutral dot -->
+  <symbol id="i-circle" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+  </symbol>
+</svg>
+
+<!-- META BAR -->
+<header class="meta">
+  <div class="meta-l">
+    <div class="meta-logo">Plate<em>Cart</em></div>
+    <div class="meta-badge">02 / 10</div>
+  </div>
+  <nav class="screen-links">
+    <a class="sl done" href="screen_01_dashboard.html">01 Dashboard</a>
+    <a class="sl cur"  href="screen_02_onboarding.html">02 Onboarding</a>
+    <a class="sl" href="screen_03_meal_plan.html">03 Meal Plan</a>
+    <a class="sl" href="screen_04_template_browser.html">04 Templates</a>
+    <a class="sl" href="screen_05_template_detail.html">05 Detail</a>
+    <a class="sl" href="screen_06_create_template.html">06 Create</a>
+    <a class="sl" href="screen_07_my_templates.html">07 My Templates</a>
+    <a class="sl" href="screen_08_cart_preview.html">08 Cart</a>
+    <a class="sl" href="screen_09_budget_tracker.html">09 Budget</a>
+    <a class="sl" href="screen_10_settings.html">10 Settings</a>
+  </nav>
+  <div class="meta-r"><div class="ds-pill">Swiggy Design System</div></div>
+</header>
+
+<div class="split">
+
+<!-- ═══ DESKTOP 85% ═══ -->
+<div class="dp">
+  <div class="browser">
+    <div class="b-dots"><div class="b-dot r"></div><div class="b-dot y"></div><div class="b-dot g"></div></div>
+    <div class="b-url">
+      <svg class="b-secure icon-xs" viewBox="0 0 24 24" fill="none" stroke="#60B246" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span id="d-url">platecart.app/onboarding/goal</span>
+    </div>
+  </div>
+  <div class="app-scroll">
+  <div class="ob-shell">
+    <div class="ob-logo">Plate<em>Cart</em></div>
+
+    <!-- PROGRESS -->
+    <div class="ob-prog">
+      <div class="prog-seg fill" id="ps1"></div><div class="prog-seg" id="ps2"></div>
+      <div class="prog-seg" id="ps3"></div><div class="prog-seg" id="ps4"></div><div class="prog-seg" id="ps5"></div>
+    </div>
+    <div class="ob-step-lbl" id="step-lbl">Step <strong>1</strong> of 5 &middot; Your Health Goal</div>
+
+    <div class="ob-layout">
+    <div class="ob-left">
+
+      <!-- STEP 1: GOAL -->
+      <div class="step-content active" id="sc1">
+        <div class="step-h">What's your health goal?</div>
+        <div class="step-sub">PlateCart builds your grocery list around this. Change it anytime in Settings.</div>
+        <div class="goal-cards">
+          <div class="gc" onclick="selectGoal(this,'loss')">
+            <div class="gc-iw"><svg class="icon-lg"><use href="#i-trending-down"/></svg></div>
+            <div class="gc-body">
+              <div class="gc-row"><div class="gc-t">Lose Weight</div><div class="pop-tag">MOST POPULAR</div></div>
+              <div class="gc-d">Calorie-controlled plans with high-satiety ingredients. Avg deficit 400–500 kcal/day.</div>
+              <div class="gc-chips">
+                <div class="gc-chip"><svg class="icon-xs"><use href="#i-flame"/></svg>1,400–1,600 kcal/day</div>
+                <div class="gc-chip"><svg class="icon-xs"><use href="#i-trending-down"/></svg>Results from week 2</div>
+              </div>
+            </div>
+            <div class="gc-ck"><svg class="icon-xs"><use href="#i-check"/></svg></div>
+          </div>
+          <div class="gc" onclick="selectGoal(this,'gain')">
+            <div class="gc-iw"><svg class="icon-lg"><use href="#i-zap"/></svg></div>
+            <div class="gc-body">
+              <div class="gc-row"><div class="gc-t">Gain Muscle</div></div>
+              <div class="gc-d">High-protein, high-calorie plans. Lean proteins, complex carbs, healthy fats.</div>
+              <div class="gc-chips">
+                <div class="gc-chip"><svg class="icon-xs"><use href="#i-flame"/></svg>2,200–2,500 kcal/day</div>
+                <div class="gc-chip"><svg class="icon-xs"><use href="#i-zap"/></svg>Protein-first</div>
+              </div>
+            </div>
+            <div class="gc-ck"><svg class="icon-xs"><use href="#i-check"/></svg></div>
+          </div>
+          <div class="gc" onclick="selectGoal(this,'maintain')">
+            <div class="gc-iw"><svg class="icon-lg"><use href="#i-heart"/></svg></div>
+            <div class="gc-body">
+              <div class="gc-row"><div class="gc-t">Stay Healthy</div></div>
+              <div class="gc-d">Balanced, varied meal planning focused on nutrition diversity and consistency.</div>
+              <div class="gc-chips">
+                <div class="gc-chip"><svg class="icon-xs"><use href="#i-flame"/></svg>1,800–2,000 kcal/day</div>
+                <div class="gc-chip"><svg class="icon-xs"><use href="#i-leaf"/></svg>Balanced macros</div>
+              </div>
+            </div>
+            <div class="gc-ck"><svg class="icon-xs"><use href="#i-check"/></svg></div>
+          </div>
+        </div>
+        <div class="social-proof">
+          <div class="sp-avs"><div class="sp-av">P</div><div class="sp-av b">A</div><div class="sp-av c">R</div></div>
+          <span><strong style="color:var(--ch)">2,847 users</strong> chose Lose Weight last month</span>
+        </div>
+        <div class="priv"><svg class="icon-sm"><use href="#i-lock"/></svg>Your health data stays private &mdash; only used to personalise your grocery list.</div>
+      </div>
+
+      <!-- STEP 2: DIET -->
+      <div class="step-content" id="sc2">
+        <div class="step-h">What's your diet type?</div>
+        <div class="step-sub">Recipes and templates will be filtered to match. Add more exclusions in step 5.</div>
+        <div class="diet-grid">
+          <div class="dc" onclick="selectDiet(this,'veg','Vegetarian')">
+            <div class="dc-iw"><svg class="icon"><use href="#i-leaf"/></svg></div>
+            <div><div class="dc-t">Vegetarian</div><div class="dc-d">No meat &middot; Eggs OK</div></div>
+            <div class="dc-ck"><svg class="icon-xs"><use href="#i-check"/></svg></div>
+          </div>
+          <div class="dc" onclick="selectDiet(this,'nonveg','Non-Vegetarian')">
+            <div class="dc-iw"><svg class="icon"><use href="#i-utensils"/></svg></div>
+            <div><div class="dc-t">Non-Vegetarian</div><div class="dc-d">All proteins welcome</div></div>
+            <div class="dc-ck"><svg class="icon-xs"><use href="#i-check"/></svg></div>
+          </div>
+          <div class="dc" onclick="selectDiet(this,'vegan','Vegan')">
+            <div class="dc-iw"><svg class="icon"><use href="#i-sprout"/></svg></div>
+            <div><div class="dc-t">Vegan</div><div class="dc-d">No animal products</div></div>
+            <div class="dc-ck"><svg class="icon-xs"><use href="#i-check"/></svg></div>
+          </div>
+          <div class="dc" onclick="selectDiet(this,'keto','Keto')">
+            <div class="dc-iw"><svg class="icon"><use href="#i-flame"/></svg></div>
+            <div><div class="dc-t">Keto / Low-Carb</div><div class="dc-d">High fat, very low carbs</div></div>
+            <div class="dc-ck"><svg class="icon-xs"><use href="#i-check"/></svg></div>
+          </div>
+          <div class="dc" onclick="selectDiet(this,'jain','Jain')">
+            <div class="dc-iw"><svg class="icon"><use href="#i-moon"/></svg></div>
+            <div><div class="dc-t">Jain</div><div class="dc-d">No root vegetables</div></div>
+            <div class="dc-ck"><svg class="icon-xs"><use href="#i-check"/></svg></div>
+          </div>
+          <div class="dc" onclick="selectDiet(this,'gf','Gluten-Free')">
+            <div class="dc-iw"><svg class="icon"><use href="#i-shield"/></svg></div>
+            <div><div class="dc-t">Gluten-Free</div><div class="dc-d">No wheat, barley, rye</div></div>
+            <div class="dc-ck"><svg class="icon-xs"><use href="#i-check"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: HOUSEHOLD -->
+      <div class="step-content" id="sc3">
+        <div class="step-h">How many people are you cooking for?</div>
+        <div class="step-sub">Grocery quantities and restock amounts scale to your household size.</div>
+        <div class="hh-row">
+          <div class="hh" onclick="selectHH(this,1)">
+            <div class="hh-iw"><svg class="icon"><use href="#i-user"/></svg></div>
+            <div class="hh-num">1</div><div class="hh-lbl">Just me</div>
+          </div>
+          <div class="hh" onclick="selectHH(this,2)">
+            <div class="hh-iw"><svg class="icon"><use href="#i-users"/></svg></div>
+            <div class="hh-num">2</div><div class="hh-lbl">Two people</div>
+          </div>
+          <div class="hh" onclick="selectHH(this,3)">
+            <div class="hh-iw"><svg class="icon-lg"><use href="#i-users"/></svg></div>
+            <div class="hh-num">3</div><div class="hh-lbl">Three people</div>
+          </div>
+          <div class="hh" onclick="selectHH(this,4)">
+            <div class="hh-iw"><svg class="icon"><use href="#i-home"/></svg></div>
+            <div class="hh-num">4+</div><div class="hh-lbl">Family</div>
+          </div>
+        </div>
+        <div class="hh-note" id="hh-note"></div>
+      </div>
+
+      <!-- STEP 4: BUDGET -->
+      <div class="step-content" id="sc4">
+        <div class="step-h">What's your monthly grocery budget?</div>
+        <div class="step-sub">PlateCart tracks groceries + eat-outs against this limit. Adjust anytime.</div>
+        <div class="budget-segs">
+          <div class="bseg" onclick="selectBudget(this,2000)"><div class="bseg-val">&#8377;2,000</div><div class="bseg-lbl">Basic</div></div>
+          <div class="bseg" onclick="selectBudget(this,3500)"><div class="bseg-val">&#8377;3,500</div><div class="bseg-lbl">Standard</div></div>
+          <div class="bseg" onclick="selectBudget(this,5000)"><div class="bseg-val">&#8377;5,000</div><div class="bseg-lbl">Comfortable &#9670;</div></div>
+          <div class="bseg" onclick="selectBudget(this,8000)"><div class="bseg-val">&#8377;8,000</div><div class="bseg-lbl">Generous</div></div>
+          <div class="bseg" onclick="selectBudget(this,'custom')"><div class="bseg-val">Custom</div><div class="bseg-lbl">Set my own</div></div>
+        </div>
+        <div class="custom-wrap" id="custom-wrap">
+          <div style="font-size:12px;color:var(--mu);display:flex;align-items:center;gap:6px"><svg class="icon-sm" style="color:var(--mu)"><use href="#i-wallet"/></svg>Drag to set your custom budget</div>
+          <div class="slider-row">
+            <input type="range" min="1000" max="20000" step="500" value="6000" id="budget-slider" oninput="updateSlider(this.value)">
+            <div class="slider-val" id="slider-display">&#8377;6,000</div>
+          </div>
+        </div>
+        <div class="budget-items" id="budget-items">
+          <div class="bi-label">What's covered at this budget</div>
+          <div class="bi"><div class="bi-dot"></div><span id="bi1"></span></div>
+          <div class="bi"><div class="bi-dot"></div><span id="bi2"></span></div>
+          <div class="bi"><div class="bi-dot or"></div><span id="bi3"></span></div>
+        </div>
+      </div>
+
+      <!-- STEP 5: EXCLUSIONS -->
+      <div class="step-content" id="sc5">
+        <div class="step-h">Any ingredients to avoid?</div>
+        <div class="step-sub">We'll hide templates containing these. Update this list anytime in Settings.</div>
+        <div class="excl-note">Tap to select ingredients to exclude. Leave empty to see all recipes.</div>
+        <div class="excl-none" onclick="toggleNone(this)" id="excl-none-btn">
+          <div class="excl-none-iw"><svg class="icon"><use href="#i-ban"/></svg></div>
+          <div><div class="excl-none-t">No exclusions &mdash; I eat everything</div><div class="excl-none-d">Show me all available recipes</div></div>
+          <div class="excl-none-ck"><svg class="icon-xs"><use href="#i-check"/></svg></div>
+        </div>
+        <div class="excl-grid">
+          <div class="etag" onclick="toggleExcl(this,'onion')"><svg class="icon-sm"><use href="#i-tag"/></svg>Onion &amp; Garlic</div>
+          <div class="etag" onclick="toggleExcl(this,'nuts')"><svg class="icon-sm"><use href="#i-tag"/></svg>Nuts</div>
+          <div class="etag" onclick="toggleExcl(this,'dairy')"><svg class="icon-sm"><use href="#i-tag"/></svg>Dairy</div>
+          <div class="etag" onclick="toggleExcl(this,'eggs')"><svg class="icon-sm"><use href="#i-tag"/></svg>Eggs</div>
+          <div class="etag" onclick="toggleExcl(this,'fish')"><svg class="icon-sm"><use href="#i-tag"/></svg>Fish &amp; Seafood</div>
+          <div class="etag" onclick="toggleExcl(this,'pork')"><svg class="icon-sm"><use href="#i-tag"/></svg>Pork</div>
+          <div class="etag" onclick="toggleExcl(this,'beef')"><svg class="icon-sm"><use href="#i-tag"/></svg>Beef</div>
+          <div class="etag" onclick="toggleExcl(this,'gluten')"><svg class="icon-sm"><use href="#i-tag"/></svg>Gluten / Wheat</div>
+          <div class="etag" onclick="toggleExcl(this,'mushroom')"><svg class="icon-sm"><use href="#i-tag"/></svg>Mushrooms</div>
+          <div class="etag" onclick="toggleExcl(this,'soy')"><svg class="icon-sm"><use href="#i-tag"/></svg>Soy</div>
+        </div>
+        <div class="excl-count" id="excl-count">No exclusions selected &mdash; showing all recipes</div>
+      </div>
+
+      <!-- STEP 6: COMPLETE -->
+      <div class="step-content" id="sc6">
+        <div class="complete-screen">
+          <div class="complete-ck"><svg class="icon icon-lg"><use href="#i-check-circle"/></svg></div>
+          <div class="complete-h">Your PlateCart is ready!</div>
+          <div class="complete-sub">Here's your personalised setup. Edit any of these from Settings.</div>
+          <div class="summary-grid">
+            <div class="sum-item"><div class="sum-lbl">Goal</div><div class="sum-val" id="s-goal">—</div></div>
+            <div class="sum-item"><div class="sum-lbl">Diet Type</div><div class="sum-val" id="s-diet">—</div></div>
+            <div class="sum-item"><div class="sum-lbl">Household</div><div class="sum-val" id="s-hh">—</div></div>
+            <div class="sum-item"><div class="sum-lbl">Monthly Budget</div><div class="sum-val" id="s-budget">—</div></div>
+            <div class="sum-item" style="grid-column:span 2"><div class="sum-lbl">Exclusions</div><div class="sum-val" id="s-excl">None</div></div>
+          </div>
+          <a href="screen_01_dashboard.html">
+            <button class="go-btn">Go to Dashboard<svg class="icon-sm" style="stroke:#fff"><use href="#i-arrow-right"/></svg></button>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PREVIEW PANEL -->
+    <div class="ob-right">
+      <div class="step-preview active" id="pv1"><div class="preview-card">
+        <div class="pv-title">Your plan preview</div>
+        <div class="pv-h" id="pv1-h">Select a goal</div>
+        <div class="pv-sub" id="pv1-sub">Choose a goal to see a sample meal plan</div>
+        <div id="pv1-meals"></div>
+        <div id="pv1-stats"></div>
+        <div class="pv-tip" id="pv1-tip" style="display:none"></div>
+      </div></div>
+      <div class="step-preview" id="pv2"><div class="preview-card">
+        <div class="pv-title">Templates available</div>
+        <div class="pv-h" id="pv2-h">Select a diet type</div>
+        <div class="pv-sub" id="pv2-sub">Your templates will be filtered to match</div>
+        <div id="pv2-items"></div>
+      </div></div>
+      <div class="step-preview" id="pv3"><div class="preview-card">
+        <div class="pv-title">Grocery quantities</div>
+        <div class="pv-h" id="pv3-h">Select household size</div>
+        <div class="pv-sub" id="pv3-sub">Quantities scale per person</div>
+        <div id="pv3-items"></div>
+      </div></div>
+      <div class="step-preview" id="pv4"><div class="preview-card">
+        <div class="pv-title">Budget breakdown</div>
+        <div class="pv-h" id="pv4-h">Select a budget</div>
+        <div class="pv-sub" id="pv4-sub">See how your budget is allocated</div>
+        <div id="pv4-items"></div>
+      </div></div>
+      <div class="step-preview" id="pv5"><div class="preview-card">
+        <div class="pv-title">Your recipe library</div>
+        <div class="pv-h" id="pv5-h">All recipes available</div>
+        <div class="pv-sub" id="pv5-sub">Exclusions narrow the list</div>
+        <div id="pv5-items"></div>
+        <div class="pv-tip"><strong>Tip:</strong> Add more exclusions in Settings anytime after setup.</div>
+      </div></div>
+      <div class="step-preview" id="pv6"><div class="preview-card" style="text-align:center;padding:22px 16px">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--gr);display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+          <svg class="icon" style="stroke:#fff;width:22px;height:22px"><use href="#i-check-circle"/></svg>
+        </div>
+        <div class="pv-h">Setup complete!</div>
+        <div class="pv-sub" style="margin-bottom:12px">Your first grocery list will be ready after you build your meal plan.</div>
+        <div style="background:var(--pg);border-radius:var(--r);padding:11px;font-size:11px;color:var(--mu);text-align:left;line-height:1.6">
+          <strong style="color:var(--ch)">What happens next:</strong><br>
+          1. Pick this week's meal templates<br>
+          2. Voice-order or manually add to cart<br>
+          3. Confirm your Instamart order
+        </div>
+      </div></div>
+    </div>
+    </div>
+
+    <!-- NAV -->
+    <div class="ob-nav" id="ob-nav">
+      <button class="ob-back" id="back-btn" onclick="goBack()" disabled>
+        <svg class="icon-sm"><use href="#i-arrow-left"/></svg>Back
+      </button>
+      <button class="ob-skip" id="skip-btn" onclick="skip()">Skip setup</button>
+      <button class="ob-continue" id="cont-btn" onclick="goNext()" disabled>
+        Continue<svg class="icon-sm"><use href="#i-arrow-right"/></svg>
+      </button>
+    </div>
+
+  </div>
+  </div>
+</div>
+
+<!-- ═══ MOBILE PANEL 15% ═══ -->
+<div class="mp">
+  <div class="mp-hdr">
+    <div class="mp-lbl">Mobile &middot; 375px</div>
+    <div class="mp-hint">Full screen &middot; no frame</div>
+  </div>
+  <div class="mp-area">
+  <div class="m-wrap" id="m-wrap">
+  <div class="m-bg">
+    <div class="m-sb"><span>9:41</span><div class="m-sb-r"><span>&bull;&bull;&bull;&bull;</span><span>WiFi</span><svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="11" rx="1"/><path d="M6 7V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3"/></svg></div></div>
+    <div class="m-prog-bar"><div class="m-ps fill" id="mp1"></div><div class="m-ps" id="mp2"></div><div class="m-ps" id="mp3"></div><div class="m-ps" id="mp4"></div><div class="m-ps" id="mp5"></div></div>
+
+    <div class="m-ob-top" id="m-ob-top">
+      <div class="m-back-row">
+        <div class="m-back-btn" onclick="goBack()"><svg class="icon-sm"><use href="#i-arrow-left"/></svg></div>
+        <div class="m-step-info" id="m-step-info">Step 1 of 5</div>
+      </div>
+      <div class="m-ob-logo">Plate<em>Cart</em></div>
+      <div class="m-ob-h" id="m-h">What's your health goal?</div>
+      <div class="m-ob-sub" id="m-sub">We'll build your grocery list around this.</div>
+    </div>
+
+    <!-- M STEP 1 -->
+    <div class="m-step active" id="ms1">
+      <div class="m-gc sel" onclick="mSelectGoal(this,'loss')">
+        <div class="m-gc-iw"><svg class="icon"><use href="#i-trending-down"/></svg></div>
+        <div><div class="m-gc-t">Lose Weight <span style="background:#FFF0E0;color:var(--sw);font-size:8px;font-weight:700;padding:1px 5px;border-radius:99px">POPULAR</span></div><div class="m-gc-d">1,400–1,600 kcal/day</div></div>
+        <div class="m-gc-ck"><svg class="icon-xs"><use href="#i-check"/></svg></div>
+      </div>
+      <div class="m-gc" onclick="mSelectGoal(this,'gain')">
+        <div class="m-gc-iw"><svg class="icon"><use href="#i-zap"/></svg></div>
+        <div><div class="m-gc-t">Gain Muscle</div><div class="m-gc-d">2,200–2,500 kcal/day</div></div>
+        <div class="m-gc-ck"></div>
+      </div>
+      <div class="m-gc" onclick="mSelectGoal(this,'maintain')">
+        <div class="m-gc-iw"><svg class="icon"><use href="#i-heart"/></svg></div>
+        <div><div class="m-gc-t">Stay Healthy</div><div class="m-gc-d">1,800–2,000 kcal/day</div></div>
+        <div class="m-gc-ck"></div>
+      </div>
+      <div class="m-social">
+        <div class="m-sp-avs"><div class="m-sp-av">P</div><div class="m-sp-av b">A</div><div class="m-sp-av c">R</div></div>
+        <span>2,847 chose Lose Weight last month</span>
+      </div>
+    </div>
+
+    <!-- M STEP 2 -->
+    <div class="m-step" id="ms2">
+      <div class="m-diet-grid">
+        <div class="m-dc" onclick="mSelDiet(this,'veg','Vegetarian')"><div class="m-dc-iw"><svg class="icon-sm"><use href="#i-leaf"/></svg></div><div><div class="m-dc-t">Vegetarian</div><div class="m-dc-d">No meat</div></div></div>
+        <div class="m-dc" onclick="mSelDiet(this,'nonveg','Non-Vegetarian')"><div class="m-dc-iw"><svg class="icon-sm"><use href="#i-utensils"/></svg></div><div><div class="m-dc-t">Non-Veg</div><div class="m-dc-d">All proteins</div></div></div>
+        <div class="m-dc" onclick="mSelDiet(this,'vegan','Vegan')"><div class="m-dc-iw"><svg class="icon-sm"><use href="#i-sprout"/></svg></div><div><div class="m-dc-t">Vegan</div><div class="m-dc-d">Plant-only</div></div></div>
+        <div class="m-dc" onclick="mSelDiet(this,'keto','Keto')"><div class="m-dc-iw"><svg class="icon-sm"><use href="#i-flame"/></svg></div><div><div class="m-dc-t">Keto</div><div class="m-dc-d">Low-carb</div></div></div>
+        <div class="m-dc" onclick="mSelDiet(this,'jain','Jain')"><div class="m-dc-iw"><svg class="icon-sm"><use href="#i-moon"/></svg></div><div><div class="m-dc-t">Jain</div><div class="m-dc-d">No root veg</div></div></div>
+        <div class="m-dc" onclick="mSelDiet(this,'gf','Gluten-Free')"><div class="m-dc-iw"><svg class="icon-sm"><use href="#i-shield"/></svg></div><div><div class="m-dc-t">Gluten-Free</div><div class="m-dc-d">No wheat</div></div></div>
+      </div>
+    </div>
+
+    <!-- M STEP 3 -->
+    <div class="m-step" id="ms3">
+      <div class="m-hh-row">
+        <div class="m-hh" onclick="mSelHH(this,1)"><div class="m-hh-iw"><svg class="icon-sm"><use href="#i-user"/></svg></div><div class="m-hh-n">1</div><div class="m-hh-l">Just me</div></div>
+        <div class="m-hh" onclick="mSelHH(this,2)"><div class="m-hh-iw"><svg class="icon-sm"><use href="#i-users"/></svg></div><div class="m-hh-n">2</div><div class="m-hh-l">Two</div></div>
+        <div class="m-hh" onclick="mSelHH(this,3)"><div class="m-hh-iw"><svg class="icon-sm"><use href="#i-users"/></svg></div><div class="m-hh-n">3</div><div class="m-hh-l">Three</div></div>
+        <div class="m-hh" onclick="mSelHH(this,4)"><div class="m-hh-iw"><svg class="icon-sm"><use href="#i-home"/></svg></div><div class="m-hh-n">4+</div><div class="m-hh-l">Family</div></div>
+      </div>
+      <div class="m-note" id="m-hh-note">Select your household size above</div>
+    </div>
+
+    <!-- M STEP 4 -->
+    <div class="m-step" id="ms4">
+      <div class="m-bsegs">
+        <div class="m-bs" onclick="mSelBudget(this,2000)"><div class="m-bs-v">&#8377;2,000</div><div class="m-bs-l">Basic</div></div>
+        <div class="m-bs" onclick="mSelBudget(this,3500)"><div class="m-bs-v">&#8377;3,500</div><div class="m-bs-l">Standard</div></div>
+        <div class="m-bs" onclick="mSelBudget(this,5000)"><div class="m-bs-v">&#8377;5,000</div><div class="m-bs-l">Comfortable</div></div>
+        <div class="m-bs" onclick="mSelBudget(this,8000)"><div class="m-bs-v">&#8377;8,000</div><div class="m-bs-l">Generous</div></div>
+      </div>
+      <div class="m-note" id="m-budget-note">Select your monthly grocery budget</div>
+    </div>
+
+    <!-- M STEP 5 -->
+    <div class="m-step" id="ms5">
+      <div class="m-excl-note">Tap to exclude. Leave empty to see all recipes.</div>
+      <div class="m-excl-grid">
+        <div class="m-et" onclick="mToggleExcl(this,'onion')"><svg class="icon-xs"><use href="#i-tag"/></svg>Onion &amp; Garlic</div>
+        <div class="m-et" onclick="mToggleExcl(this,'nuts')"><svg class="icon-xs"><use href="#i-tag"/></svg>Nuts</div>
+        <div class="m-et" onclick="mToggleExcl(this,'dairy')"><svg class="icon-xs"><use href="#i-tag"/></svg>Dairy</div>
+        <div class="m-et" onclick="mToggleExcl(this,'eggs')"><svg class="icon-xs"><use href="#i-tag"/></svg>Eggs</div>
+        <div class="m-et" onclick="mToggleExcl(this,'fish')"><svg class="icon-xs"><use href="#i-tag"/></svg>Fish &amp; Seafood</div>
+        <div class="m-et" onclick="mToggleExcl(this,'pork')"><svg class="icon-xs"><use href="#i-tag"/></svg>Pork</div>
+        <div class="m-et" onclick="mToggleExcl(this,'gluten')"><svg class="icon-xs"><use href="#i-tag"/></svg>Gluten</div>
+        <div class="m-et" onclick="mToggleExcl(this,'mushroom')"><svg class="icon-xs"><use href="#i-tag"/></svg>Mushrooms</div>
+      </div>
+    </div>
+
+    <!-- M STEP 6 -->
+    <div class="m-step" id="ms6">
+      <div class="m-complete">
+        <div class="m-comp-ck"><svg class="icon"><use href="#i-check-circle"/></svg></div>
+        <div class="m-comp-h">You're all set!</div>
+        <div class="m-comp-s">PlateCart is personalised and ready.</div>
+        <div class="m-sum">
+          <div class="m-sum-row"><span class="m-sum-l">Goal</span><span class="m-sum-v" id="ms-goal">—</span></div>
+          <div class="m-sum-row"><span class="m-sum-l">Diet</span><span class="m-sum-v" id="ms-diet">—</span></div>
+          <div class="m-sum-row"><span class="m-sum-l">Household</span><span class="m-sum-v" id="ms-hh">—</span></div>
+          <div class="m-sum-row"><span class="m-sum-l">Budget</span><span class="m-sum-v" id="ms-budget">—</span></div>
+        </div>
+        <a href="screen_01_dashboard.html"><button class="m-go">Go to Dashboard<svg class="icon-sm"><use href="#i-arrow-right"/></svg></button></a>
+      </div>
+    </div>
+
+    <!-- M CONTINUE AREA -->
+    <div class="m-bottom-area" id="m-bottom">
+      <button class="m-continue" id="m-cont" onclick="goNext()" disabled>
+        Continue<svg class="icon-sm"><use href="#i-arrow-right"/></svg>
+      </button>
+      <button class="m-skip-lnk" onclick="skip()">Skip setup for now</button>
+      <div class="m-priv"><svg class="icon-xs"><use href="#i-lock"/></svg>Your data stays private</div>
+    </div>
+  </div>
+  </div>
+  </div>
+</div>
+
+</div><!-- /split -->
+
+<!-- DEV -->
+<button class="dev-btn" onclick="toggleDev()"><div class="dev-dot"></div>DEV</button>
+<aside class="dev-panel" id="devPanel">
+  <div class="dev-ph"><div class="dev-pt">Dev Guide <span class="dev-stag">ONBOARDING</span></div><button class="dev-cls" onclick="toggleDev()">&#10005;</button></div>
+  <div class="dev-tabs">
+    <button class="d-tab act" onclick="showTab('api',this)">API</button>
+    <button class="d-tab" onclick="showTab('schema',this)">Schema</button>
+    <button class="d-tab" onclick="showTab('pitfalls',this)">Pitfalls</button>
+    <button class="d-tab" onclick="showTab('security',this)">Security</button>
+    <button class="d-tab" onclick="showTab('ui',this)">UI Rules</button>
+  </div>
+  <div class="dev-body">
+    <div class="d-sub act" id="d-api">
+      <div class="d-sec"><div class="d-lbl">Single API call — step 5 completion only</div>
+      <div class="code"><span class="om">POST</span> <span class="pa">/api/users/onboarding</span>
+Body: {
+  goal: <span class="st">"loss"</span> | <span class="st">"gain"</span> | <span class="st">"maintain"</span>,
+  diet_type: <span class="st">"veg"</span> | <span class="st">"nonveg"</span> | ...,
+  household_size: <span class="vl">1</span>–<span class="vl">4</span>,
+  monthly_budget: <span class="vl">integer</span> <span class="co">// ₹</span>
+  exclusions: <span class="st">string[]</span>
+}
+<span class="ok">201</span>: { onboarding_complete: true }
+<span class="st">409</span>: Already complete</div></div>
+      <div class="d-sec"><div class="d-lbl">Steps 1–4: localStorage only</div>
+      <div class="code"><span class="co">// Persist on every step change</span>
+localStorage.setItem(<span class="st">'ob_draft'</span>,
+  JSON.stringify({ step, goal, diet,
+    household, budget, exclusions }))
+<span class="co">// Clear after successful POST</span>
+localStorage.removeItem(<span class="st">'ob_draft'</span>)</div></div>
+    </div>
+    <div class="d-sub" id="d-schema">
+      <div class="d-sec"><div class="d-lbl">users table — fields set at onboarding</div>
+      <div class="code">goal            goalEnum  <span class="co">// nullable until done</span>
+diet_type       dietTypeEnum
+household_size  integer
+monthly_budget  integer   <span class="co">// ₹/month</span>
+exclusions      text[]
+onboarding_done boolean   <span class="co">// default false</span></div></div>
+      <div class="d-sec"><div class="d-lbl">Zod validation</div>
+      <div class="code">z.object({
+  goal: z.enum([<span class="st">'loss','gain','maintain'</span>]),
+  diet_type: z.enum([<span class="st">'veg','nonveg',...</span>]),
+  household_size: z.number().int().min(<span class="vl">1</span>).max(<span class="vl">8</span>),
+  monthly_budget: z.number().int()
+    .min(<span class="vl">1000</span>).max(<span class="vl">50000</span>),
+  exclusions: z.array(z.string()).max(<span class="vl">20</span>)
+})</div></div>
+    </div>
+    <div class="d-sub" id="d-pitfalls">
+      <div class="d-sec"><div class="d-lbl">Prevent these before building</div>
+      <ul class="dl warn">
+        <li>No DB writes on steps 1–4. Only POST on step 5 completion.</li>
+        <li>Persist all state to localStorage. Browser refresh kills JS state.</li>
+        <li>Return 409 if onboarding_done is true. Never silently overwrite.</li>
+        <li>Skip = still marks onboarding_done:true with defaults. Never leave false &mdash; causes infinite redirect loop.</li>
+        <li>Exclusions: validate each string against a server-side allowlist. Free-text breaks template filtering.</li>
+        <li>Back button on step 1: show "Exit setup?" confirmation. Don't let browser back navigate away silently.</li>
+      </ul></div>
+    </div>
+    <div class="d-sub" id="d-security">
+      <div class="d-sec"><div class="d-lbl">Auth flow</div>
+      <ul class="dl">
+        <li>Clerk sign-up completes BEFORE onboarding. JWT available on all calls.</li>
+        <li>POST route: validate auth() server-side. Redirect to /sign-up if null.</li>
+        <li>Clerk webhook (user.created) creates minimal row. Onboarding POST fills it.</li>
+      </ul></div>
+      <div class="d-sec"><div class="d-lbl">Data privacy</div>
+      <ul class="dl ok">
+        <li>Health goal + diet = sensitive. Exclude from Sentry and Vercel logs.</li>
+        <li>Exclusions: validate each item against ingredient allowlist before DB write.</li>
+        <li>budget never returned in unauthenticated API responses.</li>
+      </ul></div>
+    </div>
+    <div class="d-sub" id="d-ui">
+      <div class="d-sec"><div class="d-lbl">Swiggy DS rules for onboarding</div>
+      <ul class="dl">
+        <li>Icons: SVG symbols, stroke:currentColor, 1.75px stroke-width, no fill. Color inherits from parent.</li>
+        <li>Selected card: icon-wrap turns orange tint bg + orange stroke. Never change icon shape on select.</li>
+        <li>Continue button disabled state: white fill + 1.5px orange border + orange text. NOT greyed out.</li>
+        <li>Progress segments: 48px wide, 5px tall, 5px gap. Orange fill, #E9E9EB unfill.</li>
+        <li>Check indicator in card: 20px circle, orange fill, white check icon. Only visible when selected.</li>
+        <li>Exclusion tags when selected: orange border + orange tint bg + orange icon. X icon replaces tag icon.</li>
+        <li>Step 5 (exclusions): Continue always enabled. Zero exclusions is a valid choice.</li>
+        <li>Step 6 (complete): Replace Continue with "Go to Dashboard". Hide skip link entirely.</li>
+      </ul></div>
+    </div>
+  </div>
+</aside>
+
+<script>
+var S={step:1,goal:null,diet:null,hh:null,budget:null,excl:[]};
+var URLS=['','goal','diet-type','household','budget','exclusions','complete'];
+var LABELS=['','Your Health Goal','Your Diet Type','Household Size','Monthly Budget','Ingredients to Avoid'];
+var HEADS=['','What\'s your health goal?','What\'s your diet type?','How many people are you cooking for?','What\'s your monthly grocery budget?','Any ingredients to avoid?'];
+var SUBS=['','We\'ll build your grocery list around this.','Recipes will be filtered to match.','Quantities scale to your household.','Track groceries + eat-outs against this.','We\'ll hide templates with these. Leave empty for all.'];
+var HH_NOTES=['','Quantities set for one. Perfect for solo planning.','Groceries for two. Great for couples or flatmates.','Family quantities with variety.','Large household — we\'ll buy in bulk to save more.'];
+var BUDGET_ITEMS={2000:['3-day restock up to ₹700 per cycle','6–8 meal templates per week','Dal, rice, basic vegetables covered'],3500:['3-day restock up to ₹1,150 per cycle','10–12 templates per week','Fruits, dairy, and pantry essentials included'],5000:['3-day restock up to ₹1,650 per cycle','Full 7-day meal plan coverage','Premium produce + superfoods included'],8000:['3-day restock up to ₹2,600 per cycle','Unlimited templates + eat-out budget','Organic and specialty ingredients available']};
+var GOAL_DATA={loss:{label:'Lose Weight',sub:'Avg 1,450 kcal/day · High-fibre',meals:[['B','Oats Porridge','High Protein Mornings','310'],['L','Veggie Salad','Weight Loss Week','240'],['D','Dal Khichdi','Light Dinners','380']],stats:[['Avg grocery spend','₹3,200–4,500'],['Templates available','340+'],['Users hit goal','Week 8–12']],tip:'Next: match recipes to your diet type.'},gain:{label:'Gain Muscle',sub:'Avg 2,350 kcal/day · Protein-first',meals:[['B','Egg White Omelette','High Protein Mornings','420'],['L','Chicken Rice Bowl','Muscle Build Plan','680'],['D','Paneer & Lentils','Protein Dinners','620']],stats:[['Avg grocery spend','₹4,500–6,500'],['Templates available','180+'],['Daily protein','120–150g']],tip:'Next: set your diet type.'},maintain:{label:'Stay Healthy',sub:'Avg 1,900 kcal/day · Balanced',meals:[['B','Upma with Veggies','South Indian Basics','280'],['L','Roti & Dal','Everyday Indian','450'],['D','Vegetable Curry','Light Dinners','420']],stats:[['Avg grocery spend','₹2,800–4,000'],['Templates available','400+'],['Cuisines','7 types']],tip:'Next: fine-tune with your diet type.'}};
+var DIET_DATA={'Vegetarian':{count:'287',samples:['High Protein Veg · 42 recipes','South Indian Basics · 38 recipes','Weight Loss Veg · 31 recipes']},'Non-Vegetarian':{count:'340',samples:['Chicken Meal Plans · 55 recipes','Egg & Protein · 48 recipes','Mixed Non-Veg · 62 recipes']},'Vegan':{count:'128',samples:['Plant Protein · 34 recipes','Raw Vegan · 18 recipes','Oil-Free Cooking · 22 recipes']},'Keto':{count:'96',samples:['Keto Indian · 28 recipes','Low-Carb Veg · 24 recipes','Keto Snacks · 16 recipes']},'Jain':{count:'110',samples:['Jain Meals · 42 recipes','No Root Veg · 28 recipes','Festival Special · 18 recipes']},'Gluten-Free':{count:'142',samples:['GF Indian · 36 recipes','Rice Dishes · 44 recipes','Millet Plans · 22 recipes']}};
+var HH_ICONS={1:'i-user',2:'i-users',3:'i-users',4:'i-home'};
+function goalLabel(g){return g==='loss'?'Lose Weight':g==='gain'?'Gain Muscle':g==='maintain'?'Stay Healthy':'—';}
+function getTemplateCount(){return Math.max(40,340-S.excl.length*28);}
+
+function goNext(){if(S.step===5){complete();return;}if(!canContinue())return;S.step++;render();}
+function goBack(){if(S.step<=1)return;S.step--;render();}
+function skip(){if(!S.goal)S.goal='maintain';if(!S.diet)S.diet='Vegetarian';if(!S.hh)S.hh=1;if(!S.budget)S.budget=5000;complete();}
+function complete(){
+  S.step=6;
+  var fmt=function(n){return n?('₹'+parseInt(n).toLocaleString('en-IN')+'/mo'):null;};
+  var ids=['s-goal','s-diet','s-hh','s-budget','s-excl'];
+  var vals=[goalLabel(S.goal),S.diet||'Vegetarian',(S.hh?S.hh+' person'+(S.hh>1?'s':''):'—'),fmt(S.budget)||'₹5,000/mo',S.excl.length?S.excl.join(', '):'None'];
+  ids.forEach(function(id,i){var el=document.getElementById(id);if(el)el.textContent=vals[i];});
+  ['ms-goal','ms-diet','ms-hh','ms-budget'].forEach(function(id,i){var el=document.getElementById(id);if(el)el.textContent=vals[i];});
+  render();
+}
+function canContinue(){if(S.step===1)return!!S.goal;if(S.step===2)return!!S.diet;if(S.step===3)return!!S.hh;if(S.step===4)return!!S.budget;if(S.step===5)return true;return false;}
+
+function render(){
+  var n=S.step;
+  document.querySelectorAll('.step-content').forEach(function(el,i){el.classList.toggle('active',i+1===n);});
+  document.querySelectorAll('.step-preview').forEach(function(el,i){el.classList.toggle('active',i+1===n);});
+  document.querySelectorAll('.m-step').forEach(function(el,i){el.classList.toggle('active',i+1===n);});
+  for(var i=1;i<=5;i++){document.getElementById('ps'+i).classList.toggle('fill',i<=n);document.getElementById('mp'+i).classList.toggle('fill',i<=n);}
+  if(n<=5){
+    var ll=document.getElementById('step-lbl');if(ll)ll.innerHTML='Step <strong>'+n+'</strong> of 5 &middot; '+LABELS[n];
+    var si=document.getElementById('m-step-info');if(si)si.textContent='Step '+n+' of 5';
+    var mh=document.getElementById('m-h');if(mh)mh.textContent=HEADS[n];
+    var ms=document.getElementById('m-sub');if(ms)ms.textContent=SUBS[n];
+  }
+  var u=document.getElementById('d-url');if(u)u.textContent='platecart.app/onboarding/'+(URLS[n]||'complete');
+  var bb=document.getElementById('back-btn');if(bb)bb.disabled=n<=1;
+  var isDone=n===6,isLast=n===5;
+  var icon='<svg class="icon-sm"><use href="#i-arrow-right"/></svg>';
+  var cb=document.getElementById('cont-btn'),mc=document.getElementById('m-cont');
+  if(cb){cb.disabled=isDone||!canContinue();cb.innerHTML=(isDone?'Done':isLast?'Complete Setup':'Continue')+icon;}
+  if(mc){mc.disabled=isDone||!canContinue();mc.innerHTML=(isLast?'Complete Setup':'Continue')+icon;}
+  var nav=document.getElementById('ob-nav');if(nav)nav.style.display=isDone?'none':'flex';
+  var mbot=document.getElementById('m-bottom');if(mbot)mbot.style.display=isDone?'none':'block';
+  var mtop=document.getElementById('m-ob-top');if(mtop)mtop.style.display=isDone?'none':'block';
+  var sb=document.getElementById('skip-btn');if(sb)sb.style.display=isDone?'none':'';
+  updatePreview();
+}
+
+function updatePreview(){
+  var n=S.step;
+  if(n===1){
+    var d=GOAL_DATA[S.goal];
+    if(d){
+      document.getElementById('pv1-h').textContent=d.label;
+      document.getElementById('pv1-sub').textContent=d.sub;
+      document.getElementById('pv1-meals').innerHTML=d.meals.map(function(m){return'<div class="pv-meal"><div class="pv-mi"><svg class="icon-sm"><use href="#i-sun"/></svg></div><div class="pv-mt"><div class="pv-mn">'+m[2]+'</div><div class="pv-mm">'+m[1]+'</div></div><div class="pv-mk">'+m[3]+' kcal</div></div>';}).join('');
+      document.getElementById('pv1-stats').innerHTML='<div style="margin-top:10px">'+d.stats.map(function(s){return'<div class="pv-row"><span class="pv-rl">'+s[0]+'</span><span class="pv-rv">'+s[1]+'</span></div>';}).join('')+'</div>';
+      var t=document.getElementById('pv1-tip');if(t){t.style.display='block';t.innerHTML='<strong>Next:</strong> '+d.tip;}
+    } else {
+      document.getElementById('pv1-h').textContent='Select a goal';
+      document.getElementById('pv1-sub').textContent='Choose a goal to see a sample meal plan';
+      document.getElementById('pv1-meals').innerHTML='';document.getElementById('pv1-stats').innerHTML='';
+      var t=document.getElementById('pv1-tip');if(t)t.style.display='none';
+    }
+  }
+  if(n===2&&S.diet){var dd=DIET_DATA[S.diet];if(dd){document.getElementById('pv2-h').textContent=dd.count+' recipes match';document.getElementById('pv2-sub').textContent='Templates for '+S.diet+' diet';document.getElementById('pv2-items').innerHTML=dd.samples.map(function(s){return'<div class="pv-template"><div class="pv-tn">'+s.split('·')[0].trim()+'</div><div class="pv-td">'+s.split('·')[1].trim()+'</div></div>';}).join('')+'<div class="pv-tip" style="margin-top:8px"><strong>Next:</strong> Set quantities for your household.</div>';}}
+  if(n===3&&S.hh){var q={1:['500g spinach','250g tomatoes','1L milk'],2:['1kg spinach','500g tomatoes','2L milk'],3:['1.5kg spinach','750g tomatoes','3L milk'],4:['2kg spinach','1kg tomatoes','4L milk']};document.getElementById('pv3-h').textContent='Quantities for '+S.hh+' person'+(S.hh>1?'s':'');document.getElementById('pv3-sub').textContent='Sample 3-day restock';document.getElementById('pv3-items').innerHTML='<div class="pv-hh-icon"><svg class="icon icon-xl" style="stroke:var(--sw)"><use href="#'+HH_ICONS[S.hh]+'"/></svg></div>'+(q[S.hh]||q[1]).map(function(i){return'<div class="pv-meal"><div class="pv-mi"><svg class="icon-sm"><use href="#i-tag"/></svg></div><div class="pv-mt"><div class="pv-mn">'+i+'</div><div class="pv-mm">Per 3-day cycle</div></div></div>';}).join('')+'<div class="pv-tip" style="margin-top:8px"><strong>Next:</strong> Set your monthly budget.</div>';}
+  if(n===4&&S.budget){var bud=parseInt(S.budget)||6000;var items=BUDGET_ITEMS[bud]||BUDGET_ITEMS[5000];var gr=Math.round(bud*.6),eo=Math.round(bud*.3),sn=Math.round(bud*.1);document.getElementById('pv4-h').textContent='₹'+bud.toLocaleString('en-IN')+'/month';document.getElementById('pv4-sub').textContent='How your budget is allocated';document.getElementById('pv4-items').innerHTML='<div style="margin-bottom:8px"><div style="font-size:10px;color:var(--mu);margin-bottom:3px">Groceries (60%)</div><div class="pv-bbar"><div class="pv-bfill" style="width:60%;background:var(--sw)"></div></div><div style="font-size:12px;font-weight:700;color:var(--ch)">₹'+gr.toLocaleString('en-IN')+'</div></div><div style="margin-bottom:8px"><div style="font-size:10px;color:var(--mu);margin-bottom:3px">Eat-outs (30%)</div><div class="pv-bbar"><div class="pv-bfill" style="width:30%;background:var(--ch)"></div></div><div style="font-size:12px;font-weight:700;color:var(--ch)">₹'+eo.toLocaleString('en-IN')+'</div></div><div><div style="font-size:10px;color:var(--mu);margin-bottom:3px">Buffer (10%)</div><div class="pv-bbar"><div class="pv-bfill" style="width:10%;background:var(--gr)"></div></div><div style="font-size:12px;font-weight:700;color:var(--ch)">₹'+sn.toLocaleString('en-IN')+'</div></div><div class="pv-tip" style="margin-top:10px"><strong>Next:</strong> Add any ingredient exclusions.</div>';}
+  if(n===5){var cnt=getTemplateCount();document.getElementById('pv5-h').textContent=cnt+' recipes available';document.getElementById('pv5-sub').textContent=S.excl.length?S.excl.length+' ingredient'+(S.excl.length>1?'s':'')+' excluded':'No exclusions — full library';document.getElementById('pv5-items').innerHTML='<div class="pv-template"><div class="pv-tn">Templates matched</div><div class="pv-td">'+cnt+' of 340 in your library</div></div>'+(S.excl.length?'<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:5px">'+S.excl.map(function(e){return'<span style="font-size:10px;background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:99px;display:flex;align-items:center;gap:3px"><svg class="icon-xs" style="stroke:#DC2626"><use href="#i-x"/></svg>'+e+'</span>';}).join('')+'</div>':'');}
+  var ok=canContinue();
+  var cb=document.getElementById('cont-btn');var mc=document.getElementById('m-cont');
+  if(cb)cb.disabled=S.step===6||!ok;if(mc)mc.disabled=S.step===6||!ok;
+}
+
+function selectGoal(el,val){S.goal=val;document.querySelectorAll('.gc').forEach(function(c){c.classList.remove('sel');});el.classList.add('sel');document.querySelectorAll('#ms1 .m-gc').forEach(function(c){var m=c.getAttribute('onclick')&&c.getAttribute('onclick').indexOf("'"+val+"'")>-1;c.classList.toggle('sel',m);c.querySelector('.m-gc-ck').innerHTML=m?'<svg class="icon-xs"><use href="#i-check"/></svg>':'';});render();}
+function mSelectGoal(el,val){S.goal=val;document.querySelectorAll('#ms1 .m-gc').forEach(function(c){c.classList.remove('sel');c.querySelector('.m-gc-ck').innerHTML='';});el.classList.add('sel');el.querySelector('.m-gc-ck').innerHTML='<svg class="icon-xs"><use href="#i-check"/></svg>';document.querySelectorAll('.gc').forEach(function(c){c.classList.toggle('sel',c.getAttribute('onclick')&&c.getAttribute('onclick').indexOf("'"+val+"'")>-1);});render();}
+function selectDiet(el,val,label){S.diet=label;document.querySelectorAll('.dc').forEach(function(c){c.classList.remove('sel');});el.classList.add('sel');document.querySelectorAll('#ms2 .m-dc').forEach(function(c){c.classList.toggle('sel',c.getAttribute('onclick')&&c.getAttribute('onclick').indexOf("'"+val+"'")>-1);});render();}
+function mSelDiet(el,val,label){S.diet=label;document.querySelectorAll('#ms2 .m-dc').forEach(function(c){c.classList.remove('sel');});el.classList.add('sel');document.querySelectorAll('.dc').forEach(function(c){c.classList.toggle('sel',c.getAttribute('onclick')&&c.getAttribute('onclick').indexOf("'"+val+"'")>-1);});render();}
+function selectHH(el,val){S.hh=val;document.querySelectorAll('.hh').forEach(function(c){c.classList.remove('sel');});el.classList.add('sel');document.querySelectorAll('#ms3 .m-hh').forEach(function(c){c.classList.toggle('sel',c.getAttribute('onclick')&&c.getAttribute('onclick').indexOf(','+val+')')>-1);});var n=document.getElementById('hh-note');if(n){n.style.display='block';n.innerHTML='<strong>'+val+' person'+(val>1?'s':'')+':</strong> '+HH_NOTES[val];}var mn=document.getElementById('m-hh-note');if(mn)mn.textContent=val+' person'+(val>1?'s':'')+': '+HH_NOTES[val];render();}
+function mSelHH(el,val){S.hh=val;document.querySelectorAll('#ms3 .m-hh').forEach(function(c){c.classList.remove('sel');});el.classList.add('sel');document.querySelectorAll('.hh').forEach(function(c){c.classList.toggle('sel',c.getAttribute('onclick')&&c.getAttribute('onclick').indexOf(','+val+')')>-1);});var mn=document.getElementById('m-hh-note');if(mn)mn.textContent=val+' person'+(val>1?'s':'')+': '+HH_NOTES[val];render();}
+function selectBudget(el,val){document.querySelectorAll('.bseg').forEach(function(c){c.classList.remove('sel');});el.classList.add('sel');var cw=document.getElementById('custom-wrap');if(val==='custom'){cw.classList.add('vis');S.budget=6000;}else{cw.classList.remove('vis');S.budget=val;document.querySelectorAll('#ms4 .m-bs').forEach(function(c){c.classList.toggle('sel',c.getAttribute('onclick')&&c.getAttribute('onclick').indexOf(','+val+')')>-1);});}var bi=document.getElementById('budget-items');if(bi){var items=BUDGET_ITEMS[parseInt(S.budget)]||BUDGET_ITEMS[5000];bi.classList.add('vis');document.getElementById('bi1').textContent=items[0];document.getElementById('bi2').textContent=items[1];document.getElementById('bi3').textContent=items[2];}var mn=document.getElementById('m-budget-note');if(mn&&val!=='custom')mn.textContent='₹'+val.toLocaleString('en-IN')+'/mo';render();}
+function mSelBudget(el,val){S.budget=val;document.querySelectorAll('#ms4 .m-bs').forEach(function(c){c.classList.remove('sel');});el.classList.add('sel');document.querySelectorAll('.bseg').forEach(function(c){c.classList.toggle('sel',c.getAttribute('onclick')&&c.getAttribute('onclick').indexOf(','+val+')')>-1);});var bi=document.getElementById('budget-items');if(bi){var items=BUDGET_ITEMS[val]||BUDGET_ITEMS[5000];bi.classList.add('vis');document.getElementById('bi1').textContent=items[0];document.getElementById('bi2').textContent=items[1];document.getElementById('bi3').textContent=items[2];}render();}
+function updateSlider(val){S.budget=parseInt(val);document.getElementById('slider-display').textContent='₹'+parseInt(val).toLocaleString('en-IN');render();}
+function toggleNone(el){var active=!el.classList.contains('sel');if(active){S.excl=[];document.querySelectorAll('.etag.sel,.m-et.sel').forEach(function(t){t.classList.remove('sel');var u=t.querySelector('svg use');if(u)u.setAttribute('href','#i-tag');});}el.classList.toggle('sel',active);render();}
+function toggleExcl(el,val){document.getElementById('excl-none-btn').classList.remove('sel');el.classList.toggle('sel');var u=el.querySelector('svg use');if(u)u.setAttribute('href',el.classList.contains('sel')?'#i-x':'#i-tag');S.excl=[];document.querySelectorAll('.etag.sel').forEach(function(t){S.excl.push(t.textContent.trim());});var me=document.querySelector('#ms5 .m-et[onclick*="\''+val+'\'"]');if(me){me.classList.toggle('sel',el.classList.contains('sel'));var mu2=me.querySelector('svg use');if(mu2)mu2.setAttribute('href',me.classList.contains('sel')?'#i-x':'#i-tag');}render();}
+function mToggleExcl(el,val){el.classList.toggle('sel');var u=el.querySelector('svg use');if(u)u.setAttribute('href',el.classList.contains('sel')?'#i-x':'#i-tag');S.excl=[];document.querySelectorAll('#ms5 .m-et.sel').forEach(function(t){S.excl.push(t.textContent.trim());});var de=document.querySelector('.etag[onclick*="\''+val+"'\"]");if(de){de.classList.toggle('sel',el.classList.contains('sel'));var du=de.querySelector('svg use');if(du)du.setAttribute('href',de.classList.contains('sel')?'#i-x':'#i-tag');}render();}
+
+(function(){var wrap=document.getElementById('m-wrap'),area=document.querySelector('.mp-area');if(!wrap||!area)return;function fit(){var w=area.offsetWidth-12;var s=Math.min(w/375,.85);wrap.style.transform='scale('+s+')';wrap.style.marginLeft=0;}fit();window.addEventListener('resize',fit);})();
+
+function toggleDev(){document.getElementById('devPanel').classList.toggle('open');}
+function showTab(id,btn){document.querySelectorAll('.d-sub').forEach(function(s){s.classList.remove('act');});document.querySelectorAll('.d-tab').forEach(function(t){t.classList.remove('act');});document.getElementById('d-'+id).classList.add('act');btn.classList.add('act');}
+
+render();
+</script>
+</body>
+</html>

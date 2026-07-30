@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PlateCart · Screen 03 · Meal Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sw:#FC8019;--swt:rgba(252,128,25,.08);--swb:rgba(252,128,25,.25);
+  --ch:#282C3F;--mu:#686B78;--bo:#E9E9EB;--bg:#FFFFFF;--pg:#F4F6FB;
+  --gr:#60B246;--grt:rgba(96,178,70,.1);--f:'DM Sans',system-ui,sans-serif;--r:8px;
+  --meta:44px;--dev:400px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-family:var(--f);-webkit-font-smoothing:antialiased}
+body{overflow:hidden;height:100vh;display:flex;flex-direction:column;background:#D8D8D8}
+.icon{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.icon-lg{width:22px;height:22px}.icon-sm{width:15px;height:15px}.icon-xs{width:13px;height:13px}
+
+/* META */
+.meta{height:var(--meta);background:var(--ch);display:flex;align-items:center;flex-shrink:0;z-index:50;overflow:hidden}
+.meta-l{display:flex;align-items:center;gap:8px;padding:0 14px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.1)}
+.ml{font-weight:700;font-size:12px;color:#fff;letter-spacing:-.02em}.ml em{font-style:normal;color:var(--sw)}
+.mb{background:var(--sw);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.05em}
+.screen-links{display:flex;align-items:center;gap:2px;overflow-x:auto;flex:1;padding:0 10px;scrollbar-width:none}
+.screen-links::-webkit-scrollbar{display:none}
+.sl{font-size:10px;font-weight:500;color:rgba(255,255,255,.38);padding:4px 9px;border-radius:99px;text-decoration:none;white-space:nowrap;border:1px solid transparent;transition:.12s}
+.sl:hover{color:rgba(255,255,255,.7);background:rgba(255,255,255,.06)}
+.sl.cur{color:var(--sw);background:rgba(252,128,25,.12);border-color:rgba(252,128,25,.3);font-weight:700}
+.sl.done{color:rgba(255,255,255,.55)}
+.meta-r{padding:0 14px;flex-shrink:0;border-left:1px solid rgba(255,255,255,.1)}
+.ds-pill{border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.45);font-size:9px;padding:3px 8px;border-radius:99px;white-space:nowrap}
+
+/* SPLIT */
+.split{flex:1;display:flex;overflow:hidden}
+
+/* DESKTOP 85% */
+.dp{flex:0 0 85%;display:flex;flex-direction:column;border-right:1px solid #BEBEBE;overflow:hidden}
+.browser{background:#D0D0D0;padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #BEBEBE;flex-shrink:0}
+.b-dots{display:flex;gap:5px}
+.b-dot{width:10px;height:10px;border-radius:50%}
+.b-dot.r{background:#FF5F57}.b-dot.y{background:#FFBD2E}.b-dot.g{background:#28C840}
+.b-url{flex:1;background:#fff;border:1px solid #BEBEBE;border-radius:4px;padding:3px 10px;font-size:11px;color:#555;font-family:monospace;display:flex;align-items:center;gap:5px}
+.app-scroll{flex:1;overflow-y:auto;background:var(--pg)}
+.app-scroll::-webkit-scrollbar{width:4px}
+.app-scroll::-webkit-scrollbar-thumb{background:var(--bo);border-radius:2px}
+
+/* APP NAV */
+.anav{background:var(--bg);border-bottom:1px solid var(--bo);position:sticky;top:0;z-index:20}
+.anav-inner{max-width:1160px;margin:0 auto;padding:0 20px;height:54px;display:flex;align-items:center;justify-content:space-between}
+.anav-logo{font-size:18px;font-weight:700;color:var(--ch);letter-spacing:-.03em}
+.anav-logo em{font-style:normal;color:var(--sw)}
+.anav-links{display:flex;gap:2px}
+.alnk{padding:5px 13px;border-radius:99px;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;border:none;background:none;font-family:var(--f);transition:.12s}
+.alnk:hover{color:var(--ch);background:var(--pg)}.alnk.act{color:var(--sw);font-weight:600}
+.anav-r{display:flex;align-items:center;gap:10px}
+.bp{display:flex;align-items:center;gap:5px;background:var(--pg);border:1px solid var(--bo);border-radius:99px;padding:5px 11px;font-size:11.5px}
+.bp b{font-weight:700;color:var(--ch)}.bp span{color:var(--mu)}
+.av{width:32px;height:32px;border-radius:50%;background:var(--sw);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* PLAN SHELL */
+.plan-shell{max-width:1160px;margin:0 auto;padding:18px 20px 32px}
+
+/* TOP BAR */
+.plan-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.week-nav{display:flex;align-items:center;gap:8px}
+.wn-btn{width:30px;height:30px;border-radius:50%;background:var(--pg);border:1px solid var(--bo);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ch);transition:.12s}
+.wn-btn:hover{background:var(--bo)}
+.week-label{font-size:15px;font-weight:700;color:var(--ch);letter-spacing:-.01em}
+.week-sub{font-size:11px;color:var(--mu);margin-left:6px;font-weight:400}
+.plan-actions{display:flex;gap:8px}
+.pa-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--r);font-family:var(--f);font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--bo);background:var(--bg);color:var(--ch);transition:.12s}
+.pa-btn:hover{border-color:#C0C0C4;background:var(--pg)}
+.pa-btn.primary{background:var(--sw);color:#fff;border-color:var(--sw)}
+.pa-btn.primary:hover{opacity:.9}
+.pa-btn .icon-sm{color:inherit}
+
+/* PLAN LAYOUT */
+.plan-layout{display:flex;gap:14px}
+.plan-grid-wrap{flex:1;min-width:0}
+.plan-right{width:268px;flex-shrink:0}
+
+/* GRID */
+.meal-grid{background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);overflow:hidden}
+.grid-header{display:grid;grid-template-columns:52px repeat(7,1fr);border-bottom:1px solid var(--bo)}
+.gh-empty{background:var(--pg)}
+.gh-day{padding:10px 6px;text-align:center;border-left:1px solid var(--bo);position:relative;cursor:pointer;transition:.12s}
+.gh-day:hover{background:var(--pg)}
+.gh-day.today::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sw);border-radius:0}
+.gh-day.today .ghd-name{color:var(--sw);font-weight:700}
+.gh-day.sel{background:var(--swt)}
+.ghd-name{font-size:10px;font-weight:600;color:var(--mu);letter-spacing:.05em;text-transform:uppercase}
+.ghd-date{font-size:15px;font-weight:700;color:var(--ch)}
+.gh-day.today .ghd-date{color:var(--sw)}
+.ghd-chip{display:inline-block;background:var(--sw);color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:99px;margin-top:2px;letter-spacing:.04em}
+
+/* GRID ROWS */
+.grid-row{display:grid;grid-template-columns:52px repeat(7,1fr);border-top:1px solid var(--bo)}
+.row-label{padding:0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--pg);border-right:1px solid var(--bo);gap:3px}
+.row-lbl-icon{color:var(--mu)}
+.row-lbl-t{font-size:8.5px;font-weight:700;color:var(--mu);letter-spacing:.04em;text-transform:uppercase}
+
+/* MEAL CELL */
+.mc{border-left:1px solid var(--bo);padding:6px;min-height:78px;cursor:pointer;transition:all .14s;position:relative}
+.mc:hover{background:var(--pg)}
+.mc.today-col{background:rgba(252,128,25,.02)}
+.mc.sel-col{background:var(--swt)}
+.mc.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.mc-plus-circle{width:28px;height:28px;border-radius:50%;border:1.5px dashed var(--bo);display:flex;align-items:center;justify-content:center;color:var(--bo);transition:.14s}
+.mc:hover .mc-plus-circle{border-color:#C0C0C4;color:#C0C0C4}
+.mc-empty-t{font-size:10px;color:var(--bo);font-weight:500;transition:.14s}
+.mc:hover .mc-empty-t{color:#C0C0C4}
+.mc.assigned{background:var(--bg)}
+.mc.assigned:hover{background:#FAFAFA}
+.mc-meal-type{font-size:8.5px;font-weight:700;color:var(--mu);letter-spacing:.04em;margin-bottom:4px;text-transform:uppercase}
+.mc-name{font-size:11.5px;font-weight:700;color:var(--ch);margin-bottom:3px;line-height:1.3;letter-spacing:-.01em}
+.mc-meta{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--mu)}
+.mc-kcal{font-weight:600;color:var(--ch)}
+.mc-change{position:absolute;bottom:5px;right:6px;font-size:9.5px;font-weight:600;color:var(--sw);opacity:0;transition:.12s;background:none;border:none;font-family:var(--f);cursor:pointer;padding:0}
+.mc.assigned:hover .mc-change{opacity:1}
+.mc.eatout{background:#FFF8F2;cursor:pointer}
+.mc.eatout:hover{background:#FFF4EC}
+.mc-eo-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:5px}
+.mc-eo-icon{width:26px;height:26px;background:var(--swt);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--sw)}
+.mc-eo-t{font-size:10px;font-weight:600;color:var(--sw)}
+.mc.clicked{box-shadow:inset 0 0 0 2px var(--sw);background:var(--swt)}
+
+/* NUTRITION PANEL */
+.nut-card{background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.np-title{font-size:10px;font-weight:700;color:var(--mu);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.np-h{font-size:14px;font-weight:700;color:var(--ch);letter-spacing:-.01em;margin-bottom:3px}
+.np-sub{font-size:11px;color:var(--mu);margin-bottom:14px}
+.nut-bars{display:flex;gap:4px;align-items:flex-end;height:60px;margin-bottom:8px}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.nb-bar{width:100%;background:var(--bo);border-radius:3px 3px 0 0;transition:height .3s}
+.nb.today .nb-bar{background:var(--sw)}
+.nb.planned .nb-bar{background:var(--ch);opacity:.3}
+.nb-lbl{font-size:8px;color:var(--mu);font-weight:600;letter-spacing:.03em}
+.nut-stat{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bo);font-size:11.5px}
+.nut-stat:last-child{border-bottom:none}
+.ns-l{color:var(--mu)}.ns-v{font-weight:700;color:var(--ch)}
+.ns-v.g{color:var(--gr)}.ns-v.o{color:var(--sw)}
+.macro-row{display:flex;gap:8px;margin-top:12px}
+.macro{flex:1;background:var(--pg);border-radius:6px;padding:8px;text-align:center}
+.macro-v{font-size:14px;font-weight:700;color:var(--ch);letter-spacing:-.02em}
+.macro-l{font-size:9px;color:var(--mu);margin-top:2px}
+
+/* CART SUMMARY */
+.cart-sum{background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);padding:14px 16px}
+.cs-title{font-size:10px;font-weight:700;color:var(--mu);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.cs-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--bo)}
+.cs-row:last-of-type{border-bottom:none}
+.cs-l{color:var(--mu)}.cs-v{font-weight:700;color:var(--ch)}
+.cs-btn{width:100%;margin-top:12px;padding:10px;background:var(--sw);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:.12s}
+.cs-btn:hover{opacity:.9}.cs-btn .icon-sm{stroke:#fff}
+
+/* TEMPLATE PICKER (replaces right panel when slot is clicked) */
+.picker-card{background:var(--bg);border:1px solid var(--bo);border-radius:var(--r);overflow:hidden;height:100%;display:flex;flex-direction:column}
+.picker-head{padding:12px 14px;border-bottom:1px solid var(--bo);flex-shrink:0}
+.picker-title{font-size:11px;font-weight:700;color:var(--ch);margin-bottom:2px}
+.picker-sub{font-size:10.5px;color:var(--mu)}
+.picker-search{padding:8px 12px;border-bottom:1px solid var(--bo);flex-shrink:0;position:relative}
+.picker-search input{width:100%;background:var(--pg);border:1px solid var(--bo);border-radius:6px;padding:6px 8px 6px 30px;font-family:var(--f);font-size:12px;color:var(--ch);outline:none}
+.picker-search input:focus{border-color:var(--sw)}
+.picker-search-icon{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--mu)}
+.picker-filters{padding:8px 12px;border-bottom:1px solid var(--bo);flex-shrink:0;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}
+.pf-chip{font-size:10.5px;font-weight:600;padding:4px 10px;border-radius:99px;border:1.5px solid var(--bo);color:var(--mu);cursor:pointer;white-space:nowrap;background:var(--bg);transition:.12s}
+.pf-chip:hover{border-color:#C0C0C4;color:var(--ch)}
+.pf-chip.act{border-color:var(--sw);background:var(--swt);color:var(--sw)}
+.picker-list{flex:1;overflow-y:auto;padding:6px 0}
+.picker-list::-webkit-scrollbar{width:3px}
+.picker-list::-webkit-scrollbar-thumb{background:var(--bo);border-radius:2px}
+.pt{padding:9px 12px;cursor:pointer;transition:.12s;border-bottom:1px solid var(--bo)}
+.pt:last-child{border-bottom:none}
+.pt:hover{background:var(--pg)}
+.pt-row{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
+.pt-name{font-size:12px;font-weight:700;color:var(--ch);letter-spacing:-.01em;margin-bottom:3px}
+.pt-meta{display:flex;gap:6px;align-items:center}
+.pt-chip{font-size:9.5px;color:var(--mu);background:var(--pg);padding:1px 6px;border-radius:99px}
+.pt-kcal{font-size:11px;font-weight:700;color:var(--ch)}
+.pt-forks{font-size:10px;color:var(--mu);display:flex;align-items:center;gap:3px}
+.picker-eo{padding:10px 12px;border-top:1px solid var(--bo);flex-shrink:0}
+.eo-btn{width:100%;padding:9px;border:1.5px solid var(--bo);border-radius:var(--r);font-family:var(--f);font-size:12px;font-weight:600;color:var(--mu);cursor:pointer;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:6px;transition:.12s}
+.eo-btn:hover{border-color:var(--sw);color:var(--sw);background:var(--swt)}
+.eo-btn .icon-sm{color:inherit}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ch);color:#fff;font-size:12px;font-weight:600;padding:10px 20px;border-radius:99px;opacity:0;transition:all .3s;pointer-events:none;z-index:300;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast .icon-sm{stroke:#fff}
+
+/* MOBILE PANEL */
+.mp{flex:0 0 15%;background:#E0E0E0;border-left:1px solid #BEBEBE;display:flex;flex-direction:column;overflow:hidden}
+.mp-hdr{padding:8px 10px 4px;flex-shrink:0}
+.mp-lbl{font-size:8px;font-weight:700;color:#999;letter-spacing:.08em;text-transform:uppercase}
+.mp-hint{font-size:7.5px;color:#BBB;margin-top:1px}
+.mp-area{flex:1;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding:5px 6px}
+.m-wrap{transform-origin:top center;width:375px}
+.m-bg{background:#fff;width:375px}
+
+/* MOBILE UI */
+.m-sb{background:#fff;padding:10px 14px 6px;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;color:#1C1C1E}
+.m-sb-r{display:flex;gap:3px;font-size:10px;align-items:center}
+.m-anav{background:#fff;border-bottom:1px solid var(--bo);padding:8px 14px 10px;display:flex;align-items:center;justify-content:space-between}
+.m-alogo{font-size:16px;font-weight:700;color:var(--ch)}.m-alogo em{font-style:normal;color:var(--sw)}
+
+/* Mobile week nav */
+.m-week-nav{background:#fff;border-bottom:1px solid var(--bo);padding:8px 12px;display:flex;align-items:center;justify-content:space-between}
+.m-wlabel{font-size:12px;font-weight:700;color:var(--ch)}
+.m-wbtn{width:26px;height:26px;border-radius:50%;background:var(--pg);border:1px solid var(--bo);display:flex;align-items:center;justify-content:center;color:var(--ch)}
+
+/* Mobile day tabs */
+.m-day-tabs{background:#fff;border-bottom:1px solid var(--bo);display:flex;overflow-x:auto;padding:0 12px;scrollbar-width:none}
+.m-day-tabs::-webkit-scrollbar{display:none}
+.m-dtab{flex-shrink:0;padding:8px 10px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border-bottom:2px solid transparent;transition:.12s}
+.m-dtab.act{border-bottom-color:var(--sw)}
+.m-dtab-n{font-size:9px;font-weight:700;color:var(--mu);letter-spacing:.04em}
+.m-dtab-d{font-size:13px;font-weight:700;color:var(--ch)}
+.m-dtab.act .m-dtab-n,.m-dtab.act .m-dtab-d{color:var(--sw)}
+
+/* Mobile meal slots */
+.m-meals{padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.m-slot{background:var(--bg);border:1.5px solid var(--bo);border-radius:var(--r);padding:11px 12px;cursor:pointer;transition:.12s}
+.m-slot:hover{border-color:#C0C0C4}
+.m-slot.assigned{border-color:var(--bo)}
+.m-slot.eatout{background:#FFF8F2;border-color:var(--swb)}
+.m-slot.empty{border-style:dashed}
+.m-slot-type{font-size:9px;font-weight:700;color:var(--mu);letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.m-slot-name{font-size:13px;font-weight:700;color:var(--ch);margin-bottom:3px}
+.m-slot-meta{font-size:10px;color:var(--mu);display:flex;align-items:center;gap:5px}
+.m-slot-empty{display:flex;align-items:center;gap:8px}
+.m-plus{width:28px;height:28px;border-radius:50%;border:1.5px dashed var(--bo);display:flex;align-items:center;justify-content:center;color:var(--bo);flex-shrink:0}
+.m-slot-empty-t{font-size:12px;color:var(--mu)}
+.m-slot-eo{display:flex;align-items:center;gap:8px}
+.m-eo-icon{width:28px;height:28px;background:var(--swt);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--sw);flex-shrink:0}
+.m-eo-t{font-size:12px;font-weight:600;color:var(--sw)}
+
+/* Mobile add to cart */
+.m-add-cart{padding:10px 14px 8px;border-top:1px solid var(--bo)}
+.m-ac-btn{width:100%;padding:12px;background:var(--sw);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+.m-ac-btn .icon-sm{stroke:#fff}
+.m-ac-sub{text-align:center;font-size:10px;color:var(--mu);margin-top:5px}
+
+/* Mobile bottom nav */
+.m-tabs{background:#fff;border-top:1px solid var(--bo);display:flex;height:54px}
+.m-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;color:var(--mu);font-weight:500}
+.m-tab.act{color:var(--sw)}
+.m-ti{width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:inherit}
+.m-ti .icon{color:inherit}
+
+/* DEV */
+.dev-btn{position:fixed;bottom:20px;right:20px;z-index:200;background:var(--ch);color:#fff;border:none;border-radius:var(--r);padding:9px 16px;font-family:var(--f);font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,.3);letter-spacing:.04em;transition:.12s}
+.dev-btn:hover{background:#1a1e2e;transform:translateY(-1px)}
+.dev-dot{width:6px;height:6px;border-radius:50%;background:var(--sw)}
+.dev-panel{position:fixed;top:var(--meta);right:0;width:var(--dev);height:calc(100vh - var(--meta));background:#0D1117;z-index:150;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border-left:1px solid #1E2938;font-size:12px}
+.dev-panel.open{transform:translateX(0)}
+.dev-ph{padding:12px 16px;border-bottom:1px solid #1E2938;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dev-pt{font-family:var(--f);font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.dev-stag{background:var(--sw);color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700}
+.dev-cls{background:none;border:none;color:#555;font-size:18px;cursor:pointer;line-height:1;padding:4px}
+.dev-cls:hover{color:#fff}
+.dev-tabs{display:flex;border-bottom:1px solid #1E2938;padding:0 16px;flex-shrink:0}
+.d-tab{padding:9px 11px;font-family:var(--f);font-size:10px;font-weight:700;color:#555;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;letter-spacing:.06em;transition:.12s}
+.d-tab:hover{color:#888}.d-tab.act{color:var(--sw);border-bottom-color:var(--sw)}
+.dev-body{flex:1;overflow-y:auto;padding:16px}
+.dev-body::-webkit-scrollbar{width:3px}
+.dev-body::-webkit-scrollbar-thumb{background:#1E2938;border-radius:2px}
+.d-sub{display:none}.d-sub.act{display:block}
+.d-sec{margin-bottom:18px}
+.d-lbl{font-family:var(--f);font-size:8.5px;font-weight:700;color:var(--sw);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.code{background:#161B22;border:1px solid #1E2938;border-radius:6px;padding:11px;font-family:'Courier New',monospace;font-size:10.5px;line-height:1.65;color:#A8C8B0;white-space:pre;overflow-x:auto}
+.code .co{color:#3A5040}.code .om{color:var(--sw);font-weight:700}
+.code .pa{color:#93C5FD}.code .st{color:#FCA5A5}
+.code .vl{color:#E8D5A8}.code .ok{color:#6EE7B7}.code .wn{color:#FDE68A}
+.dl{list-style:none;display:flex;flex-direction:column;gap:7px}
+.dl li{display:flex;gap:7px;font-size:11px;line-height:1.5;color:#94A3B8}
+.dl li::before{content:'→';color:var(--sw);flex-shrink:0;margin-top:1px}
+.dl.warn li::before{content:'⚠';color:#FDE68A}
+.dl.ok li::before{content:'✓';color:#6EE7B7}
+</style>
+</head>
+<body>
+
+<!-- SVG SYMBOLS -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-chevron-left" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+  <symbol id="i-coffee" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+  <symbol id="i-utensils" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+  <symbol id="i-shopping-cart" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+  <symbol id="i-git-fork" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><path d="M6 9v3m6 9v-3a3 3 0 0 0-3-3H6"/><path d="M18 9a9 9 0 0 1-9 9"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+  <symbol id="i-layout" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+</svg>
+
+<!-- META -->
+<header class="meta">
+  <div class="meta-l"><div class="ml">Plate<em>Cart</em></div><div class="mb">03 / 10</div></div>
+  <nav class="screen-links">
+    <a class="sl done" href="screen_01_dashboard.html">01 Dashboard</a>
+    <a class="sl done" href="screen_02_onboarding.html">02 Onboarding</a>
+    <a class="sl cur"  href="screen_03_meal_plan.html">03 Meal Plan</a>
+    <a class="sl" href="screen_04_template_browser.html">04 Templates</a>
+    <a class="sl" href="screen_05_template_detail.html">05 Detail</a>
+    <a class="sl" href="screen_06_create_template.html">06 Create</a>
+    <a class="sl" href="screen_07_my_templates.html">07 My Templates</a>
+    <a class="sl" href="screen_08_cart_preview.html">08 Cart</a>
+    <a class="sl" href="screen_09_budget_tracker.html">09 Budget</a>
+    <a class="sl" href="screen_10_settings.html">10 Settings</a>
+  </nav>
+  <div class="meta-r"><div class="ds-pill">Swiggy Design System</div></div>
+</header>
+
+<div class="split">
+
+<!-- DESKTOP 85% -->
+<div class="dp">
+  <div class="browser">
+    <div class="b-dots"><div class="b-dot r"></div><div class="b-dot y"></div><div class="b-dot g"></div></div>
+    <div class="b-url">
+      <svg style="width:11px;height:11px;stroke:#60B246;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>platecart.app/meal-plan</span>
+    </div>
+  </div>
+  <div class="app-scroll">
+
+    <!-- APP NAV -->
+    <nav class="anav">
+      <div class="anav-inner">
+        <div class="anav-logo">Plate<em>Cart</em></div>
+        <div class="anav-links">
+          <button class="alnk">Dashboard</button>
+          <button class="alnk act">Meal Plan</button>
+          <button class="alnk">Templates</button>
+          <button class="alnk">Budget</button>
+        </div>
+        <div class="anav-r">
+          <div class="bp"><b>₹2,150</b><span>/ ₹5,000</span></div>
+          <div class="av">RV</div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- PLAN CONTENT -->
+    <div class="plan-shell">
+
+      <!-- TOP BAR -->
+      <div class="plan-top">
+        <div class="week-nav">
+          <div class="wn-btn" onclick="prevWeek()"><svg class="icon-sm"><use href="#i-chevron-left"/></svg></div>
+          <div>
+            <span class="week-label" id="week-label">Mon 30 Jun – Sun 6 Jul</span>
+            <span class="week-sub">Week 3 of plan</span>
+          </div>
+          <div class="wn-btn" onclick="nextWeek()"><svg class="icon-sm"><use href="#i-chevron-right"/></svg></div>
+        </div>
+        <div class="plan-actions">
+          <button class="pa-btn" onclick="copyLastWeek()">
+            <svg class="icon-sm"><use href="#i-copy"/></svg>Copy last week
+          </button>
+          <button class="pa-btn primary" onclick="autoFill()">
+            <svg class="icon-sm" style="stroke:#fff"><use href="#i-zap"/></svg>Auto-fill week
+          </button>
+        </div>
+      </div>
+
+      <!-- GRID + RIGHT PANEL -->
+      <div class="plan-layout">
+        <div class="plan-grid-wrap">
+          <div class="meal-grid">
+
+            <!-- HEADER ROW -->
+            <div class="grid-header">
+              <div class="gh-empty" style="border-right:1px solid var(--bo)"></div>
+              <div class="gh-day" id="gh0" onclick="selectDay(0)">
+                <div class="ghd-name">MON</div><div class="ghd-date">30</div>
+              </div>
+              <div class="gh-day" id="gh1" onclick="selectDay(1)">
+                <div class="ghd-name">TUE</div><div class="ghd-date">1</div>
+              </div>
+              <div class="gh-day today" id="gh2" onclick="selectDay(2)">
+                <div class="ghd-name">WED</div><div class="ghd-date">2</div>
+                <div class="ghd-chip">TODAY</div>
+              </div>
+              <div class="gh-day" id="gh3" onclick="selectDay(3)">
+                <div class="ghd-name">THU</div><div class="ghd-date">3</div>
+              </div>
+              <div class="gh-day" id="gh4" onclick="selectDay(4)">
+                <div class="ghd-name">FRI</div><div class="ghd-date">4</div>
+              </div>
+              <div class="gh-day" id="gh5" onclick="selectDay(5)">
+                <div class="ghd-name">SAT</div><div class="ghd-date">5</div>
+              </div>
+              <div class="gh-day" id="gh6" onclick="selectDay(6)">
+                <div class="ghd-name">SUN</div><div class="ghd-date">6</div>
+              </div>
+            </div>
+
+            <!-- BREAKFAST ROW -->
+            <div class="grid-row">
+              <div class="row-label"><svg class="icon-sm row-lbl-icon"><use href="#i-coffee"/></svg><span class="row-lbl-t">B</span></div>
+              <div id="c-0-b" class="mc" onclick="openPicker(0,'b')"></div>
+              <div id="c-1-b" class="mc" onclick="openPicker(1,'b')"></div>
+              <div id="c-2-b" class="mc today-col" onclick="openPicker(2,'b')"></div>
+              <div id="c-3-b" class="mc" onclick="openPicker(3,'b')"></div>
+              <div id="c-4-b" class="mc" onclick="openPicker(4,'b')"></div>
+              <div id="c-5-b" class="mc" onclick="openPicker(5,'b')"></div>
+              <div id="c-6-b" class="mc" onclick="openPicker(6,'b')"></div>
+            </div>
+
+            <!-- LUNCH ROW -->
+            <div class="grid-row">
+              <div class="row-label"><svg class="icon-sm row-lbl-icon"><use href="#i-sun"/></svg><span class="row-lbl-t">L</span></div>
+              <div id="c-0-l" class="mc" onclick="openPicker(0,'l')"></div>
+              <div id="c-1-l" class="mc" onclick="openPicker(1,'l')"></div>
+              <div id="c-2-l" class="mc today-col" onclick="openPicker(2,'l')"></div>
+              <div id="c-3-l" class="mc" onclick="openPicker(3,'l')"></div>
+              <div id="c-4-l" class="mc" onclick="openPicker(4,'l')"></div>
+              <div id="c-5-l" class="mc" onclick="openPicker(5,'l')"></div>
+              <div id="c-6-l" class="mc" onclick="openPicker(6,'l')"></div>
+            </div>
+
+            <!-- DINNER ROW -->
+            <div class="grid-row">
+              <div class="row-label"><svg class="icon-sm row-lbl-icon"><use href="#i-moon"/></svg><span class="row-lbl-t">D</span></div>
+              <div id="c-0-d" class="mc" onclick="openPicker(0,'d')"></div>
+              <div id="c-1-d" class="mc" onclick="openPicker(1,'d')"></div>
+              <div id="c-2-d" class="mc today-col" onclick="openPicker(2,'d')"></div>
+              <div id="c-3-d" class="mc" onclick="openPicker(3,'d')"></div>
+              <div id="c-4-d" class="mc" onclick="openPicker(4,'d')"></div>
+              <div id="c-5-d" class="mc" onclick="openPicker(5,'d')"></div>
+              <div id="c-6-d" class="mc" onclick="openPicker(6,'d')"></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="plan-right" id="right-panel">
+
+          <!-- NUTRITION SUMMARY (default) -->
+          <div id="nut-view">
+            <div class="nut-card">
+              <div class="np-title">Weekly Nutrition</div>
+              <div class="np-h" id="nut-h">1,423 kcal avg / day</div>
+              <div class="np-sub">Target: 1,450 kcal · On track</div>
+              <div class="nut-bars" id="nut-bars"></div>
+              <div style="display:flex;justify-content:space-between;font-size:8.5px;color:var(--mu);margin-bottom:12px">
+                <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+              </div>
+              <div class="nut-stat"><span class="ns-l">Days planned</span><span class="ns-v">3 / 7</span></div>
+              <div class="nut-stat"><span class="ns-l">Eat-out slots</span><span class="ns-v">3</span></div>
+              <div class="nut-stat"><span class="ns-l">Weekly avg kcal</span><span class="ns-v g">1,423</span></div>
+              <div class="macro-row">
+                <div class="macro"><div class="macro-v">82g</div><div class="macro-l">Protein</div></div>
+                <div class="macro"><div class="macro-v">145g</div><div class="macro-l">Carbs</div></div>
+                <div class="macro"><div class="macro-v">38g</div><div class="macro-l">Fat</div></div>
+              </div>
+            </div>
+            <div class="cart-sum">
+              <div class="cs-title">Today's Cart</div>
+              <div class="cs-row"><span class="cs-l">Ingredients needed</span><span class="cs-v" id="today-items">8 items</span></div>
+              <div class="cs-row"><span class="cs-l">Estimated cost</span><span class="cs-v">₹340</span></div>
+              <div class="cs-row"><span class="cs-l">Budget remaining</span><span class="cs-v" style="color:var(--gr)">₹2,850</span></div>
+              <button class="cs-btn" onclick="showToast('Adding to Instamart cart...')">
+                <svg class="icon-sm"><use href="#i-shopping-cart"/></svg>Add to Instamart cart
+              </button>
+            </div>
+          </div>
+
+          <!-- TEMPLATE PICKER (shown when slot is clicked) -->
+          <div id="picker-view" style="display:none;height:460px">
+            <div class="picker-card">
+              <div class="picker-head">
+                <div class="picker-title" id="picker-title">Pick a meal</div>
+                <div class="picker-sub" id="picker-sub">Select a template for this slot</div>
+              </div>
+              <div class="picker-search">
+                <svg class="icon-sm picker-search-icon"><use href="#i-search"/></svg>
+                <input type="text" placeholder="Search templates..." oninput="filterTemplates(this.value)">
+              </div>
+              <div class="picker-filters">
+                <div class="pf-chip act" onclick="filterBy(this,'all')">All</div>
+                <div class="pf-chip" onclick="filterBy(this,'veg')">Veg</div>
+                <div class="pf-chip" onclick="filterBy(this,'highprot')">High Protein</div>
+                <div class="pf-chip" onclick="filterBy(this,'light')">Light</div>
+                <div class="pf-chip" onclick="filterBy(this,'quick')">Quick &lt;10 min</div>
+              </div>
+              <div class="picker-list" id="picker-list"></div>
+              <div class="picker-eo">
+                <button class="eo-btn" onclick="setEatOut()">
+                  <svg class="icon-sm"><use href="#i-utensils"/></svg>Make this an eat-out slot
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE PANEL -->
+<div class="mp">
+  <div class="mp-hdr">
+    <div class="mp-lbl">Mobile · 375px</div>
+    <div class="mp-hint">Full screen · no frame</div>
+  </div>
+  <div class="mp-area">
+  <div class="m-wrap" id="m-wrap">
+  <div class="m-bg">
+    <div class="m-sb"><span>9:41</span><div class="m-sb-r"><span>&bull;&bull;&bull;&bull;</span><span>WiFi</span></div></div>
+    <div class="m-anav">
+      <div class="m-alogo">Plate<em>Cart</em></div>
+      <svg class="icon" style="color:var(--ch)"><use href="#i-user"/></svg>
+    </div>
+    <!-- Week nav -->
+    <div class="m-week-nav">
+      <div class="m-wbtn"><svg class="icon-xs" style="stroke:var(--ch)"><use href="#i-chevron-left"/></svg></div>
+      <div class="m-wlabel">Mon 30 Jun – Sun 6 Jul</div>
+      <div class="m-wbtn"><svg class="icon-xs" style="stroke:var(--ch)"><use href="#i-chevron-right"/></svg></div>
+    </div>
+    <!-- Day tabs -->
+    <div class="m-day-tabs">
+      <div class="m-dtab" onclick="mSelDay(this,0)"><div class="m-dtab-n">MON</div><div class="m-dtab-d">30</div></div>
+      <div class="m-dtab" onclick="mSelDay(this,1)"><div class="m-dtab-n">TUE</div><div class="m-dtab-d">1</div></div>
+      <div class="m-dtab act" onclick="mSelDay(this,2)"><div class="m-dtab-n">WED</div><div class="m-dtab-d">2</div></div>
+      <div class="m-dtab" onclick="mSelDay(this,3)"><div class="m-dtab-n">THU</div><div class="m-dtab-d">3</div></div>
+      <div class="m-dtab" onclick="mSelDay(this,4)"><div class="m-dtab-n">FRI</div><div class="m-dtab-d">4</div></div>
+      <div class="m-dtab" onclick="mSelDay(this,5)"><div class="m-dtab-n">SAT</div><div class="m-dtab-d">5</div></div>
+      <div class="m-dtab" onclick="mSelDay(this,6)"><div class="m-dtab-n">SUN</div><div class="m-dtab-d">6</div></div>
+    </div>
+    <!-- Day meals -->
+    <div class="m-meals" id="m-meals"></div>
+    <!-- Add to cart -->
+    <div class="m-add-cart" id="m-cart-area"></div>
+    <!-- Bottom nav -->
+    <div class="m-tabs">
+      <div class="m-tab"><div class="m-ti"><svg class="icon"><use href="#i-home"/></svg></div>Home</div>
+      <div class="m-tab act"><div class="m-ti"><svg class="icon"><use href="#i-layout"/></svg></div>Plan</div>
+      <div class="m-tab"><div class="m-ti"><svg class="icon"><use href="#i-book"/></svg></div>Templates</div>
+      <div class="m-tab"><div class="m-ti"><svg class="icon"><use href="#i-wallet"/></svg></div>Budget</div>
+      <div class="m-tab"><div class="m-ti"><svg class="icon"><use href="#i-user"/></svg></div>Profile</div>
+    </div>
+  </div>
+  </div>
+  </div>
+</div>
+
+</div><!-- /split -->
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg class="icon-sm"><use href="#i-check"/></svg>
+  <span id="toast-msg"></span>
+</div>
+
+<!-- DEV -->
+<button class="dev-btn" onclick="toggleDev()"><div class="dev-dot"></div>DEV</button>
+<aside class="dev-panel" id="devPanel">
+  <div class="dev-ph"><div class="dev-pt">Dev Guide <span class="dev-stag">MEAL PLAN</span></div><button class="dev-cls" onclick="toggleDev()">&#10005;</button></div>
+  <div class="dev-tabs">
+    <button class="d-tab act" onclick="showTab('api',this)">API</button>
+    <button class="d-tab" onclick="showTab('schema',this)">Schema</button>
+    <button class="d-tab" onclick="showTab('pitfalls',this)">Pitfalls</button>
+    <button class="d-tab" onclick="showTab('security',this)">Security</button>
+    <button class="d-tab" onclick="showTab('ui',this)">UI Rules</button>
+  </div>
+  <div class="dev-body">
+    <div class="d-sub act" id="d-api">
+      <div class="d-sec"><div class="d-lbl">Page load — one query, not 21</div>
+      <div class="code"><span class="om">GET</span> <span class="pa">/api/meal-plans/current</span>
+<span class="co">// Returns full week with all slots + templates</span>
+<span class="co">// One DB query with JOIN — never fetch per-slot</span>
+Response: {
+  id, week_start,
+  slots: [{
+    id, day_of_week, meal_type,
+    is_eatout,
+    template: {
+      id, dish_name, tags[],
+      avg_kcal, prep_minutes
+    }
+  }]
+}</span>
+
+<span class="om">PATCH</span> <span class="pa">/api/meal-plans/:id/slots</span>
+<span class="co">// Assign template to a slot</span>
+Body: { day_of_week: <span class="vl">3</span>, meal_type: <span class="st">"lunch"</span>,
+        template_id: <span class="st">"uuid"</span> }
+<span class="ok">200</span>: { slot: { id, template } }
+
+<span class="om">PATCH</span> <span class="pa">/api/meal-plans/:id/slots</span>
+<span class="co">// Set eat-out slot</span>
+Body: { day_of_week: <span class="vl">3</span>, meal_type: <span class="st">"dinner"</span>,
+        is_eatout: <span class="vl">true</span>, template_id: <span class="vl">null</span> }
+
+<span class="om">POST</span> <span class="pa">/api/meal-plans/copy-last-week</span>
+<span class="co">// Duplicates last week's plan for current week</span>
+<span class="co">// Returns 404 if no previous week exists — handle gracefully</span>
+
+<span class="om">POST</span> <span class="pa">/api/meal-plans/auto-fill</span>
+<span class="co">// Fills empty slots with recommended templates</span>
+<span class="co">// Based on user's goal + diet_type + household_size</span>
+Body: { fill_empty_only: <span class="vl">true</span> } <span class="co">// never overwrite assigned</span></div></div>
+      <div class="d-sec"><div class="d-lbl">Cart action from meal plan</div>
+      <div class="code"><span class="om">POST</span> <span class="pa">/api/cart/build</span>
+<span class="co">// Build Instamart cart from today's assigned slots</span>
+Body: {
+  slot_ids: [<span class="st">"uuid1"</span>, <span class="st">"uuid2"</span>],
+  date: <span class="st">"2026-07-02"</span>
+}
+<span class="co">// Returns ingredient list, not a placed order</span>
+<span class="co">// User must confirm in Cart Preview screen</span></div></div>
+    </div>
+    <div class="d-sub" id="d-schema">
+      <div class="d-sec"><div class="d-lbl">Tables used on this screen</div>
+      <div class="code">meal_plans
+  id, user_id, week_start DATE
+
+meal_plan_slots
+  id, meal_plan_id
+  day_of_week INTEGER  <span class="co">// 1=Mon … 7=Sun</span>
+  meal_type   ENUM(breakfast,lunch,dinner)
+  template_id UUID     <span class="co">// nullable</span>
+  is_eatout   BOOLEAN  <span class="co">// default false</span>
+
+templates    <span class="co">// read-only on this screen</span>
+  id, dish_name, avg_kcal
+  prep_minutes, tags[]
+
+UNIQUE constraint:
+  (meal_plan_id, day_of_week, meal_type)</div></div>
+      <div class="d-sec"><div class="d-lbl">Optimised Drizzle query</div>
+      <div class="code"><span class="co">// Get full week in ONE query — no N+1</span>
+const plan = await db.query.mealPlans.findFirst({
+  where: and(
+    eq(mealPlans.userId, userId),
+    eq(mealPlans.weekStart, weekStartDate)
+  ),
+  with: {
+    slots: {
+      with: { template: true }  <span class="ok">// single JOIN</span>
+    }
+  }
+})</div></div>
+    </div>
+    <div class="d-sub" id="d-pitfalls">
+      <div class="d-sec"><div class="d-lbl">Prevent these</div>
+      <ul class="dl warn">
+        <li><strong>N+1 on slots:</strong> Never query each slot's template individually. One JOIN query for the full week — always.</li>
+        <li><strong>Copy last week → no previous plan:</strong> API returns 404. UI must show "No previous week to copy" inline, not an error toast.</li>
+        <li><strong>Auto-fill overwrites:</strong> Auto-fill must only fill EMPTY slots (template_id IS NULL and is_eatout = false). Never replace an already-assigned meal.</li>
+        <li><strong>Duplicate slots:</strong> The DB UNIQUE constraint on (meal_plan_id, day_of_week, meal_type) prevents this. But the API must return a clear 409 — not a 500.</li>
+        <li><strong>Week start timezone:</strong> week_start must be Monday in the user's local timezone. Server-side: always compute from a client-supplied date string, not server UTC.</li>
+        <li><strong>Drag-and-drop:</strong> Never send one PATCH per cell during drag. Collect the full new state and send a single PATCH at drop. Otherwise a slow connection leaves the DB in a broken intermediate state.</li>
+        <li><strong>Eat-out slot + template both set:</strong> Validate server-side that if is_eatout=true, template_id must be null. One or the other.</li>
+      </ul></div>
+    </div>
+    <div class="d-sub" id="d-security">
+      <div class="d-sec"><div class="d-lbl">Auth &amp; row-level security</div>
+      <ul class="dl">
+        <li>All PATCH requests verify the meal_plan belongs to the authenticated user before updating. Never trust plan ID from URL alone.</li>
+        <li>Template IDs in PATCH body must be validated: confirm the template is public OR belongs to the user. Never allow assigning another user's private template.</li>
+        <li>Auto-fill: the recommendation engine runs server-side with the user's goals from the DB. Never pass goal/diet from the client body — read from JWT user record.</li>
+      </ul></div>
+      <div class="d-sec"><div class="d-lbl">Rate limits</div>
+      <div class="code">PATCH /api/meal-plans/:id/slots  <span class="wn">60/min</span>
+POST  /api/meal-plans/auto-fill    <span class="wn">5/min</span>
+POST  /api/cart/build              <span class="wn">10/min</span></div></div>
+    </div>
+    <div class="d-sub" id="d-ui">
+      <div class="d-sec"><div class="d-lbl">Swiggy DS — grid rules</div>
+      <ul class="dl">
+        <li><strong>Today column:</strong> 3px orange top border on the header cell only. Column bg: rgba(252,128,25,.02) — barely visible, just enough context. No orange on the cells themselves.</li>
+        <li><strong>Empty slot:</strong> Dashed border + plus icon + "Add meal" in muted colour. Never leave a white empty box — that reads as broken.</li>
+        <li><strong>Assigned slot:</strong> Solid 1px #E9E9EB border. Meal name bold 11.5px charcoal. Kcal + time in 10px muted. "Change" link appears on hover only.</li>
+        <li><strong>Eat-out slot:</strong> #FFF8F2 background, orange icon circle, "Eat out" in orange 10px bold. Never use orange fill on the full cell — only the icon circle.</li>
+        <li><strong>Picker panel:</strong> Replaces the nutrition panel when a slot is clicked. Never use a modal — the grid must stay visible so users know which slot they are editing.</li>
+        <li><strong>Auto-fill button:</strong> Primary orange CTA. This is more important than "Copy last week". Position it rightmost in the action row.</li>
+        <li><strong>Mobile:</strong> Grid not shown. One day at a time via tab strip. Three stacked cards per day. "Add all to Instamart" fixed at the bottom of the day view.</li>
+        <li><strong>Picker filter chips:</strong> Default selected = "All". Only one active at a time. Not multi-select.</li>
+      </ul></div>
+    </div>
+  </div>
+</aside>
+
+<script>
+/* ── DATA ── */
+var DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+var DATES=['30','1','2','3','4','5','6'];
+var TEMPLATES=[
+  {id:1,name:'Oats &amp; Fruit Porridge',kcal:310,time:8,tags:['Veg','High-fibre'],forks:847,filter:'veg'},
+  {id:2,name:'Mixed Veggie Salad',kcal:240,time:15,tags:['Veg','Light'],forks:623,filter:'veg light'},
+  {id:3,name:'Dal Khichdi',kcal:380,time:20,tags:['Veg','Protein'],forks:1204,filter:'veg'},
+  {id:4,name:'Upma with Veggies',kcal:280,time:12,tags:['Veg','South Indian'],forks:445,filter:'veg'},
+  {id:5,name:'Grilled Tofu Bowl',kcal:350,time:18,tags:['Veg','High Protein'],forks:312,filter:'veg highprot'},
+  {id:6,name:'Banana Smoothie Bowl',kcal:290,time:5,tags:['Veg','Quick'],forks:567,filter:'veg quick'},
+  {id:7,name:'Poha with Peanuts',kcal:260,time:10,tags:['Veg','Quick'],forks:389,filter:'veg quick'},
+  {id:8,name:'Moong Dal Soup',kcal:200,time:25,tags:['Veg','Light','Protein'],forks:521,filter:'veg light highprot'},
+];
+
+var MEAL_DATA={
+  0:{b:{name:'Oats Porridge',kcal:310,time:8},l:{name:'Mixed Salad',kcal:240,time:15},d:{name:'Dal Khichdi',kcal:380,time:20}},
+  1:{b:{name:'Banana Smoothie',kcal:290,time:5},l:{name:'Tofu Rice Bowl',kcal:420,time:20},d:{name:'Veg Stir Fry',kcal:310,time:15}},
+  2:{b:{name:'Upma',kcal:280,time:12},l:{name:'Grilled Tofu',kcal:350,time:18},d:'eatout'},
+  3:{},
+  4:{},
+  5:{d:'eatout'},
+  6:{b:'eatout',l:'eatout',d:'eatout'}
+};
+var MEAL_LABELS={b:'Breakfast',l:'Lunch',d:'Dinner'};
+var KCALS=[930,1020,630,0,0,0,0];
+
+var state={selDay:2,pickerDay:null,pickerMeal:null,filter:'all',meals:JSON.parse(JSON.stringify(MEAL_DATA))};
+
+/* ── RENDER GRID ── */
+function renderGrid(){
+  for(var d=0;d<7;d++){
+    ['b','l','d'].forEach(function(m){
+      var el=document.getElementById('c-'+d+'-'+m);
+      if(!el)return;
+      var meal=state.meals[d]&&state.meals[d][m];
+      el.className='mc'+(d===2?' today-col':'')+(d===state.selDay?' sel-col':'');
+      if(!el.getAttribute('onclick'))el.setAttribute('onclick','openPicker('+d+',"'+m+'")');
+      if(meal==='eatout'){
+        el.className+=' eatout';
+        el.innerHTML='<div class="mc-eo-wrap"><div class="mc-eo-icon"><svg class="icon-xs" style="stroke:var(--sw)"><use href="#i-utensils"/></svg></div><div class="mc-eo-t">Eat out</div></div>';
+      } else if(meal&&meal.name){
+        el.className+=' assigned';
+        el.innerHTML='<div class="mc-meal-type">'+MEAL_LABELS[m]+'</div><div class="mc-name">'+meal.name+'</div><div class="mc-meta"><svg class="icon-xs" style="color:var(--mu)"><use href="#i-clock"/></svg><span class="mc-kcal">'+meal.kcal+'</span><span>kcal</span><span>&middot;</span><span>'+meal.time+' min</span></div><button class="mc-change" onclick="event.stopPropagation();openPicker('+d+',"'+m+'")">Change</button>';
+      } else {
+        el.className+=' empty';
+        el.innerHTML='<div class="mc-plus-circle"><svg class="icon-xs"><use href="#i-plus"/></svg></div><div class="mc-empty-t">Add meal</div>';
+      }
+    });
+    // header highlight
+    var gh=document.getElementById('gh'+d);
+    if(gh){gh.classList.toggle('sel',d===state.selDay);if(d!==2)gh.classList.remove('today');}
+  }
+  renderNutBars();
+}
+
+function renderNutBars(){
+  var barsEl=document.getElementById('nut-bars');
+  if(!barsEl)return;
+  var maxKcal=Math.max.apply(null,KCALS.map(function(k){return k||0;}))||1500;
+  barsEl.innerHTML=KCALS.map(function(k,i){
+    var h=k?(Math.round(k/maxKcal*52)):4;
+    var cls='nb'+(i===2?' today':k>0?' planned':'');
+    return'<div class="'+cls+'"><div class="nb-bar" style="height:'+h+'px"></div><div class="nb-lbl">'+DAYS[i][0]+'</div></div>';
+  }).join('');
+}
+
+/* ── DAY SELECTION ── */
+function selectDay(d){
+  state.selDay=d;
+  renderGrid();
+  mSelDayIdx(d);
+}
+
+/* ── PICKER ── */
+function openPicker(day,meal){
+  state.pickerDay=day;state.pickerMeal=meal;
+  document.getElementById('nut-view').style.display='none';
+  document.getElementById('picker-view').style.display='block';
+  document.getElementById('picker-title').textContent='Pick meal for '+DAYS[day]+' '+MEAL_LABELS[meal];
+  document.getElementById('picker-sub').textContent='Your diet: Vegetarian · Goal: Lose Weight';
+  state.filter='all';
+  document.querySelectorAll('.pf-chip').forEach(function(c){c.classList.remove('act');});
+  document.querySelector('.pf-chip').classList.add('act');
+  renderTemplates('');
+  // highlight clicked cell
+  document.querySelectorAll('.mc').forEach(function(c){c.classList.remove('clicked');});
+  var clicked=document.getElementById('c-'+day+'-'+meal);
+  if(clicked)clicked.classList.add('clicked');
+}
+
+function closePicker(){
+  document.getElementById('nut-view').style.display='block';
+  document.getElementById('picker-view').style.display='none';
+  document.querySelectorAll('.mc.clicked').forEach(function(c){c.classList.remove('clicked');});
+}
+
+function renderTemplates(search){
+  var list=document.getElementById('picker-list');
+  if(!list)return;
+  var f=state.filter||'all';
+  var filtered=TEMPLATES.filter(function(t){
+    var matchSearch=!search||t.name.toLowerCase().indexOf(search.toLowerCase())>-1;
+    var matchFilter=f==='all'||(t.filter&&t.filter.indexOf(f)>-1);
+    return matchSearch&&matchFilter;
+  });
+  list.innerHTML=filtered.map(function(t){
+    return'<div class="pt" onclick="assignTemplate('+t.id+')">'+
+      '<div class="pt-row"><div><div class="pt-name">'+t.name+'</div>'+
+      '<div class="pt-meta">'+t.tags.map(function(tg){return'<span class="pt-chip">'+tg+'</span>';}).join('')+'</div></div>'+
+      '<div style="text-align:right;flex-shrink:0"><div class="pt-kcal">'+t.kcal+' kcal</div>'+
+      '<div class="pt-forks"><svg class="icon-xs"><use href="#i-git-fork"/></svg>'+t.forks+'</div></div></div>'+
+      '<div style="font-size:10px;color:var(--mu);margin-top:4px;display:flex;align-items:center;gap:4px">'+
+      '<svg class="icon-xs"><use href="#i-clock"/></svg>'+t.time+' min prep</div></div>';
+  }).join('')||(filtered.length===0?'<div style="padding:20px;text-align:center;font-size:12px;color:var(--mu)">No templates match</div>':'');
+}
+
+function filterTemplates(v){renderTemplates(v);}
+function filterBy(el,f){
+  state.filter=f;
+  document.querySelectorAll('.pf-chip').forEach(function(c){c.classList.remove('act');});
+  el.classList.add('act');
+  renderTemplates(document.querySelector('.picker-search input').value||'');
+}
+
+function assignTemplate(tid){
+  var t=TEMPLATES.find(function(x){return x.id===tid;});
+  if(!t||state.pickerDay===null)return;
+  if(!state.meals[state.pickerDay])state.meals[state.pickerDay]={};
+  state.meals[state.pickerDay][state.pickerMeal]={name:t.name.replace(/&amp;/g,'&'),kcal:t.kcal,time:t.time};
+  // update kcal
+  var d=state.pickerDay;
+  var dayMeals=state.meals[d];
+  KCALS[d]=['b','l','d'].reduce(function(sum,m){var meal=dayMeals[m];return sum+(meal&&meal.kcal?meal.kcal:0);},0);
+  closePicker();renderGrid();
+  showToast('Assigned '+t.name.replace(/&amp;/g,'&'));
+  if(d===state.selDay)renderMobileMeals(d);
+}
+
+function setEatOut(){
+  if(state.pickerDay===null)return;
+  if(!state.meals[state.pickerDay])state.meals[state.pickerDay]={};
+  state.meals[state.pickerDay][state.pickerMeal]='eatout';
+  closePicker();renderGrid();
+  showToast('Marked as eat-out');
+  renderMobileMeals(state.selDay);
+}
+
+/* ── ACTIONS ── */
+function prevWeek(){showToast('Previous week loaded');}
+function nextWeek(){showToast('Next week loaded');}
+function copyLastWeek(){showToast('Last week\'s plan copied');}
+function autoFill(){
+  ['b','l','d'].forEach(function(m){
+    for(var d=0;d<7;d++){
+      if(!state.meals[d])state.meals[d]={};
+      if(!state.meals[d][m]){
+        var pick=TEMPLATES[Math.floor(Math.random()*TEMPLATES.length)];
+        state.meals[d][m]={name:pick.name.replace(/&amp;/g,'&'),kcal:pick.kcal,time:pick.time};
+      }
+    }
+  });
+  for(var d=0;d<7;d++){KCALS[d]=['b','l','d'].reduce(function(sum,m){var meal=state.meals[d]&&state.meals[d][m];return sum+(meal&&meal.kcal?meal.kcal:0);},0);}
+  renderGrid();renderMobileMeals(state.selDay);
+  showToast('Week auto-filled with recommended meals');
+}
+
+/* ── TOAST ── */
+function showToast(msg){
+  var t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2500);
+}
+
+/* ── MOBILE ── */
+function mSelDay(el,d){
+  document.querySelectorAll('.m-dtab').forEach(function(t){t.classList.remove('act');});
+  el.classList.add('act');
+  state.selDay=d;
+  renderMobileMeals(d);
+  selectDay(d);
+}
+function mSelDayIdx(d){
+  document.querySelectorAll('.m-dtab').forEach(function(t,i){t.classList.toggle('act',i===d);});
+  renderMobileMeals(d);
+}
+
+function renderMobileMeals(d){
+  var el=document.getElementById('m-meals');
+  var cartEl=document.getElementById('m-cart-area');
+  if(!el)return;
+  var dayMeals=state.meals[d]||{};
+  var mealIcons={b:'i-coffee',l:'i-sun',d:'i-moon'};
+  var content=['b','l','d'].map(function(m){
+    var meal=dayMeals[m];
+    var typeLabel=MEAL_LABELS[m];
+    var iconId=mealIcons[m];
+    var inner='';
+    if(meal==='eatout'){
+      inner='<div class="m-slot-eo"><div class="m-eo-icon"><svg class="icon-sm" style="stroke:var(--sw)"><use href="#i-utensils"/></svg></div><div class="m-eo-t">Eat out</div></div>';
+      return'<div class="m-slot eatout"><div class="m-slot-type"><svg class="icon-xs" style="color:var(--mu)"><use href="#'+iconId+'"/></svg>'+typeLabel+'</div>'+inner+'</div>';
+    } else if(meal&&meal.name){
+      inner='<div class="m-slot-name">'+meal.name+'</div><div class="m-slot-meta"><svg class="icon-xs" style="color:var(--mu)"><use href="#i-clock"/></svg>'+meal.kcal+' kcal &middot; '+meal.time+' min</div>';
+      return'<div class="m-slot assigned"><div class="m-slot-type"><svg class="icon-xs" style="color:var(--mu)"><use href="#'+iconId+'"/></svg>'+typeLabel+'</div>'+inner+'</div>';
+    } else {
+      inner='<div class="m-slot-empty"><div class="m-plus"><svg class="icon-xs" style="stroke:var(--bo)"><use href="#i-plus"/></svg></div><div class="m-slot-empty-t">Add '+typeLabel.toLowerCase()+'</div></div>';
+      return'<div class="m-slot empty"><div class="m-slot-type"><svg class="icon-xs" style="color:var(--bo)"><use href="#'+iconId+'"/></svg>'+typeLabel+'</div>'+inner+'</div>';
+    }
+  }).join('');
+  el.innerHTML=content;
+  // cart button
+  var assigned=['b','l','d'].filter(function(m){var meal=dayMeals[m];return meal&&meal!=='eatout'&&meal.name;}).length;
+  if(cartEl){
+    if(assigned>0){
+      cartEl.innerHTML='<button class="m-ac-btn"><svg class="icon-sm"><use href="#i-shopping-cart"/></svg>Add to Instamart cart</button><div class="m-ac-sub">'+assigned+' meal'+(assigned>1?'s':'')+' &middot; est. ₹'+(assigned*120)+'</div>';
+    } else {
+      cartEl.innerHTML='<div style="text-align:center;padding:10px;font-size:11px;color:var(--mu)">Add meals above to build your cart</div>';
+    }
+  }
+}
+
+/* ── MOBILE SCALE ── */
+(function(){
+  var wrap=document.getElementById('m-wrap');
+  var area=document.querySelector('.mp-area');
+  if(!wrap||!area)return;
+  function fit(){var w=area.offsetWidth-10;var s=Math.min(w/375,.85);wrap.style.transform='scale('+s+')';wrap.style.marginLeft=0;}
+  fit();window.addEventListener('resize',fit);
+})();
+
+/* ── DEV ── */
+function toggleDev(){document.getElementById('devPanel').classList.toggle('open');}
+function showTab(id,btn){document.querySelectorAll('.d-sub').forEach(function(s){s.classList.remove('act');});document.querySelectorAll('.d-tab').forEach(function(t){t.classList.remove('act');});document.getElementById('d-'+id).classList.add('act');btn.classList.add('act');}
+
+/* ── INIT ── */
+renderGrid();
+renderMobileMeals(2);
+</script>
+</body>
+</html>

@@ -32,19 +32,14 @@ export function MockSignInForm() {
         Sign in to see this week&apos;s plan and cart.
       </p>
 
-      <button
-        type="button"
-        onClick={() => {
-          setSubmitting(true);
-          setTimeout(() => router.push("/dashboard"), 250);
-        }}
-        disabled={submitting}
-        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--sw-charcoal)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 disabled:opacity-70"
+      <Link
+        href="/dashboard"
+        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--sw-charcoal)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
       >
         <Sparkles className="h-4 w-4 text-[var(--sw-orange)]" />
         Log in as demo user
         <ArrowRight className="h-4 w-4" />
-      </button>
+      </Link>
       <p className="mt-2 text-center text-[11px] text-[var(--sw-muted)]">
         Skips the form. Loads the dashboard as <b>Raphy</b> with a full week of
         meals, budget, and cart pre-loaded.

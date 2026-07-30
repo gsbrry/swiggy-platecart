@@ -45,7 +45,7 @@ function withSecurityHeaders(res: NextResponse): NextResponse {
 
 const clerkAware = clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
-    await auth.protect();
+    await auth().protect();
   }
   return withSecurityHeaders(NextResponse.next());
 });

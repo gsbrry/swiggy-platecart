@@ -1,11 +1,6 @@
-import { ScreenStub } from "@/components/screen-stub";
+import { OnboardingFlow } from "@/components/onboarding/onboarding-flow";
 
+/** Screen 02 — Onboarding. Full-bleed, pre-auth-experience; no AppNav. */
 export default function OnboardingPage() {
-  return (
-    <ScreenStub
-      title="Onboarding"
-      description="Five-step setup: goal, diet, household, budget, exclusions."
-      apis={["PATCH /api/user/profile"]}
-    />
-  );
+  return <OnboardingFlow />;
 }

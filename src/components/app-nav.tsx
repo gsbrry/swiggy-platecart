@@ -11,14 +11,13 @@ type Props = {
 };
 
 const TABS = [
-  { href: "/", label: "Dashboard" },
+  { href: "/dashboard", label: "Dashboard" },
   { href: "/meal-plan", label: "Meal Plan" },
   { href: "/templates", label: "Templates" },
   { href: "/budget", label: "Budget" },
 ] as const;
 
 function isActive(pathname: string, href: string): boolean {
-  if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(href + "/");
 }
 

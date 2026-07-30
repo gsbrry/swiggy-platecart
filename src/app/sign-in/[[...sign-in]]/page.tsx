@@ -14,7 +14,7 @@ export default function SignInPage() {
             <code> .env.local</code> to enable real sign-in.
           </p>
           <Link
-            href="/"
+            href="/dashboard"
             className="inline-block rounded-full bg-[var(--sw-orange)] px-6 py-2 text-sm font-semibold text-white hover:opacity-90"
           >
             Continue as demo user →

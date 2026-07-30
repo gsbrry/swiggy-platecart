@@ -379,7 +379,7 @@ export function OnboardingFlow() {
   }, []);
 
   const finish = useCallback(() => {
-    router.push("/");
+    router.push("/dashboard");
   }, [router]);
 
   const handleKeyDownAdvance = (e: KeyboardEvent<HTMLDivElement>) => {

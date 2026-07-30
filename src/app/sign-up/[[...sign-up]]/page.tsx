@@ -13,7 +13,7 @@ export default function SignUpPage() {
             Sign-up is disabled until Clerk keys are set. Jump straight into the demo.
           </p>
           <Link
-            href="/"
+            href="/onboarding"
             className="inline-block rounded-full bg-[var(--sw-orange)] px-6 py-2 text-sm font-semibold text-white hover:opacity-90"
           >
             Continue as demo user →

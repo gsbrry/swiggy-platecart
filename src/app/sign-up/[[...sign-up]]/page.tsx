@@ -1,30 +1,36 @@
 import Link from "next/link";
 import { SignUp } from "@clerk/nextjs";
 
+import { MockSignUpForm } from "@/components/auth/mock-sign-up-form";
 import { isMockMode } from "@/lib/mock";
 
+export const metadata = {
+  title: "Sign up — PlateCart",
+  description: "Create your PlateCart account and plan your first week.",
+};
+
 export default function SignUpPage() {
-  if (isMockMode()) {
-    return (
-      <div className="flex min-h-[70vh] flex-col items-center justify-center gap-4 p-8 text-center">
-        <div className="rounded-2xl border border-[var(--sw-border)] bg-white p-8 shadow-sm">
-          <h1 className="mb-2 text-xl font-bold text-[var(--sw-charcoal)]">Demo mode</h1>
-          <p className="mb-6 max-w-sm text-sm text-[var(--sw-muted)]">
-            Sign-up is disabled until Clerk keys are set. Jump straight into the demo.
-          </p>
+  return (
+    <div className="min-h-screen bg-[var(--sw-page)]">
+      <header className="border-b border-[var(--sw-border)] bg-white">
+        <div className="mx-auto flex h-[58px] max-w-[1160px] items-center justify-between px-6">
           <Link
-            href="/onboarding"
-            className="inline-block rounded-full bg-[var(--sw-orange)] px-6 py-2 text-sm font-semibold text-white hover:opacity-90"
+            href="/"
+            className="text-[19px] font-bold tracking-tight text-[var(--sw-charcoal)]"
           >
-            Continue as demo user →
+            Plate<em className="not-italic text-[var(--sw-orange)]">Cart</em>
+          </Link>
+          <Link
+            href="/sign-in"
+            className="rounded-full px-3.5 py-1.5 text-[13px] font-medium text-[var(--sw-muted)] hover:bg-[var(--sw-page)] hover:text-[var(--sw-charcoal)]"
+          >
+            Have an account? <span className="font-semibold text-[var(--sw-orange)]">Sign in</span>
           </Link>
         </div>
-      </div>
-    );
-  }
-  return (
-    <div className="flex min-h-[70vh] items-center justify-center">
-      <SignUp />
+      </header>
+      <main className="flex items-center justify-center px-6 py-16">
+        {isMockMode() ? <MockSignUpForm /> : <SignUp />}
+      </main>
     </div>
   );
 }

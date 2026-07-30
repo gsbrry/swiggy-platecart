@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getCurrentUser } from "@/lib/current-user";
+import { isMockMode } from "@/lib/mock";
 import { checkRateLimit } from "@/lib/rate-limit";
 
 const bodySchema = z.object({
@@ -31,6 +32,17 @@ export async function POST(req: Request) {
 
   if (!sanitized) {
     return NextResponse.json({ dish_name: "", template_matches: [] });
+  }
+
+  if (isMockMode()) {
+    return NextResponse.json({
+      dish_name: sanitized,
+      template_matches: [
+        { id: "t-mock-1", dish_name: `${sanitized} — quick veg`, tags: ["veg", "quick"] },
+        { id: "t-mock-2", dish_name: `${sanitized} — high protein`, tags: ["protein"] },
+      ],
+      mock: true,
+    });
   }
 
   return NextResponse.json({

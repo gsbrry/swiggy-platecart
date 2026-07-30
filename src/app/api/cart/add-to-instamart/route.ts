@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getCurrentUser } from "@/lib/current-user";
+import { isMockMode } from "@/lib/mock";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { swiggyMcp } from "@/lib/swiggy-mcp";
 
@@ -23,6 +24,10 @@ export async function POST(req: Request) {
 
   if (!checkRateLimit(user.id, "cart", 10)) {
     return NextResponse.json({ error: "rate limited" }, { status: 429 });
+  }
+
+  if (isMockMode()) {
+    return NextResponse.json({ ok: true, order_ref: `mock-${Date.now()}`, mock: true });
   }
 
   const parsed = bodySchema.safeParse(await req.json().catch(() => null));

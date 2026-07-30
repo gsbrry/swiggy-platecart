@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import { isMockMode, mockUser } from "@/lib/mock";
 
 /**
  * Resolve (or lazily create) the internal `users` row for the currently
@@ -10,6 +11,8 @@ import { users } from "@/db/schema";
  * respond with 401 without throwing.
  */
 export async function getCurrentUser() {
+  if (isMockMode()) return mockUser;
+
   const { userId: clerkId } = await auth();
   if (!clerkId) return null;
 

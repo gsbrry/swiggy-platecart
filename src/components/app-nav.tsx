@@ -1,3 +1,7 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Bell } from "lucide-react";
 
 type Props = {
@@ -6,21 +10,36 @@ type Props = {
   budget: number;
 };
 
+const TABS = [
+  { href: "/", label: "Dashboard" },
+  { href: "/meal-plan", label: "Meal Plan" },
+  { href: "/templates", label: "Templates" },
+  { href: "/budget", label: "Budget" },
+] as const;
+
+function isActive(pathname: string, href: string): boolean {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(href + "/");
+}
+
 /** Sticky top nav — logo, section links, budget pill, notifications, avatar. */
 export function AppNav({ avatarInitials, spent, budget }: Props) {
+  const pathname = usePathname() ?? "/";
   return (
     <nav className="sticky top-0 z-20 border-b border-[var(--sw-border)] bg-white">
       <div className="mx-auto flex h-[58px] max-w-[1100px] items-center justify-between px-6">
-        <a href="/" className="text-[19px] font-bold tracking-tight text-[var(--sw-charcoal)]">
+        <Link
+          href="/"
+          className="text-[19px] font-bold tracking-tight text-[var(--sw-charcoal)]"
+        >
           Plate<em className="not-italic text-[var(--sw-orange)]">Cart</em>
-        </a>
+        </Link>
         <div className="hidden gap-0.5 md:flex">
-          <NavLink href="/" active>
-            Dashboard
-          </NavLink>
-          <NavLink href="/meal-plan">Meal Plan</NavLink>
-          <NavLink href="/templates">Templates</NavLink>
-          <NavLink href="/budget">Budget</NavLink>
+          {TABS.map((t) => (
+            <NavLink key={t.href} href={t.href} active={isActive(pathname, t.href)}>
+              {t.label}
+            </NavLink>
+          ))}
         </div>
         <div className="flex items-center gap-3">
           <div className="hidden items-center gap-1.5 rounded-full border border-[var(--sw-border)] bg-[var(--sw-page)] px-3 py-1 text-xs sm:flex">
@@ -39,9 +58,13 @@ export function AppNav({ avatarInitials, spent, budget }: Props) {
             <Bell className="h-4 w-4" />
             <span className="absolute right-[7px] top-[7px] h-1.5 w-1.5 rounded-full border-[1.5px] border-white bg-[var(--sw-orange)]" />
           </button>
-          <div className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[var(--sw-orange)] text-xs font-bold text-white">
+          <Link
+            href="/settings"
+            aria-label="Account settings"
+            className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[var(--sw-orange)] text-xs font-bold text-white"
+          >
             {avatarInitials}
-          </div>
+          </Link>
         </div>
       </div>
     </nav>
@@ -58,7 +81,7 @@ function NavLink({
   active?: boolean;
 }) {
   return (
-    <a
+    <Link
       href={href}
       className={`rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors ${
         active
@@ -67,6 +90,6 @@ function NavLink({
       }`}
     >
       {children}
-    </a>
+    </Link>
   );
 }

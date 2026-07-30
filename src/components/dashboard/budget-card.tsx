@@ -64,7 +64,7 @@ export function BudgetCard({
           role="img"
           aria-label={`Budget: ${pctSpent}% spent`}
         >
-          <title>Budget: {pctSpent}% spent</title>
+          <title>{`Budget: ${pctSpent}% spent`}</title>
           {/* Track */}
           <circle cx="65" cy="65" r={radius} fill="none" stroke="#E9E9EB" strokeWidth="10" />
           {/* Spent — starts at top (rotate -90deg) */}

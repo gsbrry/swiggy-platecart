@@ -1,6 +1,6 @@
 import { and, desc, eq, gte, sql } from "drizzle-orm";
 
-import { AppNav } from "@/components/dashboard/app-nav";
+import { AppNav } from "@/components/app-nav";
 import { BudgetCard } from "@/components/dashboard/budget-card";
 import { Hero } from "@/components/dashboard/hero";
 import { MealCards } from "@/components/dashboard/meal-cards";
@@ -9,6 +9,13 @@ import { WeekStrip } from "@/components/dashboard/week-strip";
 import { db } from "@/db";
 import { mealPlans, ordersLog, wasteLog } from "@/db/schema";
 import { getCurrentUser } from "@/lib/current-user";
+import {
+  isMockMode,
+  mockBudget,
+  mockDaysOnPlan,
+  mockSlots,
+  mockWastePatterns,
+} from "@/lib/mock";
 
 // Force dynamic — this page uses Clerk auth + user-scoped data.
 export const dynamic = "force-dynamic";
@@ -71,43 +78,54 @@ export default async function DashboardPage() {
   const monthStart = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1));
   const today = todayDayOfWeek();
 
-  // Fire the four independent reads in parallel.
-  const [planRow, budgetRows, wasteRows, ordersThisMonth] = await Promise.all([
-    db.query.mealPlans
-      .findFirst({
-        where: and(eq(mealPlans.userId, user.id), gte(mealPlans.weekStart, weekStartIso)),
-        with: { slots: { with: { template: true } } },
-      })
-      .catch(() => null),
-    db
-      .select({
-        source: ordersLog.source,
-        total: sql<string>`coalesce(sum(${ordersLog.totalAmount}), 0)`,
-      })
-      .from(ordersLog)
-      .where(and(eq(ordersLog.userId, user.id), gte(ordersLog.orderedAt, monthStart)))
-      .groupBy(ordersLog.source)
-      .catch(() => [] as Array<{ source: "instamart" | "food"; total: string }>),
-    db
-      .select({
-        ingredient_name: wasteLog.ingredientName,
-        count: sql<number>`count(*)::int`,
-      })
-      .from(wasteLog)
-      .where(eq(wasteLog.userId, user.id))
-      .groupBy(wasteLog.ingredientName)
-      .having(gte(sql<number>`count(*)::int`, 2))
-      .orderBy(desc(sql<number>`count(*)::int`))
-      .catch(() => [] as Array<{ ingredient_name: string; count: number }>),
-    // Count of distinct days with an order — used for "days on plan this month".
-    db
-      .select({
-        day: sql<string>`date_trunc('day', ${ordersLog.orderedAt})::date::text`,
-      })
-      .from(ordersLog)
-      .where(and(eq(ordersLog.userId, user.id), gte(ordersLog.orderedAt, monthStart)))
-      .catch(() => [] as Array<{ day: string }>),
-  ]);
+  const mock = isMockMode();
+
+  // Fire the four independent reads in parallel — or short-circuit to mock data.
+  const [planRow, budgetRows, wasteRows, ordersThisMonth] = mock
+    ? [
+        { slots: mockSlots() },
+        [
+          { source: "instamart" as const, total: String(mockBudget.spentGroceries) },
+          { source: "food" as const, total: String(mockBudget.spentEatout) },
+        ],
+        mockWastePatterns,
+        Array.from({ length: mockDaysOnPlan() }, (_, i) => ({ day: `d-${i}` })),
+      ]
+    : await Promise.all([
+        db.query.mealPlans
+          .findFirst({
+            where: and(eq(mealPlans.userId, user.id), gte(mealPlans.weekStart, weekStartIso)),
+            with: { slots: { with: { template: true } } },
+          })
+          .catch(() => null),
+        db
+          .select({
+            source: ordersLog.source,
+            total: sql<string>`coalesce(sum(${ordersLog.totalAmount}), 0)`,
+          })
+          .from(ordersLog)
+          .where(and(eq(ordersLog.userId, user.id), gte(ordersLog.orderedAt, monthStart)))
+          .groupBy(ordersLog.source)
+          .catch(() => [] as Array<{ source: "instamart" | "food"; total: string }>),
+        db
+          .select({
+            ingredient_name: wasteLog.ingredientName,
+            count: sql<number>`count(*)::int`,
+          })
+          .from(wasteLog)
+          .where(eq(wasteLog.userId, user.id))
+          .groupBy(wasteLog.ingredientName)
+          .having(gte(sql<number>`count(*)::int`, 2))
+          .orderBy(desc(sql<number>`count(*)::int`))
+          .catch(() => [] as Array<{ ingredient_name: string; count: number }>),
+        db
+          .select({
+            day: sql<string>`date_trunc('day', ${ordersLog.orderedAt})::date::text`,
+          })
+          .from(ordersLog)
+          .where(and(eq(ordersLog.userId, user.id), gte(ordersLog.orderedAt, monthStart)))
+          .catch(() => [] as Array<{ day: string }>),
+      ]);
 
   // ── Derive view models ─────────────────────────────────────────────────
   let spentGroceries = 0;

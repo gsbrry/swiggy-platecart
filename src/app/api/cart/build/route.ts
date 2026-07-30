@@ -5,6 +5,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import { templates } from "@/db/schema";
 import { getCurrentUser } from "@/lib/current-user";
+import { isMockMode } from "@/lib/mock";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { isoDate, uuid } from "@/lib/validation/common";
 
@@ -27,6 +28,19 @@ export async function POST(req: Request) {
 
   if (!checkRateLimit(user.id, "cart", 10)) {
     return NextResponse.json({ error: "rate limited" }, { status: 429 });
+  }
+
+  if (isMockMode()) {
+    return NextResponse.json({
+      items: [
+        { ingredient_name: "Moong dal", quantity: 200, unit: "g", instamart_search_hint: null },
+        { ingredient_name: "Onion", quantity: 3, unit: "pcs", instamart_search_hint: null },
+        { ingredient_name: "Tomato", quantity: 4, unit: "pcs", instamart_search_hint: null },
+        { ingredient_name: "Paneer", quantity: 200, unit: "g", instamart_search_hint: null },
+        { ingredient_name: "Atta", quantity: 500, unit: "g", instamart_search_hint: null },
+      ],
+      mock: true,
+    });
   }
 
   const parsed = bodySchema.safeParse(await req.json().catch(() => null));

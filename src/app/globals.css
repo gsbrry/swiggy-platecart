@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --sw-orange: #fc8019;
+  --sw-orange-tint: rgba(252, 128, 25, 0.08);
+  --sw-charcoal: #282c3f;
+  --sw-muted: #686b78;
+  --sw-border: #e9e9eb;
+  --sw-bg: #ffffff;
+  --sw-page: #f4f6fb;
+  --sw-green: #60b246;
+  --sw-yellow: #f3c334;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--sw-page);
+  color: var(--sw-charcoal);
+  -webkit-font-smoothing: antialiased;
+  font-family: "DM Sans", "Basis Grotesque Pro", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+}

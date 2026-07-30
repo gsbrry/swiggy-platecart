@@ -192,15 +192,25 @@ Goal: every screen's write action reaches the DB — no more UI-only state.
 ### 2.1 Real Swiggy MCP integration
 
 - [ ] **Priority:** P1
-- **Effort:** 4 hours (once Swiggy provides real MCP endpoint)
-- **Files:** `src/lib/swiggy-mcp.ts`
+- **Effort:** ~2 days (OAuth + tokens table + tool wiring)
+- **Read first:** [`docs/SWIGGY_MCP_INTEGRATION.md`](./SWIGGY_MCP_INTEGRATION.md) — full protocol, endpoints, tools, and file plan.
+- **Reality check:** Swiggy MCP uses **OAuth 2.1 + PKCE per user**, not a static API key. Endpoint is `POST https://mcp.swiggy.com/im`. Cart-push maps to the `update_cart` tool (which *replaces* the cart).
+- **Files:**
+  - `src/lib/swiggy-oauth.ts` (new) — PKCE helpers + token exchange
+  - `src/lib/swiggy-tokens.ts` (new) — encrypted per-user token store
+  - `src/lib/swiggy-mcp.ts` — replace bearer-key stub with MCP client factory (`getMcpClient(userId)`)
+  - `src/app/api/auth/swiggy/start/route.ts` (new) — start OAuth, store `{state, codeVerifier}`
+  - `src/app/api/auth/swiggy/callback/route.ts` (new) — exchange code, persist token
+  - `src/db/schema.ts` + migration — add `swiggy_tokens` table
+  - `src/app/api/cart/add-to-instamart/route.ts` — orchestrate `get_addresses` → `search_products` → `update_cart`
 - **Acceptance:**
-  - `cartAdd({ items })` calls the actual MCP endpoint with `Authorization: Bearer ${SWIGGY_MCP_API_KEY}`
-  - Handles the real response schema (order id, status, unavailable items)
-  - Retries on transient failures (5xx, network), max 2 retries, exponential backoff
-  - Timeouts at 10 s
+  - New user can complete Swiggy OAuth end-to-end locally and a row lands in `swiggy_tokens` with a 5-day `expires_at`.
+  - "Send to Instamart" on a real meal plan populates the Swiggy cart via `update_cart` (verified in the consumer app on the same account).
+  - 401 responses trigger a re-auth redirect (no refresh tokens in v1.0).
+  - Retries: 2 attempts on 5xx / network, exponential backoff (500 ms, 2 s), 10 s per-attempt timeout via `AbortController`.
+  - Every call logged to `orders_log` with the resolved SKUs.
 - **LLM Prompt:**
-  > Replace the stub in `src/lib/swiggy-mcp.ts`'s `cartAdd`. Use `fetch(BASE_URL + '/cart/add', { method: 'POST', headers: { Authorization, Content-Type }, body: JSON.stringify({ items }) })` with an `AbortController` set to 10 s. On 5xx or network error, retry twice with exponential backoff (500 ms, 2 s). Return `{ ok, order_ref, unavailable_items? }` where `unavailable_items` is any items Instamart couldn't fulfil. Keep the SERVER-ONLY warning comment. Keep the dev/prod key-check behaviour (`throw` in prod if missing, warn + stub in dev).
+  > Read `docs/SWIGGY_MCP_INTEGRATION.md` end-to-end, then implement the files listed in section 7 of that doc. Use `@modelcontextprotocol/sdk` with `StreamableHTTPClientTransport` targeting `https://mcp.swiggy.com/im`. Store tokens AES-GCM-encrypted using `SWIGGY_TOKEN_ENC_KEY`. Do not persist `codeVerifier` client-side — use a signed cookie or a short-lived server store keyed by `state`. Handle 401 by clearing the token row and redirecting to `/api/auth/swiggy/start`. Keep the SERVER-ONLY comment at the top of `swiggy-mcp.ts` and never import it from a client component.
 
 ### 2.2 Voice: real template match
 

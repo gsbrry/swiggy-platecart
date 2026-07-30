@@ -5,6 +5,8 @@ import { db } from "@/db";
 import { wasteLog } from "@/db/schema";
 import { getCurrentUser } from "@/lib/current-user";
 
+export const dynamic = "force-dynamic";
+
 /** GET ingredients with 2+ waste events (repeat offenders). RLS: filter by userId. */
 export async function GET() {
   const user = await getCurrentUser();

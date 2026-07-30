@@ -6,6 +6,8 @@ import { ordersLog } from "@/db/schema";
 import { getCurrentUser } from "@/lib/current-user";
 import { checkRateLimit } from "@/lib/rate-limit";
 
+export const dynamic = "force-dynamic";
+
 /** GET month-to-date spend split by source. RLS: filter by userId. */
 export async function GET() {
   const user = await getCurrentUser();

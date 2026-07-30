@@ -5,15 +5,15 @@
 
 import { randomUUID } from "node:crypto";
 
-const API_KEY = process.env.SWIGGY_MCP_API_KEY;
 const BASE_URL = process.env.SWIGGY_MCP_BASE_URL;
 
-if (!API_KEY) {
-  if (process.env.NODE_ENV === "production") {
-    throw new Error("SWIGGY_MCP_API_KEY is required in production");
+function getApiKey(): string | undefined {
+  const key = process.env.SWIGGY_MCP_API_KEY;
+  if (!key && process.env.NODE_ENV !== "production") {
+    // eslint-disable-next-line no-console
+    console.warn("[swiggy-mcp] SWIGGY_MCP_API_KEY not set — running stub responses");
   }
-  // eslint-disable-next-line no-console
-  console.warn("[swiggy-mcp] SWIGGY_MCP_API_KEY not set — running stub responses");
+  return key;
 }
 
 export type CartItem = {
@@ -30,11 +30,13 @@ export type CartAddResponse = {
 
 export const swiggyMcp = {
   async cartAdd({ items }: { items: CartItem[] }): Promise<CartAddResponse> {
+    const apiKey = getApiKey();
     // TODO: replace stub with real MCP call once schema is confirmed
     // eslint-disable-next-line no-console
     console.info("[swiggy-mcp] cartAdd stub", {
       itemCount: items.length,
       baseUrl: BASE_URL ?? "unset",
+      hasApiKey: Boolean(apiKey),
     });
     return { ok: true, order_ref: `stub-${randomUUID()}` };
   },

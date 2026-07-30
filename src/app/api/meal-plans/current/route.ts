@@ -5,6 +5,8 @@ import { db } from "@/db";
 import { mealPlans } from "@/db/schema";
 import { getCurrentUser } from "@/lib/current-user";
 
+export const dynamic = "force-dynamic";
+
 function currentWeekStart(): string {
   const now = new Date();
   const day = now.getUTCDay(); // 0=Sun..6=Sat

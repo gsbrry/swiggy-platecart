@@ -880,7 +880,7 @@ function BudgetStep({
       {items && (
         <div className="mt-3">
           <div className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--sw-muted)]">
-            What's covered at this budget
+            What&apos;s covered at this budget
           </div>
           {items.map((line, i) => (
             <div
@@ -1019,7 +1019,7 @@ function CompleteStep({ state, onGo }: { state: State; onGo: () => void }) {
         Your PlateCart is ready!
       </h2>
       <p className="mb-5 text-[13px] text-[var(--sw-muted)]">
-        Here's your personalised setup. Edit any of these from Settings.
+        Here&apos;s your personalised setup. Edit any of these from Settings.
       </p>
       <div className="mb-[18px] grid grid-cols-2 gap-2 text-left">
         {rows.map(([lbl, val, span], i) => (
@@ -1302,7 +1302,7 @@ function PreviewComplete() {
         <div className="rounded-lg bg-[var(--sw-page)] p-[11px] text-left text-[11px] leading-relaxed text-[var(--sw-muted)]">
           <strong className="text-[var(--sw-charcoal)]">What happens next:</strong>
           <br />
-          1. Pick this week's meal templates
+          1. Pick this week&apos;s meal templates
           <br />
           2. Voice-order or manually add to cart
           <br />

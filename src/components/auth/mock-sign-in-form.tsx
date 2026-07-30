@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { ArrowRight, Loader2, Mail, Phone } from "lucide-react";
+import { ArrowRight, Loader2, Mail, Phone, Sparkles } from "lucide-react";
 
 type Method = "email" | "phone";
 
@@ -32,10 +32,34 @@ export function MockSignInForm() {
         Sign in to see this week&apos;s plan and cart.
       </p>
 
+      <button
+        type="button"
+        onClick={() => {
+          setSubmitting(true);
+          setTimeout(() => router.push("/dashboard"), 250);
+        }}
+        disabled={submitting}
+        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--sw-charcoal)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 disabled:opacity-70"
+      >
+        <Sparkles className="h-4 w-4 text-[var(--sw-orange)]" />
+        Log in as demo user
+        <ArrowRight className="h-4 w-4" />
+      </button>
+      <p className="mt-2 text-center text-[11px] text-[var(--sw-muted)]">
+        Skips the form. Loads the dashboard as <b>Raphy</b> with a full week of
+        meals, budget, and cart pre-loaded.
+      </p>
+
+      <div className="my-6 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--sw-muted)]">
+        <span className="h-px flex-1 bg-[var(--sw-border)]" />
+        or use the form
+        <span className="h-px flex-1 bg-[var(--sw-border)]" />
+      </div>
+
       <div
         role="tablist"
         aria-label="Sign-in method"
-        className="mt-6 flex gap-1 rounded-lg bg-[var(--sw-page)] p-1"
+        className="flex gap-1 rounded-lg bg-[var(--sw-page)] p-1"
       >
         <MethodTab active={method === "email"} onClick={() => setMethod("email")}>
           <Mail className="h-3.5 w-3.5" /> Email

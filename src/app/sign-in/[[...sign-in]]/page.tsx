@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SignIn } from "@clerk/nextjs";
 
 import { MockSignInForm } from "@/components/auth/mock-sign-in-form";
+import { clerkAppearance } from "@/lib/clerk-appearance";
 import { isMockMode } from "@/lib/mock";
 
 export const metadata = {
@@ -29,7 +30,7 @@ export default function SignInPage() {
         </div>
       </header>
       <main className="flex items-center justify-center px-6 py-16">
-        {isMockMode() ? <MockSignInForm /> : <SignIn />}
+        {isMockMode() ? <MockSignInForm /> : <SignIn appearance={clerkAppearance} />}
       </main>
     </div>
   );

@@ -21,6 +21,6 @@ jobs:
         env:
           # Build-time env stubs so Next can compile without live secrets.
           DATABASE_URL: postgresql://ci:ci@localhost/ci?sslmode=disable
-          CLERK_PUBLISHABLE_KEY: pk_test_ci
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ci
           CLERK_SECRET_KEY: sk_test_ci
           CLERK_WEBHOOK_SECRET: whsec_ci

@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 
+import { establishMockSession } from "@/lib/mock-session";
+
 /**
  * Fake sign-up form for mock mode. Any inputs work — we navigate to /onboarding
  * so the demo user runs the 5-step preferences flow. Real Clerk <SignUp/> wires
@@ -14,10 +16,15 @@ export function MockSignUpForm() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
+  function goToOnboarding() {
+    establishMockSession();
+    router.push("/onboarding");
+  }
+
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
-    setTimeout(() => router.push("/onboarding"), 400);
+    setTimeout(goToOnboarding, 400);
   }
 
   return (

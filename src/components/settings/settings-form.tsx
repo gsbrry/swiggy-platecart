@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, type KeyboardEvent, type ReactNode } from "react";
-import { Check, Download, LogOut, Trash2, X, Tag } from "lucide-react";
+import { Check, Download, Trash2, X, Tag } from "lucide-react";
+
+import { SignOutButton } from "@/components/auth/sign-out-button";
 
 import { ConfirmModal } from "./confirm-modal";
 import {
@@ -17,6 +19,7 @@ import {
 
 type Props = {
   initialName: string;
+  initialEmail: string;
   initialGoal: Goal | null;
   initialDiet: Diet | null;
   initialHousehold: number | null;
@@ -151,12 +154,6 @@ export function SettingsForm(props: Props) {
     showToast("Saved");
   }, [notifications, showToast]);
 
-  const onSignOut = useCallback(() => {
-    // eslint-disable-next-line no-console
-    console.log("[settings] sign out");
-    showToast("Signed out (mock)");
-  }, [showToast]);
-
   const onDownload = useCallback(() => {
     // eslint-disable-next-line no-console
     console.log("[settings] download my data");
@@ -180,11 +177,7 @@ export function SettingsForm(props: Props) {
       </header>
 
       <div className="flex flex-col gap-4">
-        <ProfileCard
-          name={props.initialName}
-          email="raphy@example.com"
-          onSignOut={onSignOut}
-        />
+        <ProfileCard name={props.initialName} email={props.initialEmail} />
 
         <PreferencesCard
           prefs={prefs}
@@ -291,11 +284,9 @@ function SaveButton({
 function ProfileCard({
   name,
   email,
-  onSignOut,
 }: {
   name: string;
   email: string;
-  onSignOut: () => void;
 }) {
   return (
     <Card title="Profile" description="Basic account information.">
@@ -326,7 +317,7 @@ function ProfileCard({
           <input
             id="settings-email"
             type="email"
-            placeholder={email}
+            value={email}
             readOnly
             aria-readonly="true"
             className="w-full cursor-not-allowed rounded-lg border border-[var(--sw-border)] bg-[var(--sw-page)] px-3 py-2 text-[13px] text-[var(--sw-muted)]"
@@ -334,14 +325,7 @@ function ProfileCard({
         </div>
       </div>
       <div className="mt-4">
-        <button
-          type="button"
-          onClick={onSignOut}
-          className="flex items-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white px-3.5 py-2 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2"
-        >
-          <LogOut className="h-4 w-4" />
-          Sign out
-        </button>
+        <SignOutButton />
       </div>
     </Card>
   );

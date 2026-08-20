@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { ArrowRight, Loader2, Mail, Phone, Sparkles } from "lucide-react";
 
+import { establishMockSession } from "@/lib/mock-session";
+
 type Method = "email" | "phone";
 
 /**
@@ -16,11 +18,16 @@ export function MockSignInForm() {
   const [method, setMethod] = useState<Method>("email");
   const [submitting, setSubmitting] = useState(false);
 
+  function goToDashboard() {
+    establishMockSession();
+    router.push("/dashboard");
+  }
+
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
     // Small delay so it feels like an auth call.
-    setTimeout(() => router.push("/dashboard"), 400);
+    setTimeout(goToDashboard, 400);
   }
 
   return (
@@ -34,6 +41,7 @@ export function MockSignInForm() {
 
       <Link
         href="/dashboard"
+        onClick={() => establishMockSession()}
         className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--sw-charcoal)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
       >
         <Sparkles className="h-4 w-4 text-[var(--sw-orange)]" />

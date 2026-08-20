@@ -2,11 +2,13 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server";
 
 import { isMockMode } from "@/lib/mock";
+import { MOCK_SIGNED_OUT_COOKIE } from "@/lib/mock-session";
 
 const isPublicRoute = createRouteMatcher([
   "/",
   "/sign-in(.*)",
   "/sign-up(.*)",
+  "/sign-out",
   "/api/auth/webhook",
 ]);
 
@@ -56,6 +58,10 @@ const clerkAware = clerkMiddleware(async (auth, req) => {
  */
 export default function middleware(req: NextRequest, ev: NextFetchEvent) {
   if (isMockMode()) {
+    const mockSignedOut = req.cookies.get(MOCK_SIGNED_OUT_COOKIE)?.value === "1";
+    if (mockSignedOut && !isPublicRoute(req)) {
+      return withSecurityHeaders(NextResponse.redirect(new URL("/sign-in", req.url)));
+    }
     return withSecurityHeaders(NextResponse.next());
   }
   return clerkAware(req, ev);

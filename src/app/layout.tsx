@@ -11,7 +11,21 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const shell = (
+  const app = isMockMode() ? (
+    children
+  ) : (
+    <ClerkProvider
+      signInUrl="/sign-in"
+      signUpUrl="/sign-up"
+      afterSignInUrl="/dashboard"
+      afterSignUpUrl="/onboarding"
+      afterSignOutUrl="/"
+    >
+      {children}
+    </ClerkProvider>
+  );
+
+  return (
     <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,10 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen">{children}</body>
+      <body className="min-h-screen">{app}</body>
     </html>
   );
-
-  // In mock mode ClerkProvider would throw on missing keys, so skip it entirely.
-  return isMockMode() ? shell : <ClerkProvider>{shell}</ClerkProvider>;
 }

@@ -1,3 +1,5 @@
+import { currentUser } from "@clerk/nextjs/server";
+
 import { AppNav } from "@/components/app-nav";
 import { SettingsForm } from "@/components/settings/settings-form";
 import { getCurrentUser } from "@/lib/current-user";
@@ -19,6 +21,11 @@ export default async function SettingsPage() {
   }
 
   const mock = isMockMode();
+  const clerkUser = mock ? null : await currentUser();
+  const email =
+    clerkUser?.emailAddresses?.[0]?.emailAddress ??
+    clerkUser?.primaryEmailAddress?.emailAddress ??
+    "—";
   const spentGroceries = mock ? mockBudget.spentGroceries : 0;
   const spentEatout = mock ? mockBudget.spentEatout : 0;
   const totalSpent = spentGroceries + spentEatout;
@@ -32,7 +39,8 @@ export default async function SettingsPage() {
         budget={monthlyBudget}
       />
       <SettingsForm
-        initialName={user.name ?? "Raphy"}
+        initialName={user.name ?? "User"}
+        initialEmail={mock ? "raphy@example.com" : email}
         initialGoal={user.goal}
         initialDiet={user.dietType}
         initialHousehold={user.householdSize}

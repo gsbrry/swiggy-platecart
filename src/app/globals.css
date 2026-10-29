@@ -2,17 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Appetite theme — orange with a red tint, on frosted glass.
+ * Every component reads these tokens, so a future rebrand only touches this block
+ * (plus `primary` in tailwind.config.ts).
+ */
 :root {
   color-scheme: light;
-  --sw-orange: #fc8019;
-  --sw-orange-tint: rgba(252, 128, 25, 0.08);
-  --sw-charcoal: #282c3f;
-  --sw-muted: #686b78;
-  --sw-border: #e9e9eb;
-  --sw-bg: #ffffff;
-  --sw-page: #f4f6fb;
-  --sw-green: #60b246;
-  --sw-yellow: #f3c334;
+  --sw-orange: #f26419;
+  --sw-red: #e63946;
+  --sw-orange-tint: rgba(242, 100, 25, 0.12);
+  --sw-appetite: linear-gradient(135deg, #ff8a1f 0%, #f26419 45%, #e63946 100%);
+  --sw-charcoal: #2b1d1a;
+  --sw-muted: #6f5f5a;
+  --sw-border: rgba(230, 57, 70, 0.14);
+  --sw-bg: rgba(255, 255, 255, 0.62);
+  --sw-page: rgba(255, 237, 225, 0.55);
+  --sw-green: #4f9d3a;
+  --sw-yellow: #f3b02e;
+
+  --glass-bg: rgba(255, 255, 255, 0.58);
+  --glass-bg-strong: rgba(255, 255, 255, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 8px 32px rgba(180, 60, 30, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --glass-blur: 18px;
 }
 
 html,
@@ -21,9 +34,53 @@ body {
 }
 
 body {
-  background: var(--sw-page);
   color: var(--sw-charcoal);
   -webkit-font-smoothing: antialiased;
   font-family: "DM Sans", "Basis Grotesque Pro", system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, sans-serif;
+  background-color: #fff3ea;
+  background-image:
+    radial-gradient(40rem 32rem at 8% -6%, rgba(255, 138, 31, 0.32), transparent 60%),
+    radial-gradient(36rem 30rem at 100% 8%, rgba(230, 57, 70, 0.24), transparent 60%),
+    radial-gradient(44rem 36rem at 50% 110%, rgba(255, 176, 102, 0.3), transparent 60%);
+  background-attachment: fixed;
+}
+
+@layer utilities {
+  /* Frosted card: translucent fill, blur, light rim. Replaces "border + bg-white". */
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  }
+
+  /* Stronger glass for sticky bars, modals and menus that sit over busy content. */
+  .glass-strong {
+    background: var(--glass-bg-strong);
+    border-color: var(--glass-border);
+    -webkit-backdrop-filter: blur(22px) saturate(170%);
+    backdrop-filter: blur(22px) saturate(170%);
+  }
+
+  /* Orange → red primary fill for buttons, avatars and active states. */
+  .bg-appetite {
+    background-color: var(--sw-orange);
+    background-image: var(--sw-appetite);
+  }
+
+  .text-appetite {
+    background-image: var(--sw-appetite);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --glass-bg-strong: #ffffff;
+  }
 }

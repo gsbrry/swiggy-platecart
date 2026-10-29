@@ -118,7 +118,7 @@ export function TemplateDetailView({ template, detail, similar }: Props) {
       </nav>
 
       {/* HERO */}
-      <section className="mb-3.5 overflow-hidden rounded-lg border border-[var(--sw-border)] bg-white">
+      <section className="mb-3.5 overflow-hidden rounded-lg glass">
         <div className="flex gap-0">
           <div className="relative flex w-[200px] flex-shrink-0 items-center justify-center border-r border-[var(--sw-border)] bg-[var(--sw-page)]">
             <Utensils
@@ -216,7 +216,7 @@ export function TemplateDetailView({ template, detail, similar }: Props) {
       {/* TWO COLUMN */}
       <div className="grid gap-3.5 lg:grid-cols-[1fr_380px]">
         {/* INGREDIENTS */}
-        <section className="overflow-hidden rounded-lg border border-[var(--sw-border)] bg-white">
+        <section className="overflow-hidden rounded-lg glass">
           <header className="flex items-center justify-between border-b border-[var(--sw-border)] px-[18px] py-3.5">
             <h2 className="text-sm font-bold tracking-tight text-[var(--sw-charcoal)]">
               Ingredients
@@ -240,7 +240,7 @@ export function TemplateDetailView({ template, detail, similar }: Props) {
                     className={`flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded border-[1.5px] transition ${
                       isChecked
                         ? "border-[var(--sw-green)] bg-[var(--sw-green)]"
-                        : "border-[var(--sw-border)] bg-white"
+                        : "border-[var(--sw-border)] bg-white/70 backdrop-blur-md"
                     }`}
                   >
                     {isChecked ? (
@@ -267,7 +267,7 @@ export function TemplateDetailView({ template, detail, similar }: Props) {
             })}
           </ul>
 
-          <div className="flex flex-wrap items-center gap-2 border-t border-[var(--sw-border)] bg-white px-[18px] py-3.5">
+          <div className="flex flex-wrap items-center gap-2 border-t border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-[18px] py-3.5">
             <AddToPlanButton
               open={planOpen}
               onOpenChange={setPlanOpen}
@@ -280,7 +280,7 @@ export function TemplateDetailView({ template, detail, similar }: Props) {
             <button
               type="button"
               onClick={() => setForkOpen(true)}
-              className="flex items-center justify-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white px-[18px] py-2.5 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)]"
+              className="flex items-center justify-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-[18px] py-2.5 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)]"
             >
               <GitFork className="h-3.5 w-3.5" />
               Fork
@@ -300,7 +300,7 @@ export function TemplateDetailView({ template, detail, similar }: Props) {
         {/* RIGHT COLUMN */}
         <div className="flex flex-col gap-3.5">
           {/* INSTRUCTIONS */}
-          <section className="overflow-hidden rounded-lg border border-[var(--sw-border)] bg-white">
+          <section className="overflow-hidden rounded-lg glass">
             <header className="border-b border-[var(--sw-border)] px-[18px] py-3.5">
               <h2 className="text-sm font-bold tracking-tight text-[var(--sw-charcoal)]">
                 Cook Instructions
@@ -329,7 +329,7 @@ export function TemplateDetailView({ template, detail, similar }: Props) {
           </section>
 
           {/* NUTRITION */}
-          <section className="rounded-lg border border-[var(--sw-border)] bg-white">
+          <section className="rounded-lg glass">
             <header className="flex items-center justify-between border-b border-[var(--sw-border)] px-[18px] py-3.5">
               <h2 className="text-sm font-bold tracking-tight text-[var(--sw-charcoal)]">
                 Nutrition{" "}
@@ -353,7 +353,7 @@ export function TemplateDetailView({ template, detail, similar }: Props) {
 
           {/* SIMILAR */}
           {similar.length > 0 ? (
-            <section className="overflow-hidden rounded-lg border border-[var(--sw-border)] bg-white">
+            <section className="overflow-hidden rounded-lg glass">
               <header className="border-b border-[var(--sw-border)] px-[18px] py-3.5">
                 <h2 className="text-sm font-bold tracking-tight text-[var(--sw-charcoal)]">
                   Similar Templates
@@ -507,7 +507,7 @@ function ServingToggle({
               onClick={() => onChange(opt)}
               className={`px-3 py-1 text-xs font-bold transition ${
                 active
-                  ? "bg-[var(--sw-orange)] text-white"
+                  ? "bg-appetite text-white"
                   : "bg-[var(--sw-page)] text-[var(--sw-charcoal)] hover:bg-[var(--sw-border)]"
               }`}
             >
@@ -592,7 +592,7 @@ function AddToPlanButton({
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => onOpenChange(!open)}
-        className="flex items-center justify-center gap-1.5 rounded-lg bg-[var(--sw-orange)] px-[18px] py-2.5 text-[13px] font-bold text-white transition hover:opacity-90"
+        className="flex items-center justify-center gap-1.5 rounded-lg bg-appetite px-[18px] py-2.5 text-[13px] font-bold text-white transition hover:opacity-90"
       >
         <Calendar className="h-3.5 w-3.5" />
         Add to plan
@@ -602,7 +602,7 @@ function AddToPlanButton({
           ref={menuRef}
           role="menu"
           aria-label={`Add ${dishName} to meal plan`}
-          className="absolute left-0 z-[201] mt-2 w-[220px] overflow-hidden rounded-lg border border-[var(--sw-border)] bg-white shadow-xl"
+          className="absolute left-0 z-[201] mt-2 w-[220px] overflow-hidden rounded-lg glass shadow-xl"
         >
           <div className="border-b border-[var(--sw-border)] px-3.5 py-2.5 text-[11.5px] font-bold text-[var(--sw-charcoal)]">
             Add {dishName} to plan
@@ -698,7 +698,7 @@ function ForkModal({
         aria-modal="true"
         aria-labelledby="fork-title"
         aria-describedby="fork-desc"
-        className="fixed left-1/2 top-1/2 z-[200] w-[92%] max-w-[380px] -translate-x-1/2 -translate-y-1/2 rounded-xl border border-[var(--sw-border)] bg-white p-7 text-center shadow-2xl"
+        className="fixed left-1/2 top-1/2 z-[200] w-[92%] max-w-[380px] -translate-x-1/2 -translate-y-1/2 rounded-xl glass p-7 text-center shadow-2xl"
       >
         <button
           ref={closeBtnRef}
@@ -724,7 +724,7 @@ function ForkModal({
             ref={firstFocusRef}
             type="button"
             onClick={onClose}
-            className="flex-1 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white px-4 py-2.5 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)]"
+            className="flex-1 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-4 py-2.5 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)]"
           >
             Cancel
           </button>
@@ -732,7 +732,7 @@ function ForkModal({
             ref={confirmBtnRef}
             type="button"
             onClick={onConfirm}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[var(--sw-orange)] px-4 py-2.5 text-[13px] font-bold text-white transition hover:opacity-90"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-appetite px-4 py-2.5 text-[13px] font-bold text-white transition hover:opacity-90"
           >
             <Edit3 className="h-3.5 w-3.5" />
             Confirm fork

@@ -11,7 +11,7 @@ export function ScreenStub({ title, description, apis }: Props) {
         <h1 className="text-2xl font-semibold text-charcoal">{title}</h1>
         <p className="text-sm text-charcoal/70">{description}</p>
       </header>
-      <div className="rounded-lg border border-charcoal/10 bg-white p-4">
+      <div className="rounded-lg border border-charcoal/10 bg-white/70 backdrop-blur-md p-4">
         <p className="text-xs font-medium uppercase tracking-wide text-charcoal/50">
           APIs this screen calls
         </p>

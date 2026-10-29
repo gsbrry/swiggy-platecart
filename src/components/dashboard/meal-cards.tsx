@@ -86,7 +86,7 @@ function MealCard({
   // Empty slot — show "Add a meal" placeholder per UI rules.
   if (!slot || !slot.template) {
     return (
-      <div className="relative rounded-lg border border-dashed border-[var(--sw-border)] bg-white p-4">
+      <div className="relative rounded-lg border border-dashed border-[var(--sw-border)] bg-white/70 backdrop-blur-md p-4">
         <div className="mb-2.5 inline-flex items-center gap-1 rounded-full bg-[var(--sw-page)] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[var(--sw-muted)]">
           <span>{meta.icon}</span>
           {meta.label}
@@ -107,7 +107,7 @@ function MealCard({
   const isEatout = slot.isEatout;
 
   return (
-    <div className="relative rounded-lg border border-[var(--sw-border)] bg-white p-4">
+    <div className="relative rounded-lg glass p-4">
       <div className="mb-2.5 inline-flex items-center gap-1 rounded-full bg-[var(--sw-page)] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[var(--sw-muted)]">
         <span>{meta.icon}</span>
         {meta.label}
@@ -140,7 +140,7 @@ function MealCard({
         type="button"
         onClick={handleAdd}
         disabled={status === "loading" || !slot.templateId}
-        className="w-full rounded-lg bg-[var(--sw-orange)] py-2 text-xs font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-70"
+        className="w-full rounded-lg bg-appetite py-2 text-xs font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-70"
       >
         {status === "loading"
           ? "Building cart…"

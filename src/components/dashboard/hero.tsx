@@ -21,7 +21,7 @@ export function Hero({ greeting, goalLabel, weekStart }: Props) {
   );
 
   return (
-    <div className="mb-4 flex flex-col gap-4 rounded-lg border border-[var(--sw-border)] bg-white p-6 md:flex-row md:items-center md:justify-between">
+    <div className="mb-4 flex flex-col gap-4 rounded-lg glass p-6 md:flex-row md:items-center md:justify-between">
       <div>
         <h1 className="mb-1.5 text-[20px] font-bold tracking-tight text-[var(--sw-charcoal)]">
           {greeting} <span aria-hidden>👋</span>

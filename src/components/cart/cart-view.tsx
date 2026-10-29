@@ -276,7 +276,7 @@ export function CartView({ templateIds, sources }: Props) {
       <div
         role="tablist"
         aria-label="Group cart items"
-        className="mb-4 inline-flex rounded-lg border border-[var(--sw-border)] bg-white p-1"
+        className="mb-4 inline-flex rounded-lg glass p-1"
       >
         <GroupTab
           active={group === "meal"}
@@ -297,7 +297,7 @@ export function CartView({ templateIds, sources }: Props) {
           {items === null ? (
             <LoadingCard />
           ) : loadErr ? (
-            <div className="rounded-lg border border-[var(--sw-border)] bg-white p-8 text-center text-sm text-[var(--sw-muted)]">
+            <div className="rounded-lg glass p-8 text-center text-sm text-[var(--sw-muted)]">
               {loadErr}
             </div>
           ) : activeItems.length === 0 ? (
@@ -322,7 +322,7 @@ export function CartView({ templateIds, sources }: Props) {
                       key={i.id}
                       type="button"
                       onClick={() => restoreItem(i.id)}
-                      className="flex items-center gap-1.5 rounded-full border border-[var(--sw-border)] bg-white px-2.5 py-1 text-[11px] font-semibold text-[var(--sw-charcoal)] transition hover:border-[var(--sw-orange)] hover:text-[var(--sw-orange)]"
+                      className="flex items-center gap-1.5 rounded-full glass px-2.5 py-1 text-[11px] font-semibold text-[var(--sw-charcoal)] transition hover:border-[var(--sw-orange)] hover:text-[var(--sw-orange)]"
                     >
                       <Undo2 className="h-3 w-3" />
                       {i.ingredient_name}
@@ -335,7 +335,7 @@ export function CartView({ templateIds, sources }: Props) {
 
         {/* RIGHT — sticky summary */}
         <aside className="lg:sticky lg:top-[74px] lg:self-start">
-          <div className="rounded-lg border border-[var(--sw-border)] bg-white p-5">
+          <div className="rounded-lg glass p-5">
             <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.06em] text-[var(--sw-muted)]">
               Order summary
             </div>
@@ -360,7 +360,7 @@ export function CartView({ templateIds, sources }: Props) {
               type="button"
               onClick={sendToInstamart}
               disabled={sending || itemCount === 0}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--sw-orange)] px-3 py-2.5 text-[13px] font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-appetite px-3 py-2.5 text-[13px] font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
             >
               {sending ? (
                 <>
@@ -378,7 +378,7 @@ export function CartView({ templateIds, sources }: Props) {
               type="button"
               onClick={saveCart}
               disabled={itemCount === 0}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white px-3 py-2 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:border-[#C0C0C4] hover:bg-[var(--sw-page)] disabled:cursor-not-allowed disabled:opacity-40"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-3 py-2 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:border-[#C0C0C4] hover:bg-[var(--sw-page)] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Save className="h-[15px] w-[15px]" />
               Save cart
@@ -424,7 +424,7 @@ function GroupTab({
       onClick={onClick}
       className={`rounded-md px-3.5 py-1.5 text-xs font-semibold transition ${
         active
-          ? "bg-[var(--sw-orange)] text-white"
+          ? "bg-appetite text-white"
           : "text-[var(--sw-muted)] hover:text-[var(--sw-charcoal)]"
       }`}
     >
@@ -444,7 +444,7 @@ function SumRow({ label, value }: { label: string; value: string }) {
 
 function LoadingCard() {
   return (
-    <div className="flex items-center justify-center rounded-lg border border-[var(--sw-border)] bg-white p-10 text-sm text-[var(--sw-muted)]">
+    <div className="flex items-center justify-center rounded-lg glass p-10 text-sm text-[var(--sw-muted)]">
       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       Building your cart…
     </div>
@@ -453,7 +453,7 @@ function LoadingCard() {
 
 function EmptyState() {
   return (
-    <div className="rounded-lg border border-dashed border-[var(--sw-border)] bg-white px-6 py-12 text-center">
+    <div className="rounded-lg border border-dashed border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-6 py-12 text-center">
       <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--sw-orange-tint)] text-[var(--sw-orange)]">
         <ShoppingCart className="h-5 w-5" />
       </div>
@@ -465,7 +465,7 @@ function EmptyState() {
       </p>
       <Link
         href="/meal-plan"
-        className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[var(--sw-orange)] px-3.5 py-2 text-xs font-semibold text-white transition hover:opacity-90"
+        className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-appetite px-3.5 py-2 text-xs font-semibold text-white transition hover:opacity-90"
       >
         Go to Meal Plan
       </Link>
@@ -520,14 +520,14 @@ function LineRow({ item, stepQty, removeItem, restoreItem, showChip = true }: Ro
         <button
           type="button"
           onClick={() => restoreItem(item.id)}
-          className="flex items-center gap-1.5 rounded-full border border-[var(--sw-border)] bg-white px-3 py-1.5 text-[11px] font-semibold text-[var(--sw-charcoal)] transition hover:border-[var(--sw-orange)] hover:text-[var(--sw-orange)]"
+          className="flex items-center gap-1.5 rounded-full glass px-3 py-1.5 text-[11px] font-semibold text-[var(--sw-charcoal)] transition hover:border-[var(--sw-orange)] hover:text-[var(--sw-orange)]"
         >
           <Undo2 className="h-3 w-3" />
           Restore
         </button>
       ) : (
         <>
-          <div className="flex items-center gap-1 rounded-full border border-[var(--sw-border)] bg-white px-1 py-1">
+          <div className="flex items-center gap-1 rounded-full glass px-1 py-1">
             <button
               type="button"
               aria-label={`Decrease quantity of ${item.ingredient_name}`}
@@ -572,7 +572,7 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="mb-3 overflow-hidden rounded-lg border border-[var(--sw-border)] bg-white">
+    <div className="mb-3 overflow-hidden rounded-lg glass">
       <div className="flex items-center justify-between border-b border-[var(--sw-border)] bg-[var(--sw-page)] px-4 py-2">
         <span className="text-[10px] font-bold uppercase tracking-[0.06em] text-[var(--sw-muted)]">
           {title}
@@ -681,7 +681,7 @@ function SuccessScreen({
 }) {
   return (
     <div className="mx-auto max-w-[560px] px-5 pb-10 pt-16">
-      <div className="rounded-lg border border-[var(--sw-border)] bg-white p-8 text-center">
+      <div className="rounded-lg glass p-8 text-center">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--sw-orange-tint)] text-[var(--sw-orange)]">
           <Check className="h-6 w-6" />
         </div>
@@ -702,13 +702,13 @@ function SuccessScreen({
         <div className="mt-6 flex justify-center gap-2">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--sw-orange)] px-3.5 py-2 text-xs font-semibold text-white transition hover:opacity-90"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-appetite px-3.5 py-2 text-xs font-semibold text-white transition hover:opacity-90"
           >
             Back to Dashboard
           </Link>
           <Link
             href="/meal-plan"
-            className="inline-flex items-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white px-3.5 py-[7px] text-xs font-semibold text-[var(--sw-charcoal)] transition hover:border-[#C0C0C4] hover:bg-[var(--sw-page)]"
+            className="inline-flex items-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-3.5 py-[7px] text-xs font-semibold text-[var(--sw-charcoal)] transition hover:border-[#C0C0C4] hover:bg-[var(--sw-page)]"
           >
             View Meal Plan
           </Link>

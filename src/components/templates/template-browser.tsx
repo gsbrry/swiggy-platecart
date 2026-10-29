@@ -145,7 +145,7 @@ export function TemplateBrowser({ templates }: Props) {
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search 340 recipes — try 'dal', 'protein', 'quick breakfast'…"
           aria-label="Search recipes"
-          className="w-full rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white py-2.5 pl-[42px] pr-11 text-sm text-[var(--sw-charcoal)] outline-none transition placeholder:text-[var(--sw-muted)] focus:border-[var(--sw-orange)] focus:shadow-[0_0_0_3px_var(--sw-orange-tint)]"
+          className="w-full rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md py-2.5 pl-[42px] pr-11 text-sm text-[var(--sw-charcoal)] outline-none transition placeholder:text-[var(--sw-muted)] focus:border-[var(--sw-orange)] focus:shadow-[0_0_0_3px_var(--sw-orange-tint)]"
         />
         {search && (
           <button
@@ -178,7 +178,7 @@ export function TemplateBrowser({ templates }: Props) {
                 className={`flex items-center gap-1.5 whitespace-nowrap rounded-full border-[1.5px] px-3.5 py-1.5 text-xs font-semibold transition ${
                   active
                     ? "border-[var(--sw-orange)] bg-[var(--sw-orange-tint)] text-[var(--sw-orange)]"
-                    : "border-[var(--sw-border)] bg-white text-[var(--sw-muted)] hover:border-[#c0c0c4] hover:text-[var(--sw-charcoal)]"
+                    : "border-[var(--sw-border)] bg-white/70 backdrop-blur-md text-[var(--sw-muted)] hover:border-[#c0c0c4] hover:text-[var(--sw-charcoal)]"
                 }`}
               >
                 <Icon className="h-[13px] w-[13px]" aria-hidden="true" />
@@ -191,7 +191,7 @@ export function TemplateBrowser({ templates }: Props) {
         <button
           type="button"
           onClick={() => console.log("[template-browser] sort clicked")}
-          className="flex flex-shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border-[1.5px] border-[var(--sw-border)] bg-white px-3 py-1.5 text-xs font-medium text-[var(--sw-muted)] transition hover:border-[#c0c0c4] hover:text-[var(--sw-charcoal)]"
+          className="flex flex-shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-3 py-1.5 text-xs font-medium text-[var(--sw-muted)] transition hover:border-[#c0c0c4] hover:text-[var(--sw-charcoal)]"
         >
           <SlidersHorizontal className="h-[13px] w-[13px]" aria-hidden="true" />
           Sort
@@ -208,7 +208,7 @@ export function TemplateBrowser({ templates }: Props) {
             className={`flex h-8 w-8 items-center justify-center rounded-md border-[1.5px] transition disabled:cursor-not-allowed disabled:opacity-50 ${
               effectiveView === "lane"
                 ? "border-[var(--sw-orange)] bg-[var(--sw-orange-tint)] text-[var(--sw-orange)]"
-                : "border-[var(--sw-border)] bg-white text-[var(--sw-muted)] hover:border-[#c0c0c4] hover:text-[var(--sw-charcoal)]"
+                : "border-[var(--sw-border)] bg-white/70 backdrop-blur-md text-[var(--sw-muted)] hover:border-[#c0c0c4] hover:text-[var(--sw-charcoal)]"
             }`}
           >
             <List className="h-[15px] w-[15px]" aria-hidden="true" />
@@ -222,7 +222,7 @@ export function TemplateBrowser({ templates }: Props) {
             className={`flex h-8 w-8 items-center justify-center rounded-md border-[1.5px] transition ${
               effectiveView === "grid"
                 ? "border-[var(--sw-orange)] bg-[var(--sw-orange-tint)] text-[var(--sw-orange)]"
-                : "border-[var(--sw-border)] bg-white text-[var(--sw-muted)] hover:border-[#c0c0c4] hover:text-[var(--sw-charcoal)]"
+                : "border-[var(--sw-border)] bg-white/70 backdrop-blur-md text-[var(--sw-muted)] hover:border-[#c0c0c4] hover:text-[var(--sw-charcoal)]"
             }`}
           >
             <Grid3x3 className="h-[15px] w-[15px]" aria-hidden="true" />
@@ -301,7 +301,7 @@ function LaneView({ templates }: { templates: BrowserTemplate[] }) {
 function GridView({ templates }: { templates: BrowserTemplate[] }) {
   if (templates.length === 0) {
     return (
-      <div className="rounded-lg border border-[var(--sw-border)] bg-white p-10 text-center text-sm text-[var(--sw-muted)]">
+      <div className="rounded-lg glass p-10 text-center text-sm text-[var(--sw-muted)]">
         No templates match your filters.
       </div>
     );
@@ -320,7 +320,7 @@ function LaneCard({ template }: { template: BrowserTemplate }) {
     <Link
       href={`/templates/${template.id}`}
       aria-label={`${template.dishName}, ${template.kcal} kilocalories, ${template.prepMinutes} minutes prep`}
-      className="group relative flex w-[178px] flex-shrink-0 flex-col rounded-lg border border-[var(--sw-border)] bg-white transition hover:-translate-y-px hover:shadow-[0_2px_12px_rgba(40,44,63,0.1)]"
+      className="group relative flex w-[178px] flex-shrink-0 flex-col rounded-lg glass transition hover:-translate-y-px hover:shadow-[0_2px_12px_rgba(40,44,63,0.1)]"
     >
       <div className="relative flex h-[88px] items-center justify-center overflow-hidden rounded-t-lg bg-[var(--sw-page)]">
         <ThumbIcon
@@ -371,7 +371,7 @@ function LaneCard({ template }: { template: BrowserTemplate }) {
               `[template-browser] add to plan template=${template.id}`,
             );
           }}
-          className="flex w-full items-center justify-center gap-1 rounded-md bg-[var(--sw-orange)] py-1.5 text-[11px] font-bold text-white transition hover:opacity-90"
+          className="flex w-full items-center justify-center gap-1 rounded-md bg-appetite py-1.5 text-[11px] font-bold text-white transition hover:opacity-90"
         >
           + Add to plan
         </button>
@@ -385,7 +385,7 @@ function GridCard({ template }: { template: BrowserTemplate }) {
     <Link
       href={`/templates/${template.id}`}
       aria-label={`${template.dishName}, ${template.kcal} kilocalories, ${template.prepMinutes} minutes prep`}
-      className="flex items-start gap-3 rounded-lg border border-[var(--sw-border)] bg-white p-3 transition hover:shadow-[0_2px_10px_rgba(40,44,63,0.08)]"
+      className="flex items-start gap-3 rounded-lg glass p-3 transition hover:shadow-[0_2px_10px_rgba(40,44,63,0.08)]"
     >
       <div className="flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-md bg-[var(--sw-page)] text-[var(--sw-border)]">
         <ThumbIcon mealType={template.mealType} className="h-5 w-5" />

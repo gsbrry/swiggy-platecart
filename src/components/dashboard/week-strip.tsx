@@ -37,7 +37,7 @@ export function WeekStrip({ weekStart, today, doneDays, eatoutDays }: Props) {
   };
 
   return (
-    <div className="mb-4 rounded-lg border border-[var(--sw-border)] bg-white px-5 py-4">
+    <div className="mb-4 rounded-lg glass px-5 py-4">
       <div className="flex items-center justify-between">
         <h2 className="text-[15px] font-bold tracking-tight text-[var(--sw-charcoal)]">
           This Week
@@ -66,7 +66,7 @@ export function WeekStrip({ weekStart, today, doneDays, eatoutDays }: Props) {
               aria-current={isToday ? "date" : undefined}
               className={`flex flex-1 flex-col items-center gap-1 rounded-lg border border-transparent px-1 py-2.5 transition-colors ${
                 isToday
-                  ? "border-[var(--sw-orange)] bg-[var(--sw-orange)]"
+                  ? "border-[var(--sw-orange)] bg-appetite"
                   : "hover:bg-[var(--sw-page)]"
               }`}
             >

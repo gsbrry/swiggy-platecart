@@ -44,7 +44,7 @@ export function PreviewPanel({ draft }: Props) {
       className="sticky top-[74px] flex flex-col gap-3"
       aria-live="polite"
     >
-      <div className="overflow-hidden rounded-lg border border-[var(--sw-border)] bg-white">
+      <div className="overflow-hidden rounded-lg glass">
         <div className="border-b border-[var(--sw-border)] px-3.5 py-3">
           <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--sw-muted)]">
             Live preview
@@ -118,7 +118,7 @@ export function PreviewPanel({ draft }: Props) {
         </div>
       </div>
 
-      <div className="rounded-lg border border-[var(--sw-border)] bg-white p-3.5">
+      <div className="rounded-lg glass p-3.5">
         <div className="mb-2.5 text-[10px] font-bold uppercase tracking-wider text-[var(--sw-muted)]">
           Auto-calculated
         </div>

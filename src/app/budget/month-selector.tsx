@@ -48,7 +48,7 @@ export function MonthSelector({ initialMonth }: Props) {
   };
 
   return (
-    <div className="flex items-center gap-1 rounded-full border border-[var(--sw-border)] bg-white px-1.5 py-1">
+    <div className="flex items-center gap-1 rounded-full glass px-1.5 py-1">
       <button
         type="button"
         onClick={() => shift(-1)}

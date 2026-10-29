@@ -23,7 +23,7 @@ export const metadata = {
 
 export default function LandingPage() {
   return (
-    <div className="bg-white text-[var(--sw-charcoal)]">
+    <div className="text-[var(--sw-charcoal)]">
       <TopNav />
       <Hero />
       <ProblemSection />
@@ -41,7 +41,7 @@ export default function LandingPage() {
 
 function TopNav() {
   return (
-    <header className="sticky top-0 z-30 border-b border-[var(--sw-border)] bg-white/85 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-[var(--sw-border)] glass-strong">
       <div className="mx-auto flex h-[58px] max-w-[1160px] items-center justify-between px-6">
         <Link
           href="/"
@@ -63,7 +63,7 @@ function TopNav() {
           </Link>
           <Link
             href="/sign-up"
-            className="rounded-full bg-[var(--sw-orange)] px-4 py-1.5 text-[13px] font-semibold text-white shadow-sm transition hover:opacity-90"
+            className="rounded-full bg-appetite px-4 py-1.5 text-[13px] font-semibold text-white shadow-sm transition hover:opacity-90"
           >
             Get started free
           </Link>
@@ -93,7 +93,7 @@ function Hero() {
       <div className="mx-auto max-w-[1160px] px-6 pb-20 pt-14 md:pt-24">
         <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
           <div>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--sw-orange)]/25 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--sw-orange)]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--sw-orange)]/25 bg-white/70 backdrop-blur-md px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--sw-orange)]">
               <Sparkles className="h-3 w-3" /> Made for Indian home cooks
             </span>
             <h1 className="mt-5 text-[38px] font-bold leading-[1.08] tracking-tight text-[var(--sw-charcoal)] md:text-[54px]">
@@ -111,13 +111,13 @@ function Hero() {
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 href="/sign-up"
-                className="inline-flex items-center gap-1.5 rounded-full bg-[var(--sw-orange)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
+                className="inline-flex items-center gap-1.5 rounded-full bg-appetite px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
               >
                 Start free <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--sw-border)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)]"
+                className="inline-flex items-center gap-1.5 rounded-full glass px-5 py-2.5 text-sm font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)]"
               >
                 See the demo
               </Link>
@@ -160,7 +160,7 @@ function HeroMockup() {
   return (
     <div className="relative">
       <div className="absolute -left-6 -top-6 h-40 w-40 rounded-full bg-[var(--sw-orange)]/10 blur-2xl" />
-      <div className="relative rounded-2xl border border-[var(--sw-border)] bg-white p-5 shadow-xl shadow-black/[0.04]">
+      <div className="relative rounded-2xl glass p-5 shadow-xl shadow-black/[0.04]">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--sw-muted)]">
@@ -178,7 +178,7 @@ function HeroMockup() {
               key={i}
               className={`rounded-md py-1 text-[10px] font-bold ${
                 i === 0
-                  ? "bg-[var(--sw-orange)] text-white"
+                  ? "bg-appetite text-white"
                   : "bg-[var(--sw-page)] text-[var(--sw-muted)]"
               }`}
             >
@@ -192,7 +192,7 @@ function HeroMockup() {
               key={`${m.day}-${m.type}`}
               className="flex items-center gap-3 rounded-lg border border-[var(--sw-border)] bg-[var(--sw-page)] px-3 py-2.5"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white">
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white/70 backdrop-blur-md">
                 <Utensils className="h-4 w-4 text-[var(--sw-orange)]" />
               </div>
               <div className="flex-1">
@@ -258,7 +258,7 @@ function ProblemSection() {
           {PAINS.map((p) => (
             <div
               key={p.q}
-              className="rounded-xl border border-[var(--sw-border)] bg-white p-6 shadow-sm"
+              className="rounded-xl glass p-6 shadow-sm"
             >
               <p className="text-[17px] font-bold text-[var(--sw-charcoal)]">{p.q}</p>
               <p className="mt-2 text-[13px] leading-relaxed text-[var(--sw-muted)]">{p.a}</p>
@@ -295,7 +295,7 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section id="how" className="scroll-mt-20 border-t border-[var(--sw-border)] bg-white">
+    <section id="how" className="scroll-mt-20 border-t border-[var(--sw-border)] bg-white/70 backdrop-blur-md">
       <div className="mx-auto max-w-[1160px] px-6 py-16 md:py-24">
         <div className="mx-auto max-w-[720px] text-center">
           <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--sw-orange)]">
@@ -309,7 +309,7 @@ function HowItWorks() {
           {STEPS.map((s) => (
             <div
               key={s.n}
-              className="relative rounded-xl border border-[var(--sw-border)] bg-white p-6"
+              className="relative rounded-xl glass p-6"
             >
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[var(--sw-orange)]/10">
@@ -385,7 +385,7 @@ function FeaturesGrid() {
           {FEATURES.map((f) => (
             <div
               key={f.title}
-              className="rounded-xl border border-[var(--sw-border)] bg-white p-6"
+              className="rounded-xl glass p-6"
             >
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--sw-orange)]/10">
                 <f.icon className="h-5 w-5 text-[var(--sw-orange)]" />
@@ -409,13 +409,13 @@ function Numbers() {
     { k: "Avg. monthly saving", v: "~₹1,200", icon: Coins },
   ];
   return (
-    <section className="border-t border-[var(--sw-border)] bg-white">
+    <section className="border-t border-[var(--sw-border)] bg-white/70 backdrop-blur-md">
       <div className="mx-auto max-w-[1160px] px-6 py-14">
         <div className="grid gap-6 md:grid-cols-3">
           {stats.map((s) => (
             <div
               key={s.k}
-              className="flex items-center gap-4 rounded-xl border border-[var(--sw-border)] bg-white px-6 py-5"
+              className="flex items-center gap-4 rounded-xl glass px-6 py-5"
             >
               <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[var(--sw-orange)]/10">
                 <s.icon className="h-5 w-5 text-[var(--sw-orange)]" />
@@ -472,7 +472,7 @@ function Testimonials() {
           {QUOTES.map((qt) => (
             <figure
               key={qt.who}
-              className="rounded-xl border border-[var(--sw-border)] bg-white p-6"
+              className="rounded-xl glass p-6"
             >
               <Heart className="h-4 w-4 text-[var(--sw-orange)]" />
               <blockquote className="mt-3 text-[14px] leading-relaxed text-[var(--sw-charcoal)]">
@@ -496,11 +496,11 @@ function FinalCta() {
   return (
     <section
       id="pricing"
-      className="scroll-mt-20 border-t border-[var(--sw-border)] bg-white"
+      className="scroll-mt-20 border-t border-[var(--sw-border)] bg-white/70 backdrop-blur-md"
     >
       <div className="mx-auto max-w-[1160px] px-6 py-16 md:py-24">
         <div className="mx-auto max-w-[720px] rounded-2xl border border-[var(--sw-border)] bg-gradient-to-br from-[#FFF8F2] to-white p-8 text-center md:p-12">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--sw-orange)]/25 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--sw-orange)]">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--sw-orange)]/25 bg-white/70 backdrop-blur-md px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--sw-orange)]">
             Free during launch
           </span>
           <h2 className="mt-5 text-[28px] font-bold tracking-tight md:text-[36px]">
@@ -512,13 +512,13 @@ function FinalCta() {
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
               href="/sign-up"
-              className="inline-flex items-center gap-1.5 rounded-full bg-[var(--sw-orange)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
+              className="inline-flex items-center gap-1.5 rounded-full bg-appetite px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
             >
               Start free <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1.5 rounded-full border border-[var(--sw-border)] bg-white px-5 py-2.5 text-sm font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)]"
+              className="inline-flex items-center gap-1.5 rounded-full glass px-5 py-2.5 text-sm font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)]"
             >
               Try the demo
             </Link>
@@ -537,7 +537,7 @@ function FinalCta() {
 
 function Footer() {
   return (
-    <footer className="border-t border-[var(--sw-border)] bg-white">
+    <footer className="border-t border-[var(--sw-border)] bg-white/70 backdrop-blur-md">
       <div className="mx-auto flex max-w-[1160px] flex-col items-start justify-between gap-4 px-6 py-8 sm:flex-row sm:items-center">
         <p className="text-[12px] text-[var(--sw-muted)]">
           © 2026 PlateCart · Built for Indian home cooks

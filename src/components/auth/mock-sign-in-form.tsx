@@ -24,7 +24,7 @@ export function MockSignInForm() {
   }
 
   return (
-    <div className="w-full max-w-[400px] rounded-2xl border border-[var(--sw-border)] bg-white p-8 shadow-sm">
+    <div className="w-full max-w-[400px] rounded-2xl glass p-8 shadow-sm">
       <h1 className="text-[22px] font-bold tracking-tight text-[var(--sw-charcoal)]">
         Welcome back
       </h1>
@@ -106,7 +106,7 @@ export function MockSignInForm() {
         <button
           type="submit"
           disabled={submitting}
-          className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[var(--sw-orange)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 disabled:opacity-70"
+          className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-appetite px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 disabled:opacity-70"
         >
           {submitting ? (
             <>
@@ -155,7 +155,7 @@ function MethodTab({
       onClick={onClick}
       className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-[12px] font-semibold transition ${
         active
-          ? "bg-white text-[var(--sw-charcoal)] shadow-sm"
+          ? "bg-white/70 backdrop-blur-md text-[var(--sw-charcoal)] shadow-sm"
           : "text-[var(--sw-muted)] hover:text-[var(--sw-charcoal)]"
       }`}
     >
@@ -179,7 +179,7 @@ function Field({
       <input
         {...inputProps}
         id={id}
-        className="w-full rounded-lg border border-[var(--sw-border)] bg-white px-3 py-2 text-[14px] text-[var(--sw-charcoal)] placeholder:text-[var(--sw-muted)] focus:border-[var(--sw-orange)] focus:outline-none focus:ring-2 focus:ring-[var(--sw-orange)]/20"
+        className="w-full rounded-lg glass px-3 py-2 text-[14px] text-[var(--sw-charcoal)] placeholder:text-[var(--sw-muted)] focus:border-[var(--sw-orange)] focus:outline-none focus:ring-2 focus:ring-[var(--sw-orange)]/20"
       />
     </label>
   );

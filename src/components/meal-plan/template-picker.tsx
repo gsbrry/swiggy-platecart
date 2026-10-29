@@ -101,7 +101,7 @@ export function TemplatePicker({
         aria-modal="true"
         aria-labelledby={titleId}
         onClick={(e) => e.stopPropagation()}
-        className="flex max-h-[600px] w-full max-w-[420px] flex-col overflow-hidden rounded-lg border border-[var(--sw-border)] bg-white shadow-xl"
+        className="flex max-h-[600px] w-full max-w-[420px] flex-col overflow-hidden rounded-lg glass shadow-xl"
       >
         <div className="flex items-start justify-between border-b border-[var(--sw-border)] px-4 py-3">
           <div>
@@ -158,7 +158,7 @@ export function TemplatePicker({
                 className={`whitespace-nowrap rounded-full border-[1.5px] px-2.5 py-1 text-[10.5px] font-semibold transition ${
                   active
                     ? "border-[var(--sw-orange)] bg-[var(--sw-orange-tint)] text-[var(--sw-orange)]"
-                    : "border-[var(--sw-border)] bg-white text-[var(--sw-muted)] hover:border-[#C0C0C4] hover:text-[var(--sw-charcoal)]"
+                    : "border-[var(--sw-border)] bg-white/70 backdrop-blur-md text-[var(--sw-muted)] hover:border-[#C0C0C4] hover:text-[var(--sw-charcoal)]"
                 }`}
               >
                 {f.label}
@@ -219,7 +219,7 @@ export function TemplatePicker({
           <button
             type="button"
             onClick={onEatOut}
-            className="flex w-full items-center justify-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white py-2 text-xs font-semibold text-[var(--sw-muted)] transition hover:border-[var(--sw-orange)] hover:bg-[var(--sw-orange-tint)] hover:text-[var(--sw-orange)]"
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md py-2 text-xs font-semibold text-[var(--sw-muted)] transition hover:border-[var(--sw-orange)] hover:bg-[var(--sw-orange-tint)] hover:text-[var(--sw-orange)]"
           >
             <Utensils className="h-[15px] w-[15px]" />
             Make this an eat-out slot

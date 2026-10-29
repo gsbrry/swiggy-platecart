@@ -60,7 +60,7 @@ export default async function TemplateDetailPage({ params }: PageProps) {
           </p>
           <Link
             href="/templates"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--sw-orange)] px-4 py-2.5 text-sm font-bold text-white transition hover:opacity-90"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-appetite px-4 py-2.5 text-sm font-bold text-white transition hover:opacity-90"
           >
             Back to Templates
           </Link>

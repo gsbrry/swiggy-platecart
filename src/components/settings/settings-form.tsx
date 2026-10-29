@@ -245,7 +245,7 @@ function Card({
   footer?: ReactNode;
 }) {
   return (
-    <section className="rounded-xl border border-[var(--sw-border)] bg-white p-5">
+    <section className="rounded-xl glass p-5">
       <div className="mb-4">
         <h2 className="text-[15px] font-bold text-[var(--sw-charcoal)]">{title}</h2>
         {description && (
@@ -276,7 +276,7 @@ function SaveButton({
       className={`rounded-lg px-4 py-2 text-[13px] font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2 ${
         disabled
           ? "cursor-not-allowed border-[1.5px] border-[var(--sw-border)] bg-[var(--sw-page)] text-[var(--sw-muted)]"
-          : "bg-[var(--sw-orange)] text-white hover:opacity-90"
+          : "bg-appetite text-white hover:opacity-90"
       }`}
     >
       {saving ? "Saving…" : "Save changes"}
@@ -337,7 +337,7 @@ function ProfileCard({
         <button
           type="button"
           onClick={onSignOut}
-          className="flex items-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white px-3.5 py-2 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2"
+          className="flex items-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-3.5 py-2 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2"
         >
           <LogOut className="h-4 w-4" />
           Sign out
@@ -589,7 +589,7 @@ function RadioTile({
       className={`cursor-pointer rounded-lg border-[1.5px] p-3 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2 ${
         selected
           ? "border-[var(--sw-orange)] bg-[var(--sw-orange-tint)]"
-          : "border-[var(--sw-border)] bg-white hover:border-[#C0C0C4] hover:bg-[#FAFAFA]"
+          : "border-[var(--sw-border)] bg-white/70 backdrop-blur-md hover:border-[#C0C0C4] hover:bg-[#FAFAFA]"
       } ${className ?? ""}`}
     >
       {children}
@@ -717,11 +717,11 @@ function Toggle({
       onClick={onChange}
       onKeyDown={onKeyDown}
       className={`relative inline-flex h-6 w-10 flex-shrink-0 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2 ${
-        checked ? "bg-[var(--sw-orange)]" : "bg-[var(--sw-border)]"
+        checked ? "bg-appetite" : "bg-[var(--sw-border)]"
       }`}
     >
       <span
-        className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+        className={`inline-block h-5 w-5 transform rounded-full bg-white/70 backdrop-blur-md shadow transition-transform ${
           checked ? "translate-x-[18px]" : "translate-x-0.5"
         }`}
       />
@@ -746,7 +746,7 @@ function PrivacyCard({
         <button
           type="button"
           onClick={onDownload}
-          className="flex items-center justify-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white px-3.5 py-2 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2"
+          className="flex items-center justify-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-3.5 py-2 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2"
         >
           <Download className="h-4 w-4" />
           Download my data
@@ -754,7 +754,7 @@ function PrivacyCard({
         <button
           type="button"
           onClick={onDelete}
-          className="flex items-center justify-center gap-1.5 rounded-lg border-[1.5px] border-[#F5C5C5] bg-white px-3.5 py-2 text-[13px] font-semibold text-[#DC2626] transition hover:bg-[#FEF2F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2"
+          className="flex items-center justify-center gap-1.5 rounded-lg border-[1.5px] border-[#F5C5C5] bg-white/70 backdrop-blur-md px-3.5 py-2 text-[13px] font-semibold text-[#DC2626] transition hover:bg-[#FEF2F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2"
         >
           <Trash2 className="h-4 w-4" />
           Delete account

@@ -415,7 +415,7 @@ export function OnboardingFlow() {
             <div
               key={i}
               className={`h-[5px] w-12 rounded-[3px] transition-colors ${
-                i <= state.step ? "bg-[var(--sw-orange)]" : "bg-[var(--sw-border)]"
+                i <= state.step ? "bg-appetite" : "bg-[var(--sw-border)]"
               }`}
             />
           ))}
@@ -516,7 +516,7 @@ export function OnboardingFlow() {
               disabled={!canContinue || saving}
               className={`flex items-center gap-1.5 rounded-lg px-6 py-[11px] text-[13px] font-bold transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2 ${
                 canContinue && !saving
-                  ? "bg-[var(--sw-orange)] text-white hover:opacity-90"
+                  ? "bg-appetite text-white hover:opacity-90"
                   : "cursor-not-allowed border-[1.5px] border-[var(--sw-border)] bg-[var(--sw-page)] text-[var(--sw-muted)]"
               }`}
             >
@@ -578,7 +578,7 @@ function GoalStep({
               className={`relative flex cursor-pointer items-center gap-3 rounded-lg border-[1.5px] p-[14px_16px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2 ${
                 isSel
                   ? "border-[var(--sw-orange)] bg-[var(--sw-orange-tint)]"
-                  : "border-[var(--sw-border)] bg-white hover:border-[#C0C0C4] hover:shadow-[0_1px_6px_rgba(40,44,63,0.06)]"
+                  : "border-[var(--sw-border)] bg-white/70 backdrop-blur-md hover:border-[#C0C0C4] hover:shadow-[0_1px_6px_rgba(40,44,63,0.06)]"
               }`}
             >
               <div
@@ -624,7 +624,7 @@ function GoalStep({
                 </div>
               </div>
               {isSel && (
-                <div className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--sw-orange)] text-white">
+                <div className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-appetite text-white">
                   <Check className="h-3 w-3" strokeWidth={2.5} />
                 </div>
               )}
@@ -656,7 +656,7 @@ function SocialAv({ label, tone }: { label: string; tone?: "green" | "dark" }) {
       ? "bg-[var(--sw-green)]"
       : tone === "dark"
         ? "bg-[var(--sw-charcoal)]"
-        : "bg-[var(--sw-orange)]";
+        : "bg-appetite";
   return (
     <div
       className={`-ml-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white text-[7px] font-bold text-white first:ml-0 ${bg}`}
@@ -699,7 +699,7 @@ function DietStep({
               className={`flex cursor-pointer items-center gap-2.5 rounded-lg border-[1.5px] p-[13px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2 ${
                 isSel
                   ? "border-[var(--sw-orange)] bg-[var(--sw-orange-tint)]"
-                  : "border-[var(--sw-border)] bg-white hover:border-[#C0C0C4] hover:bg-[#FAFAFA]"
+                  : "border-[var(--sw-border)] bg-white/70 backdrop-blur-md hover:border-[#C0C0C4] hover:bg-[#FAFAFA]"
               }`}
             >
               <div
@@ -719,7 +719,7 @@ function DietStep({
               </div>
               <div
                 className={`ml-auto flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-[1.5px] transition-colors ${
-                  isSel ? "border-[var(--sw-orange)] bg-[var(--sw-orange)] text-white" : "border-[var(--sw-border)]"
+                  isSel ? "border-[var(--sw-orange)] bg-appetite text-white" : "border-[var(--sw-border)]"
                 }`}
               >
                 {isSel && <Check className="h-3 w-3" strokeWidth={2.5} />}
@@ -765,7 +765,7 @@ function HouseholdStep({
               className={`flex flex-1 cursor-pointer flex-col items-center gap-2 rounded-lg border-[1.5px] p-[16px_8px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2 ${
                 isSel
                   ? "border-[var(--sw-orange)] bg-[var(--sw-orange-tint)]"
-                  : "border-[var(--sw-border)] bg-white hover:border-[#C0C0C4] hover:bg-[#FAFAFA]"
+                  : "border-[var(--sw-border)] bg-white/70 backdrop-blur-md hover:border-[#C0C0C4] hover:bg-[#FAFAFA]"
               }`}
             >
               <div
@@ -839,7 +839,7 @@ function BudgetStep({
               className={`min-w-[90px] flex-1 cursor-pointer rounded-lg border-[1.5px] p-[12px_8px] text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2 ${
                 isSel
                   ? "border-[var(--sw-orange)] bg-[var(--sw-orange-tint)]"
-                  : "border-[var(--sw-border)] bg-white hover:border-[#C0C0C4] hover:bg-[#FAFAFA]"
+                  : "border-[var(--sw-border)] bg-white/70 backdrop-blur-md hover:border-[#C0C0C4] hover:bg-[#FAFAFA]"
               }`}
             >
               <div
@@ -889,7 +889,7 @@ function BudgetStep({
             >
               <div
                 className={`mt-[4px] h-1.5 w-1.5 flex-shrink-0 rounded-full ${
-                  i === 2 ? "bg-[var(--sw-orange)]" : "bg-[var(--sw-green)]"
+                  i === 2 ? "bg-appetite" : "bg-[var(--sw-green)]"
                 }`}
               />
               <span>{line}</span>
@@ -935,7 +935,7 @@ function ExclusionsStep({
         className={`mb-2.5 flex cursor-pointer items-center gap-2.5 rounded-lg border-[1.5px] p-[11px_13px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2 ${
           noExcl
             ? "border-[var(--sw-orange)] bg-[var(--sw-orange-tint)]"
-            : "border-[var(--sw-border)] bg-white hover:border-[#C0C0C4]"
+            : "border-[var(--sw-border)] bg-white/70 backdrop-blur-md hover:border-[#C0C0C4]"
         }`}
       >
         <div
@@ -955,7 +955,7 @@ function ExclusionsStep({
         </div>
         <div
           className={`ml-auto flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-[1.5px] transition-colors ${
-            noExcl ? "border-[var(--sw-orange)] bg-[var(--sw-orange)] text-white" : "border-[var(--sw-border)]"
+            noExcl ? "border-[var(--sw-orange)] bg-appetite text-white" : "border-[var(--sw-border)]"
           }`}
         >
           {noExcl && <Check className="h-3 w-3" strokeWidth={2.5} />}
@@ -1037,7 +1037,7 @@ function CompleteStep({ state, onGo }: { state: State; onGo: () => void }) {
       <button
         type="button"
         onClick={onGo}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--sw-orange)] px-4 py-3 text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2 hover:opacity-90"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-appetite px-4 py-3 text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sw-orange)] focus-visible:ring-offset-2 hover:opacity-90"
       >
         Go to Dashboard
         <ArrowRight className="h-4 w-4" />
@@ -1061,7 +1061,7 @@ function PreviewPanel({ state }: { state: State }) {
 
 function PreviewCard({ children }: { children: ReactNode }) {
   return (
-    <div className="sticky top-4 rounded-lg border border-[var(--sw-border)] bg-white p-4">
+    <div className="sticky top-4 rounded-lg glass p-4">
       {children}
     </div>
   );

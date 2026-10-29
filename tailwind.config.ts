@@ -8,9 +8,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Swiggy palette pulled from /docs/screens mockups
+        // Appetite palette — keep in sync with globals.css tokens
         primary: {
-          DEFAULT: "#FC8019",
+          DEFAULT: "#F26419",
           foreground: "#FFFFFF",
         },
         charcoal: "#282C3F",

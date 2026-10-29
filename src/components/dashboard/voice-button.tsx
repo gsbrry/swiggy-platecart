@@ -92,7 +92,7 @@ export function VoiceButton() {
         aria-label="Voice order — say a dish name"
         onClick={handleClick}
         disabled={state === "processing"}
-        className="flex items-center gap-2.5 whitespace-nowrap rounded-lg bg-[var(--sw-orange)] px-4 py-2.5 text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-70"
+        className="flex items-center gap-2.5 whitespace-nowrap rounded-lg bg-appetite px-4 py-2.5 text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-70"
       >
         <span
           className={`flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-full bg-white/20 ${

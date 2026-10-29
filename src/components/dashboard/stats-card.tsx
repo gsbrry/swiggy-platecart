@@ -30,7 +30,7 @@ export function StatsCard({
       : `${savedVsLastMonth > 0 ? "+" : ""}₹${Math.abs(savedVsLastMonth).toLocaleString("en-IN")}`;
 
   return (
-    <div className="rounded-lg border border-[var(--sw-border)] bg-white px-5 py-4">
+    <div className="rounded-lg glass px-5 py-4">
       <div className="flex items-center justify-between">
         <h2 className="text-[15px] font-bold tracking-tight text-[var(--sw-charcoal)]">
           Activity & Insights

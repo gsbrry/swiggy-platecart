@@ -55,7 +55,7 @@ export function ConfirmModal({ title, description, confirmLabel, onClose, onConf
         aria-modal="true"
         aria-labelledby="confirm-title"
         aria-describedby="confirm-desc"
-        className="fixed left-1/2 top-1/2 z-[200] w-[92%] max-w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-xl border border-[var(--sw-border)] bg-white p-7 text-center shadow-2xl"
+        className="fixed left-1/2 top-1/2 z-[200] w-[92%] max-w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-xl glass p-7 text-center shadow-2xl"
       >
         <button
           ref={closeBtnRef}
@@ -80,7 +80,7 @@ export function ConfirmModal({ title, description, confirmLabel, onClose, onConf
             ref={cancelBtnRef}
             type="button"
             onClick={onClose}
-            className="flex-1 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white px-4 py-2.5 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)]"
+            className="flex-1 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-4 py-2.5 text-[13px] font-semibold text-[var(--sw-charcoal)] transition hover:bg-[var(--sw-page)]"
           >
             Cancel
           </button>

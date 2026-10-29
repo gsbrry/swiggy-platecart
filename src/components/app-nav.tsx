@@ -25,7 +25,7 @@ function isActive(pathname: string, href: string): boolean {
 export function AppNav({ avatarInitials, spent, budget }: Props) {
   const pathname = usePathname() ?? "/";
   return (
-    <nav className="sticky top-0 z-20 border-b border-[var(--sw-border)] bg-white">
+    <nav className="sticky top-0 z-20 border-b border-[var(--sw-border)] glass-strong">
       <div className="mx-auto flex h-[58px] max-w-[1100px] items-center justify-between px-6">
         <Link
           href="/"
@@ -55,12 +55,12 @@ export function AppNav({ avatarInitials, spent, budget }: Props) {
             className="relative flex h-[34px] w-[34px] items-center justify-center rounded-full border border-[var(--sw-border)] bg-[var(--sw-page)] text-[var(--sw-charcoal)]"
           >
             <Bell className="h-4 w-4" />
-            <span className="absolute right-[7px] top-[7px] h-1.5 w-1.5 rounded-full border-[1.5px] border-white bg-[var(--sw-orange)]" />
+            <span className="absolute right-[7px] top-[7px] h-1.5 w-1.5 rounded-full border-[1.5px] border-white bg-appetite" />
           </button>
           <Link
             href="/settings"
             aria-label="Account settings"
-            className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[var(--sw-orange)] text-xs font-bold text-white"
+            className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-appetite text-xs font-bold text-white"
           >
             {avatarInitials}
           </Link>

@@ -489,7 +489,7 @@ export function TemplateForm({ mockMode }: { mockMode: boolean }) {
           </Section>
 
           {/* Ingredients */}
-          <div className="overflow-hidden rounded-lg border border-[var(--sw-border)] bg-white">
+          <div className="overflow-hidden rounded-lg glass">
             <div className="flex items-center justify-between border-b border-[var(--sw-border)] px-[18px] py-3">
               <div className="flex items-baseline gap-2">
                 <h2 className="text-[13px] font-bold text-[var(--sw-charcoal)]">
@@ -592,7 +592,7 @@ export function TemplateForm({ mockMode }: { mockMode: boolean }) {
           </div>
 
           {/* Instructions */}
-          <div className="overflow-hidden rounded-lg border border-[var(--sw-border)] bg-white">
+          <div className="overflow-hidden rounded-lg glass">
             <div className="border-b border-[var(--sw-border)] px-[18px] py-3">
               <h2 className="text-[13px] font-bold text-[var(--sw-charcoal)]">
                 Cook instructions
@@ -684,7 +684,7 @@ export function TemplateForm({ mockMode }: { mockMode: boolean }) {
           </Section>
 
           {/* Action bar */}
-          <div className="flex flex-col items-stretch justify-between gap-3 rounded-lg border border-[var(--sw-border)] bg-white px-4 py-3.5 sm:flex-row sm:items-center">
+          <div className="flex flex-col items-stretch justify-between gap-3 rounded-lg glass px-4 py-3.5 sm:flex-row sm:items-center">
             <div className="flex items-center gap-1.5 text-xs text-[var(--sw-muted)]">
               <Info className="h-3 w-3" />
               <span>
@@ -713,7 +713,7 @@ export function TemplateForm({ mockMode }: { mockMode: boolean }) {
                 type="button"
                 onClick={handlePublish}
                 disabled={!validation.valid || publishing}
-                className="flex items-center gap-1.5 rounded-lg bg-[var(--sw-orange)] px-6 py-2.5 text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:bg-[var(--sw-border)] disabled:text-[var(--sw-muted)]"
+                className="flex items-center gap-1.5 rounded-lg bg-appetite px-6 py-2.5 text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:bg-[var(--sw-border)] disabled:text-[var(--sw-muted)]"
               >
                 <Send className="h-3.5 w-3.5" />
                 {publishing ? "Publishing…" : "Publish template"}
@@ -753,7 +753,7 @@ function chipCls(selected: boolean, greenAccent: boolean): string {
   if (selected) {
     return "flex items-center gap-1 rounded-full border-[1.5px] border-[var(--sw-orange)] bg-[var(--sw-orange-tint)] px-3 py-1.5 text-xs font-semibold text-[var(--sw-orange)] transition-colors";
   }
-  return "flex items-center gap-1 rounded-full border-[1.5px] border-[var(--sw-border)] bg-white px-3 py-1.5 text-xs font-semibold text-[var(--sw-muted)] transition-colors hover:border-[#C0C0C4] hover:text-[var(--sw-charcoal)]";
+  return "flex items-center gap-1 rounded-full border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-3 py-1.5 text-xs font-semibold text-[var(--sw-muted)] transition-colors hover:border-[#C0C0C4] hover:text-[var(--sw-charcoal)]";
 }
 
 function Section({
@@ -764,7 +764,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-[var(--sw-border)] bg-white">
+    <div className="overflow-hidden rounded-lg glass">
       <div className="border-b border-[var(--sw-border)] px-[18px] py-3">
         <h2 className="text-[13px] font-bold text-[var(--sw-charcoal)]">
           {title}
@@ -811,7 +811,7 @@ function VisButton({
       className={`flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold transition-colors ${
         active
           ? "bg-[var(--sw-charcoal)] text-white"
-          : "bg-white text-[var(--sw-muted)] hover:text-[var(--sw-charcoal)]"
+          : "bg-white/70 backdrop-blur-md text-[var(--sw-muted)] hover:text-[var(--sw-charcoal)]"
       }`}
     >
       {icon}

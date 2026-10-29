@@ -63,7 +63,7 @@ export function MyTemplatesBrowser({ templates }: Props) {
         </div>
         <Link
           href="/templates/new"
-          className="flex items-center gap-1.5 rounded-md bg-[var(--sw-orange)] px-3.5 py-2 text-[13px] font-bold text-white transition hover:opacity-90"
+          className="flex items-center gap-1.5 rounded-md bg-appetite px-3.5 py-2 text-[13px] font-bold text-white transition hover:opacity-90"
         >
           <Plus className="h-[15px] w-[15px]" aria-hidden="true" />
           New template
@@ -88,14 +88,14 @@ export function MyTemplatesBrowser({ templates }: Props) {
               className={`flex items-center gap-1.5 whitespace-nowrap rounded-full border-[1.5px] px-3.5 py-1.5 text-xs font-semibold transition ${
                 active
                   ? "border-[var(--sw-orange)] bg-[var(--sw-orange-tint)] text-[var(--sw-orange)]"
-                  : "border-[var(--sw-border)] bg-white text-[var(--sw-muted)] hover:border-[#c0c0c4] hover:text-[var(--sw-charcoal)]"
+                  : "border-[var(--sw-border)] bg-white/70 backdrop-blur-md text-[var(--sw-muted)] hover:border-[#c0c0c4] hover:text-[var(--sw-charcoal)]"
               }`}
             >
               {label}
               <span
                 className={`rounded-full px-1.5 py-[1px] text-[10px] font-bold ${
                   active
-                    ? "bg-[var(--sw-orange)] text-white"
+                    ? "bg-appetite text-white"
                     : "bg-[var(--sw-page)] text-[var(--sw-muted)]"
                 }`}
               >
@@ -132,7 +132,7 @@ function EmptyState({ tab }: { tab: TabKey }) {
       ? "Browse the community catalogue and fork a recipe to make it your own."
       : "Start with a blank template or fork one from the browser.";
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-[var(--sw-border)] bg-white px-6 py-16 text-center">
+    <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-6 py-16 text-center">
       <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--sw-page)] text-[var(--sw-muted)]">
         <Utensils className="h-5 w-5" aria-hidden="true" />
       </div>
@@ -143,14 +143,14 @@ function EmptyState({ tab }: { tab: TabKey }) {
       <div className="mt-4 flex gap-2">
         <Link
           href="/templates/new"
-          className="flex items-center gap-1.5 rounded-md bg-[var(--sw-orange)] px-3.5 py-2 text-[12.5px] font-bold text-white transition hover:opacity-90"
+          className="flex items-center gap-1.5 rounded-md bg-appetite px-3.5 py-2 text-[12.5px] font-bold text-white transition hover:opacity-90"
         >
           <Plus className="h-[13px] w-[13px]" aria-hidden="true" />
           New template
         </Link>
         <Link
           href="/templates"
-          className="rounded-md border-[1.5px] border-[var(--sw-border)] bg-white px-3.5 py-2 text-[12.5px] font-semibold text-[var(--sw-charcoal)] transition hover:border-[var(--sw-orange)] hover:text-[var(--sw-orange)]"
+          className="rounded-md border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-3.5 py-2 text-[12.5px] font-semibold text-[var(--sw-charcoal)] transition hover:border-[var(--sw-orange)] hover:text-[var(--sw-orange)]"
         >
           Browse catalogue
         </Link>
@@ -164,7 +164,7 @@ function MineCard({ template }: { template: MineTemplate }) {
   const ariaLabel = `${template.dishName}, ${visibilityLabel} template, ${template.kcal} kilocalories, ${template.prepMinutes} minutes prep`;
 
   return (
-    <div className="relative flex items-start gap-3 rounded-lg border border-[var(--sw-border)] bg-white p-3 transition hover:shadow-[0_2px_10px_rgba(40,44,63,0.08)]">
+    <div className="relative flex items-start gap-3 rounded-lg glass p-3 transition hover:shadow-[0_2px_10px_rgba(40,44,63,0.08)]">
       <Link
         href={`/templates/${template.id}`}
         aria-label={ariaLabel}
@@ -338,7 +338,7 @@ function KebabMenu({
           ref={menuRef}
           role="menu"
           aria-label={`Actions for ${dishName}`}
-          className="absolute right-0 top-8 z-30 w-40 overflow-hidden rounded-md border border-[var(--sw-border)] bg-white py-1 shadow-[0_6px_20px_rgba(40,44,63,0.15)]"
+          className="absolute right-0 top-8 z-30 w-40 overflow-hidden rounded-md glass py-1 shadow-[0_6px_20px_rgba(40,44,63,0.15)]"
         >
           {MENU_ACTIONS.map(({ key, label, Icon }, i) => {
             const danger = key === "delete";

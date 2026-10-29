@@ -99,7 +99,7 @@ export default async function BudgetPage() {
         </header>
 
         {/* 1. Overview card */}
-        <section className="mb-6 rounded-lg border border-[var(--sw-border)] bg-white p-6">
+        <section className="mb-6 rounded-lg glass p-6">
           <div className="flex flex-col items-center gap-8 md:flex-row md:items-stretch">
             <BigBudgetRing
               pctSpent={pctSpent}
@@ -130,7 +130,7 @@ export default async function BudgetPage() {
         </section>
 
         {/* 2. Category breakdown */}
-        <section className="mb-6 rounded-lg border border-[var(--sw-border)] bg-white p-6">
+        <section className="mb-6 rounded-lg glass p-6">
           <h2 className="mb-4 text-[15px] font-bold tracking-tight text-[var(--sw-charcoal)]">
             Category breakdown
           </h2>
@@ -200,7 +200,7 @@ export default async function BudgetPage() {
         </section>
 
         {/* 3. Weekly trend */}
-        <section className="mb-6 rounded-lg border border-[var(--sw-border)] bg-white p-6">
+        <section className="mb-6 rounded-lg glass p-6">
           <h2 className="mb-4 text-[15px] font-bold tracking-tight text-[var(--sw-charcoal)]">
             Weekly trend
           </h2>
@@ -256,7 +256,7 @@ export default async function BudgetPage() {
         </section>
 
         {/* 4. Recent transactions */}
-        <section className="mb-6 rounded-lg border border-[var(--sw-border)] bg-white p-6">
+        <section className="mb-6 rounded-lg glass p-6">
           <h2 className="mb-4 text-[15px] font-bold tracking-tight text-[var(--sw-charcoal)]">
             Recent transactions
           </h2>
@@ -306,7 +306,7 @@ export default async function BudgetPage() {
         </section>
 
         {/* 5. Waste insights */}
-        <section className="rounded-lg border border-[var(--sw-border)] bg-white p-6">
+        <section className="rounded-lg glass p-6">
           <div className="mb-3 flex items-center gap-2">
             <AlertCircle className="h-4 w-4 text-[var(--sw-orange)]" />
             <h2 className="text-[15px] font-bold tracking-tight text-[var(--sw-charcoal)]">
@@ -326,7 +326,7 @@ export default async function BudgetPage() {
                   className="flex items-start gap-3 rounded-md bg-[var(--sw-page)] px-4 py-3"
                 >
                   <span
-                    className="mt-1 h-1.5 w-1.5 rounded-full bg-[var(--sw-orange)]"
+                    className="mt-1 h-1.5 w-1.5 rounded-full bg-appetite"
                     aria-hidden
                   />
                   <p className="text-sm text-[var(--sw-charcoal)]">
@@ -369,7 +369,7 @@ function BigBudgetRing({
           cy="100"
           r={radius}
           fill="none"
-          stroke="#FC8019"
+          stroke="var(--sw-orange)"
           strokeWidth="14"
           strokeDasharray={`${spentLen} ${remainingLen}`}
           strokeDashoffset={circumference / 4}

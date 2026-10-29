@@ -17,7 +17,7 @@ export default function Error({
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--sw-page)] px-6">
-      <div className="max-w-md rounded-lg border border-[var(--sw-border)] bg-white p-8 text-center">
+      <div className="max-w-md rounded-lg glass p-8 text-center">
         <div className="mb-3 text-3xl" aria-hidden>
           🙁
         </div>
@@ -30,7 +30,7 @@ export default function Error({
         <button
           type="button"
           onClick={reset}
-          className="rounded-lg bg-[var(--sw-orange)] px-5 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
+          className="rounded-lg bg-appetite px-5 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
         >
           Try again
         </button>

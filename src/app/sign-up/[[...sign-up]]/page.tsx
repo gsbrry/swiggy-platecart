@@ -12,7 +12,7 @@ export const metadata = {
 export default function SignUpPage() {
   return (
     <div className="min-h-screen bg-[var(--sw-page)]">
-      <header className="border-b border-[var(--sw-border)] bg-white">
+      <header className="border-b border-[var(--sw-border)] glass-strong">
         <div className="mx-auto flex h-[58px] max-w-[1160px] items-center justify-between px-6">
           <Link
             href="/"

@@ -400,7 +400,7 @@ export function MealPlanBoard({
           <button
             type="button"
             onClick={onCopyLastWeek}
-            className="flex items-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white px-3.5 py-[7px] text-xs font-semibold text-[var(--sw-charcoal)] transition hover:border-[#C0C0C4] hover:bg-[var(--sw-page)]"
+            className="flex items-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-border)] bg-white/70 backdrop-blur-md px-3.5 py-[7px] text-xs font-semibold text-[var(--sw-charcoal)] transition hover:border-[#C0C0C4] hover:bg-[var(--sw-page)]"
           >
             <Copy className="h-[15px] w-[15px]" />
             Copy last week
@@ -408,7 +408,7 @@ export function MealPlanBoard({
           <button
             type="button"
             onClick={onAutoFill}
-            className="flex items-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-orange)] bg-[var(--sw-orange)] px-3.5 py-[7px] text-xs font-semibold text-white transition hover:opacity-90"
+            className="flex items-center gap-1.5 rounded-lg border-[1.5px] border-[var(--sw-orange)] bg-appetite px-3.5 py-[7px] text-xs font-semibold text-white transition hover:opacity-90"
           >
             <Zap className="h-[15px] w-[15px]" />
             Auto-fill week
@@ -424,7 +424,7 @@ export function MealPlanBoard({
             aria-label="Weekly meal plan"
             aria-rowcount={4}
             aria-colcount={8}
-            className="overflow-hidden rounded-lg border border-[var(--sw-border)] bg-white"
+            className="overflow-hidden rounded-lg glass"
           >
             {/* Header row */}
             <div
@@ -452,7 +452,7 @@ export function MealPlanBoard({
                     }`}
                   >
                     {isToday && (
-                      <span className="absolute inset-x-0 top-0 h-[3px] bg-[var(--sw-orange)]" />
+                      <span className="absolute inset-x-0 top-0 h-[3px] bg-appetite" />
                     )}
                     <div
                       className={`text-[10px] font-semibold uppercase tracking-wider ${
@@ -473,7 +473,7 @@ export function MealPlanBoard({
                       {d.date}
                     </div>
                     {isToday && (
-                      <span className="mt-0.5 inline-block rounded-full bg-[var(--sw-orange)] px-1.5 py-px text-[8px] font-bold tracking-wider text-white">
+                      <span className="mt-0.5 inline-block rounded-full bg-appetite px-1.5 py-px text-[8px] font-bold tracking-wider text-white">
                         TODAY
                       </span>
                     )}
@@ -531,7 +531,7 @@ export function MealPlanBoard({
                             : meal.kind === "eatout"
                               ? "bg-[#FFF8F2] hover:bg-[#FFF4EC]"
                               : meal.kind === "assigned"
-                                ? "bg-white hover:bg-[#FAFAFA]"
+                                ? "bg-white/70 backdrop-blur-md hover:bg-[#FAFAFA]"
                                 : "hover:bg-[var(--sw-page)]"
                         } ${
                           !isPickerCell && isSelCol
@@ -615,7 +615,7 @@ export function MealPlanBoard({
 
         {/* Right panel — nutrition + cart summary */}
         <aside className="w-[268px] flex-shrink-0">
-          <div className="mb-2.5 rounded-lg border border-[var(--sw-border)] bg-white p-4">
+          <div className="mb-2.5 rounded-lg glass p-4">
             <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.06em] text-[var(--sw-muted)]">
               Weekly Nutrition
             </div>
@@ -645,7 +645,7 @@ export function MealPlanBoard({
             </div>
           </div>
 
-          <div className="rounded-lg border border-[var(--sw-border)] bg-white px-4 py-3.5">
+          <div className="rounded-lg glass px-4 py-3.5">
             <div className="mb-2.5 text-[10px] font-bold uppercase tracking-[0.06em] text-[var(--sw-muted)]">
               Today&apos;s Cart
             </div>
@@ -660,7 +660,7 @@ export function MealPlanBoard({
               type="button"
               onClick={addToInstamart}
               disabled={busy || todayAssignedIds.length === 0}
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--sw-orange)] px-3 py-2.5 text-[13px] font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-appetite px-3 py-2.5 text-[13px] font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ShoppingCart className="h-[15px] w-[15px]" />
               {busy ? "Adding..." : "Add to Instamart cart"}
@@ -711,7 +711,7 @@ function NutritionBars({
         const h = k ? Math.round((k / maxKcal) * 52) : 4;
         const isToday = i === todayIdx;
         const bg = isToday
-          ? "bg-[var(--sw-orange)]"
+          ? "bg-appetite"
           : k > 0
             ? "bg-[var(--sw-charcoal)] opacity-30"
             : "bg-[var(--sw-border)]";

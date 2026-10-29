@@ -23,7 +23,7 @@ export function BudgetCard({
 
   if (monthlyBudget === 0) {
     return (
-      <div className="rounded-lg border border-[var(--sw-border)] bg-white p-5">
+      <div className="rounded-lg glass p-5">
         <div className="mb-2 flex items-center justify-between">
           <h2 className="text-[15px] font-bold tracking-tight text-[var(--sw-charcoal)]">
             Monthly Budget
@@ -43,7 +43,7 @@ export function BudgetCard({
   }
 
   return (
-    <div className="flex flex-col items-center rounded-lg border border-[var(--sw-border)] bg-white px-5 py-4">
+    <div className="flex flex-col items-center rounded-lg glass px-5 py-4">
       <div className="flex w-full items-center justify-between">
         <h2 className="text-[15px] font-bold tracking-tight text-[var(--sw-charcoal)]">
           Monthly Budget
@@ -73,7 +73,7 @@ export function BudgetCard({
             cy="65"
             r={radius}
             fill="none"
-            stroke="#FC8019"
+            stroke="var(--sw-orange)"
             strokeWidth="10"
             strokeDasharray={`${spentLen} ${remainingLen}`}
             strokeDashoffset={circumference / 4}
@@ -103,7 +103,7 @@ export function BudgetCard({
             <span
               key={i}
               className={`h-2.5 w-2.5 rounded-full ${
-                i < eatoutUsed ? "bg-[var(--sw-orange)]" : "bg-[var(--sw-border)]"
+                i < eatoutUsed ? "bg-appetite" : "bg-[var(--sw-border)]"
               }`}
             />
           ))}

@@ -17,11 +17,13 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(href + "/");
 }
 
-export function DesktopNavLinks() {
+const PUBLIC_TABS = new Set(["/dishes", "/market"]);
+
+export function DesktopNavLinks({ signedIn }: { signedIn: boolean }) {
   const pathname = usePathname() ?? "";
   return (
     <ul className="hidden items-center gap-1 md:flex">
-      {TABS.filter((t) => t.href !== "/me").map((t) => {
+      {TABS.filter((t) => t.href !== "/me" && (signedIn || PUBLIC_TABS.has(t.href))).map((t) => {
         const active = isActive(pathname, t.href);
         return (
           <li key={t.href}>

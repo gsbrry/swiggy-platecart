@@ -117,7 +117,7 @@ export function OnboardingFlow({ name, suggestedUsername }: { name: string; sugg
                 aria-describedby="username-help"
               />
             </div>
-            <p id="username-help" className="mt-1 text-xs text-ink-muted">Shown on menus you share. 3–20 letters, numbers or _.</p>
+            <p id="username-help" className="mt-1 text-xs text-ink-muted">Shown on menus you share. 3–20 letters, numbers or underscores.</p>
           </div>
           {error && <p role="alert" className="text-sm text-danger">{error}</p>}
           <div className="flex gap-2">

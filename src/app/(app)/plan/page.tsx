@@ -9,12 +9,12 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "Plan" };
 
-export default async function PlanPage({ searchParams }: { searchParams: Promise<{ w?: string }> }) {
+export default async function PlanPage({ searchParams }: { searchParams: Promise<{ w?: string; added?: string }> }) {
   const me = await getMe();
   if (!me) redirect("/sign-in?next=/plan");
   if (!me.settings.onboarded) redirect("/onboarding");
 
-  const { w } = await searchParams;
+  const { w, added } = await searchParams;
   const today = todayIso();
   const monday = mondayOf(isIsoDate(w) ? w : today);
   const days = weekDates(monday);
@@ -59,6 +59,7 @@ export default async function PlanPage({ searchParams }: { searchParams: Promise
       slots={planSlots}
       dishes={options}
       diet={me.settings.diet ?? "veg"}
+      added={added && /^\d{1,3}$/.test(added) ? Number(added) : null}
     />
   );
 }

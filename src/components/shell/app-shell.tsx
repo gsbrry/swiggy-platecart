@@ -17,7 +17,7 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
           <Link href={me ? "/plan" : "/"} aria-label="Planetto home">
             <Logo />
           </Link>
-          <DesktopNavLinks />
+          <DesktopNavLinks signedIn={!!me} />
           {me ? (
             <Link
               href="/me"

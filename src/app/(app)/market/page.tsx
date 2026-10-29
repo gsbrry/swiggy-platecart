@@ -21,7 +21,7 @@ export default async function MarketPage({ searchParams }: { searchParams: Promi
   const supabase = await createClient();
   let q = supabase
     .from("menus")
-    .select("id, slug, title, period, diet, tags, rating_avg, rating_count, get_count, owner:profiles(display_name)")
+    .select("id, slug, title, period, diet, tags, rating_avg, rating_count, get_count, owner:profiles!menus_owner_id_fkey(display_name)")
     .eq("visibility", "public")
     .eq("status", "active")
     .eq("period", period)
@@ -70,8 +70,8 @@ export default async function MarketPage({ searchParams }: { searchParams: Promi
   return (
     <div className="space-y-5">
       <div className="glass p-6 sm:p-8">
-        <h1 className="text-[28px] font-semibold leading-tight sm:text-[40px]">
-          Menus from <span className="text-appetite">real kitchens</span>
+        <h1 className="text-[32px] font-semibold leading-tight sm:text-[40px]">
+          Menus from <span className="text-accent">real kitchens</span>
         </h1>
         <p className="mt-2 max-w-xl text-ink-muted">
           Ready-made days, weeks and months planned by home cooks. Use one and it fills your calendar. Free for now.
@@ -86,8 +86,8 @@ export default async function MarketPage({ searchParams }: { searchParams: Promi
             </Link>
           ))}
         </nav>
-        <div className="flex flex-wrap gap-2">
-          <nav aria-label="Diet" className="flex flex-wrap gap-2">
+        <div className="min-w-0">
+          <nav aria-label="Diet" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0 sm:pb-0">
             <Link href={href({ diet: null })} className="chip" aria-current={!diet ? "page" : undefined}>All</Link>
             {DIETS.map((d) => (
               <Link key={d} href={href({ diet: d })} className="chip" aria-current={diet === d ? "page" : undefined}>{DIET_LABEL[d]}</Link>

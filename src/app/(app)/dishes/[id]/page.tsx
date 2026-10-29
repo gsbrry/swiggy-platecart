@@ -17,7 +17,7 @@ export default async function DishPage({ params }: { params: Promise<{ id: strin
   const userId = await getUserId();
   const { data: dish } = await supabase
     .from("dishes")
-    .select("id, name, description, diet, meal_types, tags, cook_minutes, steps, is_public, owner_id, fork_count, forked_from, owner:profiles(display_name, username), dish_ingredients(name, quantity, unit, position)")
+    .select("id, name, description, diet, meal_types, tags, cook_minutes, steps, is_public, owner_id, fork_count, forked_from, owner:profiles!dishes_owner_id_fkey(display_name, username), dish_ingredients(name, quantity, unit, position)")
     .eq("id", id)
     .maybeSingle();
   if (!dish) notFound();

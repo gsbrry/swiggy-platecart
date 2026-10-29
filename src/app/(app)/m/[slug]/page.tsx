@@ -114,7 +114,7 @@ export default async function MenuPage({ params }: Params) {
                         <span className="inline-flex items-center gap-1 text-ink-muted"><Utensils className="h-3.5 w-3.5" /> Eating out</span>
                       ) : it?.dish_name ? (
                         <span className="inline-flex items-start gap-1.5 font-medium">
-                          {it.dish_diet && <DietDot diet={it.dish_diet} className="mt-1" />}
+                          {it.dish_diet && it.dish_diet !== menu.diet && <DietDot diet={it.dish_diet} className="mt-1" />}
                           {it.dish_name}
                         </span>
                       ) : (

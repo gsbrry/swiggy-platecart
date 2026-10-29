@@ -5,22 +5,47 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
       - run: npm run lint
       - run: npm run typecheck
+      - run: npm test
+      # Public Supabase URL + publishable key come from the committed .env.production.
       - run: npm run build
-        env:
-          # Build-time env stubs so Next can compile without live secrets.
-          DATABASE_URL: postgresql://ci:ci@localhost/ci?sslmode=disable
-          CLERK_PUBLISHABLE_KEY: pk_test_ci
-          CLERK_SECRET_KEY: sk_test_ci
-          CLERK_WEBHOOK_SECRET: whsec_ci
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Runs the app against e2e/mock-supabase.cjs: no secrets or network needed.
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 7

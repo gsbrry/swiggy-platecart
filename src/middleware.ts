@@ -13,7 +13,7 @@ function isProtected(pathname: string): boolean {
   );
 }
 
-function buildCsp(nonce: string): string {
+function buildCsp(nonce: string, https: boolean): string {
   const supabase = new URL(env.NEXT_PUBLIC_SUPABASE_URL);
   const dev = process.env.NODE_ENV !== "production";
   return [
@@ -27,7 +27,7 @@ function buildCsp(nonce: string): string {
     "base-uri 'self'",
     "object-src 'none'",
     "frame-ancestors 'none'",
-    "upgrade-insecure-requests",
+    ...(https ? ["upgrade-insecure-requests"] : []),
   ].join("; ");
 }
 
@@ -49,7 +49,7 @@ function redirectKeepingCookies(url: URL, from: NextResponse): NextResponse {
 
 export async function middleware(request: NextRequest) {
   const nonce = btoa(crypto.randomUUID());
-  const csp = buildCsp(nonce);
+  const csp = buildCsp(nonce, request.nextUrl.protocol === "https:");
 
   // Next.js reads the nonce from the request CSP header and stamps it on its own scripts.
   const requestHeaders = new Headers(request.headers);

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
-import { ChevronLeft, ChevronRight, Copy, Plus, Share2, Store, Utensils, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, ClipboardList, Copy, Plus, Share2, Store, Utensils, X } from "lucide-react";
 
 import { DishPicker } from "@/components/plan/dish-picker";
 import { ShareSheet } from "@/components/plan/share-sheet";
@@ -22,9 +22,11 @@ type Props = {
   slots: PlanSlot[];
   dishes: DishOption[];
   diet: Diet;
+  /** Meals just added from a menu (from /m/[slug] "Use this menu"). */
+  added: number | null;
 };
 
-export function PlanBoard({ monday, today, prevWeek, nextWeek, slots, dishes, diet }: Props) {
+export function PlanBoard({ monday, today, prevWeek, nextWeek, slots, dishes, diet, added }: Props) {
   const router = useRouter();
   const toast = useToast();
   const [pending, startTransition] = useTransition();
@@ -92,18 +94,26 @@ export function PlanBoard({ monday, today, prevWeek, nextWeek, slots, dishes, di
             <ChevronRight className="h-5 w-5" />
           </Link>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <button type="button" className="btn-secondary btn-sm" disabled={pending} onClick={() => run(() => copyPreviousWeek({ monday }), "Copied last week into the empty slots.")}>
-            <Copy className="h-4 w-4" /> Copy last week
+        <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:w-auto">
+          <button type="button" className="btn-secondary btn-sm !gap-1.5 whitespace-nowrap !px-2 text-[13px] sm:!px-4 sm:text-sm" disabled={pending} onClick={() => run(() => copyPreviousWeek({ monday }), "Copied last week into the empty slots.")}>
+            <Copy className="h-4 w-4 shrink-0" /> <span className="sm:hidden">Last week</span><span className="hidden sm:inline">Copy last week</span>
           </button>
-          <button type="button" className="btn-secondary btn-sm" onClick={copyText} disabled={filled === 0}>
-            Copy as text
+          <button type="button" className="btn-secondary btn-sm !gap-1.5 whitespace-nowrap !px-2 text-[13px] sm:!px-4 sm:text-sm" onClick={copyText} disabled={filled === 0}>
+            <ClipboardList className="h-4 w-4 shrink-0" /> <span className="sm:hidden">As text</span><span className="hidden sm:inline">Copy as text</span>
           </button>
-          <button type="button" className="btn-primary btn-sm" onClick={() => setSharing(true)} disabled={filled === 0}>
-            <Share2 className="h-4 w-4" /> Share or publish
+          <button type="button" className="btn-primary btn-sm !gap-1.5 whitespace-nowrap !px-2 text-[13px] sm:!px-4 sm:text-sm" onClick={() => setSharing(true)} disabled={filled === 0}>
+            <Share2 className="h-4 w-4 shrink-0" /> Share
           </button>
         </div>
       </div>
+
+      {added !== null && (
+        <p role="status" className="rounded-xl border border-success/30 bg-white px-4 py-3 text-success">
+          {added === 0
+            ? "Those days were already planned, so nothing changed. Choose “Replace them” to overwrite."
+            : `Added ${added} ${added === 1 ? "meal" : "meals"} from the menu. Ingredients are on your shopping list.`}
+        </p>
+      )}
 
       {filled === 0 && (
         <div className="glass flex flex-col items-start gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
@@ -119,7 +129,7 @@ export function PlanBoard({ monday, today, prevWeek, nextWeek, slots, dishes, di
 
       {/* Mobile: day strip + day list */}
       <div className="lg:hidden">
-        <div role="tablist" aria-label="Day" className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1">
+        <div role="tablist" aria-label="Day" className="grid grid-cols-7 gap-1">
           {days.map((d) => {
             const count = MEALS.filter((m) => {
               const s = byKey.get(`${d}|${m}`);
@@ -132,7 +142,7 @@ export function PlanBoard({ monday, today, prevWeek, nextWeek, slots, dishes, di
                 role="tab"
                 aria-selected={active}
                 onClick={() => setSelectedDay(d)}
-                className={`flex min-w-[52px] flex-1 flex-col items-center rounded-xl border px-2 py-2 transition ${
+                className={`flex flex-col items-center rounded-xl border px-0 py-2 transition ${
                   active ? "border-transparent bg-[image:var(--action)] text-white" : "border-hairline bg-white text-ink"
                 }`}
               >
@@ -150,7 +160,10 @@ export function PlanBoard({ monday, today, prevWeek, nextWeek, slots, dishes, di
           })}
         </div>
         <div className="mt-4 space-y-3">
-          {selectedDay === today && <p className="text-sm font-semibold text-ink-orange">Today</p>}
+          <h2 className="text-lg font-semibold">
+            {formatDay(selectedDay, { weekday: "long", day: "numeric", month: "long" })}
+            {selectedDay === today && <span className="ml-2 align-middle text-sm font-semibold text-ink-orange">Today</span>}
+          </h2>
           {MEALS.map((m) => (
             <SlotCard
               key={m}

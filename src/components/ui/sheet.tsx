@@ -25,7 +25,11 @@ export function Sheet({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (open && !el.open) el.showModal();
+    if (open && !el.open) {
+      el.showModal();
+      // <dialog> focuses its first control (the close button); prefer the field marked for autofocus.
+      el.querySelector<HTMLElement>("[data-autofocus]")?.focus();
+    }
     if (!open && el.open) el.close();
   }, [open]);
 
@@ -37,11 +41,11 @@ export function Sheet({
         if (e.target === ref.current) onClose();
       }}
       aria-label={title}
-      className={`glass-overlay m-0 mt-auto max-h-[88dvh] w-full max-w-none rounded-t-2xl p-0 text-ink backdrop:bg-[rgb(43_29_26/0.32)] backdrop:backdrop-blur-[4px] sm:m-auto sm:rounded-2xl ${
+      className={`glass-overlay fixed inset-x-0 bottom-0 top-auto m-0 max-h-[90dvh] w-full max-w-none rounded-b-none rounded-t-2xl p-0 text-ink backdrop:bg-[rgb(43_29_26/0.32)] backdrop:backdrop-blur-[4px] sm:inset-0 sm:m-auto sm:max-h-[85dvh] sm:rounded-2xl ${
         wide ? "sm:max-w-2xl" : "sm:max-w-lg"
       }`}
     >
-      <div className="flex max-h-[88dvh] flex-col">
+      <div className="flex max-h-[90dvh] flex-col sm:max-h-[85dvh]">
         <div className="flex items-center justify-between gap-4 border-b border-hairline px-5 py-3">
           <h2 className="text-lg font-semibold">{title}</h2>
           <button type="button" onClick={onClose} className="-mr-2 flex h-11 w-11 items-center justify-center rounded-full text-ink-muted hover:bg-fill-subtle" aria-label="Close">

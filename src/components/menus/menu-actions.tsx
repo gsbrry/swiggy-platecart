@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { CalendarPlus, Check, Copy, MessageCircle, Star } from "lucide-react";
 
 import { Sheet } from "@/components/ui/sheet";
@@ -103,7 +103,10 @@ export function GetMenuButton({
 
 export function ShareButtons({ slug, title }: { slug: string; title: string }) {
   const [copied, setCopied] = useState(false);
-  const url = typeof window === "undefined" ? `/m/${slug}` : `${window.location.origin}/m/${slug}`;
+  // Origin is only known in the browser; resolve it after hydration so server and client HTML match.
+  const [origin, setOrigin] = useState("");
+  useEffect(() => setOrigin(window.location.origin), []);
+  const url = `${origin}/m/${slug}`;
   return (
     <>
       <button

@@ -32,7 +32,7 @@ export default async function LandingPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("menus")
-    .select("slug, title, period, diet, tags, rating_avg, rating_count, get_count, owner:profiles(display_name)")
+    .select("slug, title, period, diet, tags, rating_avg, rating_count, get_count, owner:profiles!menus_owner_id_fkey(display_name)")
     .eq("visibility", "public")
     .eq("status", "active")
     .order("rating_avg", { ascending: false })
@@ -75,7 +75,7 @@ export default async function LandingPage() {
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-ink-orange">Free meal planner for Indian homes</p>
             <h1 className="mt-3 text-[40px] font-bold leading-[1.05] tracking-tight sm:text-[56px]">
-              Decide the week once. <span className="text-appetite">Not 21 times.</span>
+              Decide the week once. <span className="text-accent">Not 21 times.</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg text-ink-muted">
               Plan breakfast, lunch and dinner for the whole week, get your shopping list, and share it with the family. Or copy a ready-made week from another home cook.

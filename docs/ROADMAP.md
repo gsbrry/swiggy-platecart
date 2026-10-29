@@ -1,4 +1,6 @@
-# PlateCart Roadmap: standalone meal planner
+# Planetto Roadmap: standalone meal planner
+
+> **Status 29 Oct 2026:** v1 is built on Supabase (decision taken: Supabase over Clerk + Neon; menus free first; name Planetto). See [`BACKLOG.md`](BACKLOG.md) for what is done and the launch blockers. Scope follows the product review in [`reviews/01-product-prd.md`](reviews/01-product-prd.md): budget, voice and waste tracking moved to "Later".
 
 > The source of truth for product direction. It replaces the Swiggy-first plan in
 > [`DEVELOPER_TASKS.md`](DEVELOPER_TASKS.md), which stays only as history.

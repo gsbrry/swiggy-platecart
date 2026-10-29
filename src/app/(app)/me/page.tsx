@@ -11,6 +11,10 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "Me" };
 
+function plural(n: number, one: string, many = `${one}s`) {
+  return `${n} ${n === 1 ? one : many}`;
+}
+
 export default async function MePage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const me = await getMe();
   if (!me) redirect("/sign-in?next=/me");
@@ -25,7 +29,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
       .order("created_at", { ascending: false }),
     supabase
       .from("menu_acquisitions")
-      .select("start_date, menu:menus(slug, title, period, diet, tags, rating_avg, rating_count, get_count, owner:profiles(display_name))")
+      .select("start_date, menu:menus(slug, title, period, diet, tags, rating_avg, rating_count, get_count, owner:profiles!menus_owner_id_fkey(display_name))")
       .eq("user_id", me.id)
       .order("created_at", { ascending: false })
       .limit(12),
@@ -51,7 +55,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         <div>
           <h1 className="text-[28px] font-semibold leading-tight">{me.profile.display_name}</h1>
           <p className="text-ink-muted">
-            {me.profile.username ? `@${me.profile.username}` : "No username yet"} · {mine?.length ?? 0} menus · {dishCount ?? 0} dishes
+            {me.profile.username ? `@${me.profile.username}` : "No username yet"} · {plural(mine?.length ?? 0, "menu")} · {plural(dishCount ?? 0, "dish", "dishes")}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -70,11 +74,8 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         {mine?.length ? (
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {mine.map((m) => (
-              <li key={m.slug} className="relative">
-                <MenuCard menu={toCard(m, "You")} />
-                <span className="pointer-events-none absolute right-4 top-12 rounded-full bg-white px-2 py-0.5 text-xs text-ink-muted shadow-sm">
-                  {VISIBILITY_LABEL[m.visibility as Visibility]}
-                </span>
+              <li key={m.slug}>
+                <MenuCard menu={toCard(m, "you")} badge={VISIBILITY_LABEL[m.visibility as Visibility]} />
               </li>
             ))}
           </ul>

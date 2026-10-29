@@ -123,18 +123,16 @@ body::before {
     @apply mb-1.5 block text-sm font-semibold text-ink;
   }
   .chip {
-    @apply inline-flex min-h-[36px] items-center gap-1.5 rounded-full border border-hairline px-3.5 text-sm font-medium text-ink-muted transition hover:text-ink;
+    @apply inline-flex min-h-[36px] shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-hairline bg-white/60 px-3.5 text-sm font-medium text-ink-muted transition hover:text-ink;
   }
   .chip[aria-pressed="true"],
   .chip[aria-selected="true"],
   .chip[aria-current="page"] {
     @apply border-ink-orange bg-tint-orange text-ink-orange;
   }
-  .text-appetite {
-    background-image: linear-gradient(135deg, #ff8a1f 0%, #f26419 45%, #e63946 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  /* Display accent for large headline words (>= 32px): solid, 4.2:1 on the canvas. */
+  .text-accent {
+    color: #d9480f;
   }
 }
 

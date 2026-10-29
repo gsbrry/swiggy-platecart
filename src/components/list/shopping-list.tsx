@@ -61,7 +61,7 @@ export function ShoppingList({ items, storageKey, title }: { items: ListItem[]; 
             <li key={i.key}>
               <label className="flex min-h-[56px] cursor-pointer items-center gap-3 px-4 py-2.5">
                 <input type="checkbox" checked={done} onChange={() => toggle(i.key)} className="h-5 w-5 shrink-0 accent-[var(--ink-orange)]" />
-                <span className={`flex-1 ${done ? "text-ink-faint line-through" : ""}`}>
+                <span className={`min-w-0 flex-1 ${done ? "text-ink-faint line-through" : ""}`}>
                   <span className="block font-medium capitalize">{i.name}</span>
                   <span className="block truncate text-xs text-ink-muted">for {i.dishes.slice(0, 3).join(", ")}{i.dishes.length > 3 ? ` +${i.dishes.length - 3}` : ""}</span>
                 </span>

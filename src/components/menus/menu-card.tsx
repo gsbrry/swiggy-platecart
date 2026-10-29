@@ -18,7 +18,7 @@ export type MenuCardData = {
   preview: string[];
 };
 
-export function MenuCard({ menu }: { menu: MenuCardData }) {
+export function MenuCard({ menu, badge }: { menu: MenuCardData; badge?: string }) {
   return (
     <Link
       href={`/m/${menu.slug}`}
@@ -32,7 +32,10 @@ export function MenuCard({ menu }: { menu: MenuCardData }) {
       </div>
       <div>
         <h3 className="text-lg font-semibold leading-snug group-hover:text-ink-orange">{menu.title}</h3>
-        <p className="text-sm text-ink-muted">by {menu.author}</p>
+        <p className="text-sm text-ink-muted">
+          by {menu.author}
+          {badge && <span className="ml-2 rounded-full bg-fill-subtle px-2 py-0.5 text-xs font-medium">{badge}</span>}
+        </p>
       </div>
       {menu.preview.length > 0 && (
         <ul className="space-y-0.5 text-sm text-ink-muted">

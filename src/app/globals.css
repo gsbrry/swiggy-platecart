@@ -3,84 +3,165 @@
 @tailwind utilities;
 
 /*
- * Appetite theme — orange with a red tint, on frosted glass.
- * Every component reads these tokens, so a future rebrand only touches this block
- * (plus `primary` in tailwind.config.ts).
+ * Planetto "appetite" design tokens: orange with a red tint, frosted glass for chrome only.
+ * Spec: docs/reviews/04-ux-ui.md §4. Rebrand = change this block + tailwind.config.ts.
  */
 :root {
   color-scheme: light;
-  --sw-orange: #f26419;
-  --sw-red: #e63946;
-  --sw-orange-tint: rgba(242, 100, 25, 0.12);
-  --sw-appetite: linear-gradient(135deg, #ff8a1f 0%, #f26419 45%, #e63946 100%);
-  --sw-charcoal: #2b1d1a;
-  --sw-muted: #6f5f5a;
-  --sw-border: rgba(230, 57, 70, 0.14);
-  --sw-bg: rgba(255, 255, 255, 0.62);
-  --sw-page: rgba(255, 237, 225, 0.55);
-  --sw-green: #4f9d3a;
-  --sw-yellow: #f3b02e;
-
-  --glass-bg: rgba(255, 255, 255, 0.58);
-  --glass-bg-strong: rgba(255, 255, 255, 0.78);
-  --glass-border: rgba(255, 255, 255, 0.7);
-  --glass-shadow: 0 8px 32px rgba(180, 60, 30, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  --glass-blur: 18px;
+  --bg-base: #fff6ef;
+  --ink: #2b1d1a;
+  --ink-muted: #6f5f5a;
+  --ink-faint: #8c7b75;
+  --ink-orange: #c2410c;
+  --brand-orange: #f26419;
+  --brand-red: #e63946;
+  --action: linear-gradient(135deg, #d9480f 0%, #c92a3b 100%);
+  --action-solid: #cf3d1f;
+  --tint-orange: rgb(242 100 25 / 0.1);
+  --fill-subtle: #fbf4ef;
+  --hairline: rgb(43 29 26 / 0.1);
+  --success: #2f7d32;
+  --warning: #b26a00;
+  --danger: #b42318;
 }
 
-html,
-body {
-  height: 100%;
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  color: var(--sw-charcoal);
+  min-height: 100dvh;
+  color: var(--ink);
+  background-color: var(--bg-base);
   -webkit-font-smoothing: antialiased;
-  font-family: "DM Sans", "Basis Grotesque Pro", system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, sans-serif;
-  background-color: #fff3ea;
-  background-image:
-    radial-gradient(40rem 32rem at 8% -6%, rgba(255, 138, 31, 0.32), transparent 60%),
-    radial-gradient(36rem 30rem at 100% 8%, rgba(230, 57, 70, 0.24), transparent 60%),
-    radial-gradient(44rem 36rem at 50% 110%, rgba(255, 176, 102, 0.3), transparent 60%);
-  background-attachment: fixed;
+  font-family: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-@layer utilities {
-  /* Frosted card: translucent fill, blur, light rim. Replaces "border + bg-white". */
+/* Gradient field the glass refracts. A fixed layer (not background-attachment: fixed, which iOS ignores). */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(42rem 34rem at 6% -8%, rgb(255 138 31 / 0.28), transparent 60%),
+    radial-gradient(38rem 30rem at 100% 6%, rgb(230 57 70 / 0.2), transparent 60%),
+    radial-gradient(46rem 36rem at 50% 112%, rgb(255 176 102 / 0.26), transparent 60%);
+}
+
+@layer components {
+  /* L1 content card: near-opaque so text stays readable. */
+  .surface {
+    background: rgb(255 255 255 / 0.82);
+    border: 1px solid rgb(255 255 255 / 0.8);
+    box-shadow:
+      0 0 0 1px rgb(43 29 26 / 0.06),
+      0 1px 2px rgb(43 29 26 / 0.05),
+      0 8px 24px rgb(180 60 30 / 0.08);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    backdrop-filter: blur(12px) saturate(140%);
+    border-radius: 12px;
+  }
+  /* L1s solid: grids, forms, lists. No blur. */
+  .surface-solid {
+    background: #fff;
+    border: 1px solid rgb(43 29 26 / 0.08);
+    box-shadow: 0 1px 2px rgb(43 29 26 / 0.05), 0 8px 24px rgb(180 60 30 / 0.06);
+    border-radius: 12px;
+  }
+  /* L2 raised glass: one signature element per view. */
   .glass {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    background: rgb(255 255 255 / 0.6);
+    border: 1px solid rgb(255 255 255 / 0.7);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7), 0 12px 32px rgb(180 60 30 / 0.12);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+    border-radius: 16px;
   }
-
-  /* Stronger glass for sticky bars, modals and menus that sit over busy content. */
+  /* L3 chrome: top nav, bottom tab bar, sticky footers. */
   .glass-strong {
-    background: var(--glass-bg-strong);
-    border-color: var(--glass-border);
-    -webkit-backdrop-filter: blur(22px) saturate(170%);
-    backdrop-filter: blur(22px) saturate(170%);
+    background: rgb(255 250 246 / 0.78);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+  }
+  /* L4 overlay: sheets, dialogs, toasts. */
+  .glass-overlay {
+    background: rgb(255 252 249 / 0.94);
+    border: 1px solid rgb(255 255 255 / 0.8);
+    box-shadow: 0 24px 64px rgb(43 29 26 / 0.18);
+    -webkit-backdrop-filter: blur(28px);
+    backdrop-filter: blur(28px);
   }
 
-  /* Orange → red primary fill for buttons, avatars and active states. */
-  .bg-appetite {
-    background-color: var(--sw-orange);
-    background-image: var(--sw-appetite);
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full px-5 text-[15px] font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-orange focus-visible:ring-offset-2 disabled:cursor-not-allowed;
   }
-
+  .btn-primary {
+    @apply btn text-white shadow-[0_6px_16px_rgb(201_42_59/0.25)] hover:brightness-105 active:brightness-95;
+    background-image: var(--action);
+  }
+  .btn-primary:disabled {
+    background-image: none;
+    background-color: var(--fill-subtle);
+    color: var(--ink-faint);
+    box-shadow: none;
+  }
+  .btn-secondary {
+    @apply btn border border-hairline bg-white text-ink hover:bg-fill-subtle disabled:text-ink-faint;
+  }
+  .btn-ghost {
+    @apply btn text-ink-orange hover:bg-tint-orange;
+  }
+  .btn-sm {
+    @apply min-h-[36px] px-4 text-sm;
+  }
+  .input {
+    @apply block min-h-[44px] w-full rounded-lg border border-[rgb(43_29_26/0.14)] bg-white px-3 text-base text-ink placeholder:text-ink-faint focus:outline-none focus-visible:ring-2 focus-visible:ring-ink-orange focus-visible:ring-offset-1;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-semibold text-ink;
+  }
+  .chip {
+    @apply inline-flex min-h-[36px] items-center gap-1.5 rounded-full border border-hairline px-3.5 text-sm font-medium text-ink-muted transition hover:text-ink;
+  }
+  .chip[aria-pressed="true"],
+  .chip[aria-selected="true"],
+  .chip[aria-current="page"] {
+    @apply border-ink-orange bg-tint-orange text-ink-orange;
+  }
   .text-appetite {
-    background-image: var(--sw-appetite);
+    background-image: linear-gradient(135deg, #ff8a1f 0%, #f26419 45%, #e63946 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 }
 
+/* Weak GPUs / user preference: swap every glass level for its opaque equivalent. */
 @media (prefers-reduced-transparency: reduce) {
-  :root {
-    --glass-bg: rgba(255, 255, 255, 0.95);
-    --glass-bg-strong: #ffffff;
+  .surface,
+  .glass,
+  .glass-strong,
+  .glass-overlay {
+    background: #fffaf6;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .surface,
+  .glass,
+  .glass-strong,
+  .glass-overlay {
+    background: #fffaf6;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

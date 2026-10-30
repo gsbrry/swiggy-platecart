@@ -6,7 +6,6 @@ import { Camera, Trash2 } from "lucide-react";
 
 import { Avatar } from "@/components/ui/avatar";
 import { setAvatar } from "@/lib/actions/profile";
-import { createClient } from "@/lib/supabase/client";
 
 const MAX_INPUT_BYTES = 10 * 1024 * 1024;
 const OUT = 256;
@@ -52,6 +51,8 @@ export function AvatarEditor({ userId, name, url, hasGoogle }: { userId: string;
     run(async () => {
       try {
         const blob = await toSquareWebp(file);
+        // Loaded on demand so the Supabase client isn't in the settings page bundle.
+        const { createClient } = await import("@/lib/supabase/client");
         const supabase = createClient();
         const path = `${userId}/${Date.now()}.webp`;
         const { error } = await supabase.storage.from("avatars").upload(path, blob, { contentType: "image/webp", cacheControl: "31536000", upsert: false });

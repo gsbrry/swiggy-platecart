@@ -30,6 +30,16 @@ test("market is browsable without an account", async ({ page }) => {
   await expect(page.getByRole("link", { name: /Use this menu/ })).toHaveAttribute("href", /\/sign-in\?next=%2Fm%2F/);
 });
 
+test("market filters by goal and health menus carry a note", async ({ page }) => {
+  await page.goto("/market");
+  await page.getByRole("navigation", { name: "Category" }).getByRole("link", { name: "High protein" }).click();
+  await expect(page).toHaveURL(/tag=high-protein/);
+  await expect(page.getByRole("link", { name: /High-Protein Veg Week/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Simple Veg Week/ })).toHaveCount(0);
+  await page.getByRole("link", { name: /High-Protein Veg Week/ }).click();
+  await expect(page.getByText(/not medical or diet advice/)).toBeVisible({ timeout: 30_000 });
+});
+
 test("sign-up checks the password while you type", async ({ page }) => {
   await page.goto("/sign-up");
   await expect(page.getByRole("checkbox")).toHaveCount(0); // no age checkbox any more

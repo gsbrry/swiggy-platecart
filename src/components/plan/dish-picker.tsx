@@ -9,7 +9,7 @@ import { DietDot } from "@/components/ui/diet-dot";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { quickAddDish, setSlotDish, setSlotEatout } from "@/lib/actions/plan";
-import { formatDay } from "@/lib/dates";
+import { formatDay, isWeekday } from "@/lib/dates";
 import { DIET_ALLOWS, DIET_LABEL, MEAL_LABEL, type Diet, type Meal } from "@/lib/labels";
 
 export function DishPicker({
@@ -17,11 +17,15 @@ export function DishPicker({
   onClose,
   dishes,
   diet,
+  exclusions,
+  weekdayMaxMinutes,
 }: {
   target: { date: string; meal: Meal } | null;
   onClose: () => void;
   dishes: DishOption[];
   diet: Diet;
+  exclusions: string[];
+  weekdayMaxMinutes: number | null;
 }) {
   const router = useRouter();
   const toast = useToast();
@@ -33,12 +37,19 @@ export function DishPicker({
     if (!target) return [];
     const q = query.trim().toLowerCase();
     const allowed = DIET_ALLOWS[diet];
+    const limit = weekdayMaxMinutes && isWeekday(target.date) ? weekdayMaxMinutes : null;
+    const avoid = exclusions.map((x) => x.toLowerCase()).filter(Boolean);
+    const suits = (d: DishOption) =>
+      allowed.includes(d.diet) &&
+      (d.meal_types.length === 0 || d.meal_types.includes(target.meal)) &&
+      (limit === null || d.cook_minutes === null || d.cook_minutes <= limit) &&
+      !avoid.some((x) => d.name.toLowerCase().includes(x));
     return dishes
       .filter((d) => (tab === "mine" ? d.mine : true))
-      .filter((d) => (tab === "suggested" ? allowed.includes(d.diet) && (d.meal_types.length === 0 || d.meal_types.includes(target.meal)) : true))
+      .filter((d) => (tab === "suggested" ? suits(d) : true))
       .filter((d) => !q || d.name.toLowerCase().includes(q))
       .sort((a, b) => Number(b.mine) - Number(a.mine) || a.name.localeCompare(b.name));
-  }, [dishes, diet, query, tab, target]);
+  }, [dishes, diet, exclusions, weekdayMaxMinutes, query, tab, target]);
 
   function done(promise: Promise<{ ok: boolean; error?: string }>) {
     startTransition(async () => {
@@ -76,7 +87,11 @@ export function DishPicker({
           <div role="tablist" className="flex gap-2">
             {(["suggested", "mine", "all"] as const).map((t) => (
               <button key={t} role="tab" aria-selected={tab === t} className="chip" onClick={() => setTab(t)}>
-                {t === "suggested" ? `For you (${DIET_LABEL[diet]})` : t === "mine" ? "My dishes" : "All"}
+                {t === "suggested"
+                  ? `For you (${DIET_LABEL[diet]}${weekdayMaxMinutes && isWeekday(target.date) ? `, ≤${weekdayMaxMinutes} min` : ""})`
+                  : t === "mine"
+                    ? "My dishes"
+                    : "All"}
               </button>
             ))}
           </div>

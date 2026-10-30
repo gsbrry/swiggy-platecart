@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { ShoppingList } from "@/components/list/shopping-list";
 import { getMe } from "@/lib/auth";
-import { addDays, formatDay, mondayOf, todayIso } from "@/lib/dates";
+import { addDays, formatDay, todayIso, weekStartOf } from "@/lib/dates";
 import { buildShoppingList, type Line } from "@/lib/shopping";
 import { createClient } from "@/lib/supabase/server";
 
@@ -22,7 +22,7 @@ export default async function ListPage({ searchParams }: { searchParams: Promise
   const { range: r } = await searchParams;
   const range: Range = r && r in RANGES ? (r as Range) : "week";
   const today = todayIso();
-  const end = range === "today" ? today : range === "week" ? addDays(mondayOf(today), 6) : addDays(today, 6);
+  const end = range === "today" ? today : range === "week" ? addDays(weekStartOf(today, me.settings.week_start), 6) : addDays(today, 6);
 
   const supabase = await createClient();
   const { data } = await supabase

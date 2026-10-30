@@ -9,6 +9,6 @@ test("allows same-site paths", () => {
 
 test("blocks open redirects", () => {
   for (const bad of ["//evil.com", "https://evil.com", "/\\evil.com", "javascript:alert(1)", "", null, 42]) {
-    assert.equal(safeNext(bad), "/plan", String(bad));
+    assert.equal(safeNext(bad), "/today", String(bad));
   }
 });

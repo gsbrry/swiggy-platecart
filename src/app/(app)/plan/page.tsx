@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { PlanBoard } from "@/components/plan/plan-board";
 import type { DishOption, PlanSlot } from "@/components/plan/types";
 import { getMe } from "@/lib/auth";
-import { addDays, isIsoDate, mondayOf, todayIso, weekDates } from "@/lib/dates";
+import { addDays, isIsoDate, todayIso, weekDates, weekStartOf } from "@/lib/dates";
 import type { Diet, Meal } from "@/lib/labels";
 import { createClient } from "@/lib/supabase/server";
 
@@ -16,7 +16,7 @@ export default async function PlanPage({ searchParams }: { searchParams: Promise
 
   const { w, added } = await searchParams;
   const today = todayIso();
-  const monday = mondayOf(isIsoDate(w) ? w : today);
+  const monday = weekStartOf(isIsoDate(w) ? w : today, me.settings.week_start);
   const days = weekDates(monday);
 
   const supabase = await createClient();
@@ -29,7 +29,7 @@ export default async function PlanPage({ searchParams }: { searchParams: Promise
       .lte("date", days[6]),
     supabase
       .from("dishes")
-      .select("id, name, diet, meal_types, owner_id")
+      .select("id, name, diet, meal_types, cook_minutes, owner_id")
       .or(`owner_id.eq.${me.id},and(owner_id.is.null,is_public.eq.true)`)
       .eq("status", "active")
       .order("name")
@@ -47,6 +47,7 @@ export default async function PlanPage({ searchParams }: { searchParams: Promise
     name: d.name,
     diet: d.diet as Diet,
     meal_types: d.meal_types as Meal[],
+    cook_minutes: d.cook_minutes,
     mine: d.owner_id === me.id,
   }));
 
@@ -59,6 +60,11 @@ export default async function PlanPage({ searchParams }: { searchParams: Promise
       slots={planSlots}
       dishes={options}
       diet={me.settings.diet ?? "veg"}
+      prefs={{
+        exclusions: me.settings.exclusions,
+        weekdayMaxMinutes: me.settings.weekday_max_minutes,
+        defaultVisibility: me.settings.default_visibility,
+      }}
       added={added && /^\d{1,3}$/.test(added) ? Number(added) : null}
     />
   );

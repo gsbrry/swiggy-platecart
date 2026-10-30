@@ -188,6 +188,7 @@ export type Database = {
       >;
       profiles: Table<
         {
+          avatar_url: string | null;
           bio: string | null;
           created_at: string;
           display_name: string;
@@ -217,6 +218,9 @@ export type Database = {
           onboarded: boolean;
           updated_at: string;
           user_id: string;
+          week_start: "mon" | "sun";
+          default_visibility: MenuVisibility;
+          weekday_max_minutes: number | null;
         },
         "user_id"
       >;

@@ -2,9 +2,10 @@ import Link from "next/link";
 
 import { Logo } from "@/components/brand/logo";
 import { BottomTabs, DesktopNavLinks } from "@/components/shell/nav-links";
-import { getMe, initials } from "@/lib/auth";
+import { UserMenu } from "@/components/shell/user-menu";
+import { getMe } from "@/lib/auth";
 
-/** Sticky glass top bar (desktop links) + glass bottom tab bar on phones. */
+/** Sticky glass top bar (desktop links + account menu) and a glass bottom tab bar on phones. */
 export async function AppShell({ children }: { children: React.ReactNode }) {
   const me = await getMe();
   return (
@@ -14,18 +15,12 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
       </a>
       <header className="glass-strong sticky top-0 z-30 border-b border-hairline">
         <nav aria-label="Primary" className="mx-auto flex h-16 max-w-app items-center justify-between gap-4 px-4 sm:px-6">
-          <Link href={me ? "/plan" : "/"} aria-label="Planetto home">
+          <Link href="/" aria-label="Planetto home page">
             <Logo />
           </Link>
           <DesktopNavLinks signedIn={!!me} />
           {me ? (
-            <Link
-              href="/me"
-              aria-label="Your profile and settings"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-[image:var(--action)] text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-orange focus-visible:ring-offset-2"
-            >
-              {initials(me.profile.display_name)}
-            </Link>
+            <UserMenu name={me.profile.display_name} username={me.profile.username} avatarUrl={me.profile.avatar_url} isAdmin={me.isAdmin} />
           ) : (
             <div className="flex items-center gap-2">
               <Link href="/sign-in" className="btn-ghost btn-sm hidden sm:inline-flex">Sign in</Link>

@@ -2,7 +2,9 @@
 
 | Route | Who | Purpose |
 |---|---|---|
-| `/` | everyone | Landing: what it does, popular menus |
+| `/` | everyone | Home: problem, plan/shop/share/copy walkthrough, Indian kitchens, popular menus, cooks, FAQ |
+| `/creators` | everyone | For home cooks: why and how to publish menus, community rules, paid menus later |
+| `/about` | everyone | Story, promises, contact |
 | `/sign-in`, `/sign-up`, `/forgot-password`, `/reset-password` | signed out | Email + password and Google |
 | `/onboarding` | new users | Diet, foods to avoid, household size, username |
 | `/plan` | signed in | Week planner. Desktop 7×3 grid, mobile day view. Dish picker, eating out, copy last week, copy as text, share/publish |

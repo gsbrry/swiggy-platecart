@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { env } from "@/lib/env";
 
 /** Routes that need a signed-in user. Everything else (landing, market, shared menus) is public. */
-const PROTECTED = ["/plan", "/list", "/me", "/onboarding", "/admin", "/dishes/new"];
+const PROTECTED = ["/today", "/plan", "/list", "/me", "/onboarding", "/admin", "/dishes/new"];
 
 function isProtected(pathname: string): boolean {
   return (
@@ -20,7 +20,7 @@ function buildCsp(nonce: string, https: boolean): string {
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${dev ? " 'unsafe-eval'" : ""}`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "img-src 'self' data: blob:",
+    `img-src 'self' data: blob: ${supabase.origin} https://*.googleusercontent.com`,
     "font-src 'self' data: https://fonts.gstatic.com",
     `connect-src 'self' ${supabase.origin} wss://${supabase.host}`,
     "form-action 'self'",
@@ -84,7 +84,7 @@ export async function middleware(request: NextRequest) {
     response = redirectKeepingCookies(url, response);
   } else if (signedIn && (pathname === "/sign-in" || pathname === "/sign-up")) {
     const url = request.nextUrl.clone();
-    url.pathname = "/plan";
+    url.pathname = "/today";
     url.search = "";
     response = redirectKeepingCookies(url, response);
   }

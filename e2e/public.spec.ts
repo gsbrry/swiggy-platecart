@@ -43,3 +43,13 @@ test("unknown share links show a friendly 404", async ({ page }) => {
   expect(res?.status()).toBe(404);
   await expect(page.getByText("This page isn't on the menu")).toBeVisible();
 });
+
+test("home page FAQ opens and links to the new pages work", async ({ page }) => {
+  await page.goto("/");
+  await page.getByText("Is Planetto free?").click();
+  await expect(page.getByText(/Planning, shopping lists, sharing and every menu/)).toBeVisible();
+  await page.goto("/creators");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Your week of meals");
+  await page.goto("/about");
+  await expect(page.getByRole("heading", { name: "What we promise" })).toBeVisible();
+});

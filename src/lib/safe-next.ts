@@ -1,5 +1,5 @@
 /** Only allow same-site relative redirects (blocks open redirects like //evil.com or https://…). */
-export function safeNext(value: unknown, fallback = "/plan"): string {
+export function safeNext(value: unknown, fallback = "/today"): string {
   if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//") || value.startsWith("/\\")) {
     return fallback;
   }

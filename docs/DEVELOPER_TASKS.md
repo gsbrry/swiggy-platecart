@@ -1,5 +1,7 @@
 # Developer Tasks & Sprint Plan
 
+> **Superseded (Oct 2026):** the app is now a standalone meal planner. Swiggy moves to a later phase. See [`ROADMAP.md`](ROADMAP.md) and [`BACKLOG.md`](BACKLOG.md). This file is kept for history.
+
 **Purpose:** a structured backlog that a developer — or an LLM coding agent — can pick up and execute against without re-reading the whole repo. Each task is self-contained: files to touch, acceptance criteria, exact API contract, and a ready-to-paste LLM prompt.
 
 For product context (what the app is, tech stack, how to run) → [`README.md`](../README.md).

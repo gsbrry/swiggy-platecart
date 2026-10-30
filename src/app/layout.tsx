@@ -1,30 +1,34 @@
-import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
+import type { Metadata, Viewport } from "next";
+import { DM_Sans } from "next/font/google";
+import { headers } from "next/headers";
 
-import { isMockMode } from "@/lib/mock";
+import { APP_NAME } from "@/components/brand/logo";
+import { env } from "@/lib/env";
 
 import "./globals.css";
 
+const dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700"], display: "swap" });
+
 export const metadata: Metadata = {
-  title: "PlateCart",
-  description: "Meal planning that fills your Instamart cart.",
+  metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  title: { default: `${APP_NAME} — plan your week of meals`, template: `%s · ${APP_NAME}` },
+  description:
+    "Plan breakfast, lunch and dinner for the week, share your plan on WhatsApp, and copy ready-made menus from other home cooks.",
+  applicationName: APP_NAME,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const shell = (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="min-h-screen">{children}</body>
+export const viewport: Viewport = {
+  themeColor: "#fff6ef",
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Reading the nonce opts every page into dynamic rendering, so Next can stamp the CSP nonce on its scripts.
+  await headers();
+  return (
+    <html lang="en-IN" className={dmSans.className}>
+      <body>{children}</body>
     </html>
   );
-
-  // In mock mode ClerkProvider would throw on missing keys, so skip it entirely.
-  return isMockMode() ? shell : <ClerkProvider>{shell}</ClerkProvider>;
 }

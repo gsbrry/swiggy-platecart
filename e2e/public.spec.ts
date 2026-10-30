@@ -25,8 +25,9 @@ test("market is browsable without an account", async ({ page }) => {
   await page.goto("/market");
   await expect(page.getByRole("heading", { name: /Menus from/ })).toBeVisible();
   await page.getByRole("link", { name: /High-Protein Veg Week/ }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "High-Protein Veg Week" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Use this menu/ })).toHaveAttribute("href", /\/sign-up\?next=\/m\//);
+  // First visit compiles the page in dev mode, so allow extra time.
+  await expect(page.getByRole("heading", { level: 1, name: "High-Protein Veg Week" })).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByRole("link", { name: /Use this menu/ })).toHaveAttribute("href", /\/sign-in\?next=%2Fm%2F/);
 });
 
 test("sign-up form validates before submitting", async ({ page }) => {
@@ -52,4 +53,26 @@ test("home page FAQ opens and links to the new pages work", async ({ page }) => 
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Your week of meals");
   await page.goto("/about");
   await expect(page.getByRole("heading", { name: "What we promise" })).toBeVisible();
+});
+
+test("sign in opens as a popup over the current page and closes back to it", async ({ page }) => {
+  await page.goto("/market");
+  await page.getByRole("link", { name: "Sign in" }).click();
+  await expect(page).toHaveURL(/\/sign-in\?next=%2Fmarket$/);
+  const dialog = page.getByRole("dialog", { name: "Sign in" });
+  await expect(dialog.getByRole("heading", { name: "Welcome back" })).toBeVisible();
+  // The market page is still rendered underneath.
+  await expect(page.getByRole("heading", { name: /Menus from/ })).toBeAttached();
+  // Switching to sign-up stays in the popup.
+  await dialog.getByRole("link", { name: "Create a free account" }).click();
+  await expect(page.getByRole("dialog", { name: "Create account" }).getByRole("heading", { name: "Plan your first week" })).toBeVisible();
+  await page.getByRole("button", { name: "Close" }).click();
+  await expect(page).toHaveURL(/\/market$/);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+});
+
+test("visiting /sign-in directly shows the full page, not a popup", async ({ page }) => {
+  await page.goto("/sign-in");
+  await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
 });

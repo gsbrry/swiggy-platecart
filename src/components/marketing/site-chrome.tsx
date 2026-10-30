@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Logo } from "@/components/brand/logo";
+import { AuthLink } from "@/components/auth/auth-link";
 
 const NAV = [
   { href: "/market", label: "Menus" },
@@ -30,8 +31,8 @@ export function SiteHeader({ signedIn }: { signedIn: boolean }) {
             <Link href="/today" className="btn-primary btn-sm">Go to my dashboard</Link>
           ) : (
             <>
-              <Link href="/sign-in" className="btn-ghost btn-sm">Sign in</Link>
-              <Link href="/sign-up" className="btn-primary btn-sm">Start free</Link>
+              <AuthLink to="/sign-in" className="btn-ghost btn-sm">Sign in</AuthLink>
+              <AuthLink to="/sign-up" className="btn-primary btn-sm">Start free</AuthLink>
             </>
           )}
         </div>

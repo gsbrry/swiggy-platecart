@@ -8,6 +8,7 @@ import { Sheet } from "@/components/ui/sheet";
 import { addDishToPlan, forkDish, reportContent } from "@/lib/actions/dishes";
 import { addDays, formatDay } from "@/lib/dates";
 import { MEAL_LABEL, MEALS, type Meal } from "@/lib/labels";
+import { AuthLink } from "@/components/auth/auth-link";
 
 export function AddToPlanButton({ dishId, today, defaultMeal, signedIn }: { dishId: string; today: string; defaultMeal: Meal; signedIn: boolean }) {
   const router = useRouter();
@@ -20,9 +21,9 @@ export function AddToPlanButton({ dishId, today, defaultMeal, signedIn }: { dish
 
   if (!signedIn) {
     return (
-      <a href={`/sign-in?next=/dishes/${dishId}`} className="btn-primary">
+      <AuthLink to="/sign-in" next={`/dishes/${dishId}`} className="btn-primary">
         <CalendarPlus className="h-4 w-4" /> Add to my plan
-      </a>
+      </AuthLink>
     );
   }
 

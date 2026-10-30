@@ -9,6 +9,7 @@ import { Sheet } from "@/components/ui/sheet";
 import { getMenu, rateMenu, setMenuVisibility } from "@/lib/actions/menus";
 import { addDays, formatDay } from "@/lib/dates";
 import { VISIBILITY_LABEL, type Period, type Visibility } from "@/lib/labels";
+import { AuthLink } from "@/components/auth/auth-link";
 
 export function GetMenuButton({
   slug,
@@ -32,9 +33,9 @@ export function GetMenuButton({
 
   if (!signedIn) {
     return (
-      <Link href={`/sign-up?next=/m/${slug}`} className="btn-primary">
+      <AuthLink to="/sign-in" next={`/m/${slug}`} className="btn-primary">
         <CalendarPlus className="h-4 w-4" /> Use this menu
-      </Link>
+      </AuthLink>
     );
   }
 

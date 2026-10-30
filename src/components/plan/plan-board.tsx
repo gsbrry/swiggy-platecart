@@ -12,7 +12,7 @@ import { DietDot } from "@/components/ui/diet-dot";
 import { useToast } from "@/components/ui/toast";
 import { clearSlot, copyPreviousWeek } from "@/lib/actions/plan";
 import { formatDay, weekDates, weekLabel } from "@/lib/dates";
-import { MEAL_LABEL, MEALS, type Diet, type Meal } from "@/lib/labels";
+import { MEAL_LABEL, MEALS, type Diet, type Meal, type Visibility } from "@/lib/labels";
 
 type Props = {
   monday: string;
@@ -22,11 +22,13 @@ type Props = {
   slots: PlanSlot[];
   dishes: DishOption[];
   diet: Diet;
+  /** User preferences that shape suggestions and sharing defaults. */
+  prefs: { exclusions: string[]; weekdayMaxMinutes: number | null; defaultVisibility: Visibility };
   /** Meals just added from a menu (from /m/[slug] "Use this menu"). */
   added: number | null;
 };
 
-export function PlanBoard({ monday, today, prevWeek, nextWeek, slots, dishes, diet, added }: Props) {
+export function PlanBoard({ monday, today, prevWeek, nextWeek, slots, dishes, diet, prefs, added }: Props) {
   const router = useRouter();
   const toast = useToast();
   const [pending, startTransition] = useTransition();
@@ -238,8 +240,10 @@ export function PlanBoard({ monday, today, prevWeek, nextWeek, slots, dishes, di
         onClose={() => setPicker(null)}
         dishes={dishes}
         diet={diet}
+        exclusions={prefs.exclusions}
+        weekdayMaxMinutes={prefs.weekdayMaxMinutes}
       />
-      <ShareSheet open={sharing} onClose={() => setSharing(false)} monday={monday} selectedDay={selectedDay} diet={diet} />
+      <ShareSheet open={sharing} onClose={() => setSharing(false)} monday={monday} selectedDay={selectedDay} diet={diet} defaultVisibility={prefs.defaultVisibility} />
     </div>
   );
 }

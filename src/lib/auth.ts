@@ -18,22 +18,31 @@ export const getMe = cache(async () => {
   if (!id) return null;
   const supabase = await createClient();
   const [{ data: profile }, { data: settings }, { data: admin }] = await Promise.all([
-    supabase.from("profiles").select("id, username, display_name, bio").eq("id", id).maybeSingle(),
-    supabase.from("user_settings").select("diet, exclusions, household_size, onboarded").eq("user_id", id).maybeSingle(),
+    supabase.from("profiles").select("id, username, display_name, bio, avatar_url").eq("id", id).maybeSingle(),
+    supabase
+      .from("user_settings")
+      .select("diet, exclusions, household_size, onboarded, week_start, default_visibility, weekday_max_minutes")
+      .eq("user_id", id)
+      .maybeSingle(),
     supabase.rpc("am_i_admin"),
   ]);
   if (!profile) return null;
   return {
     id,
     profile,
-    settings: settings ?? { diet: null, exclusions: [], household_size: 2, onboarded: false },
+    settings: settings ?? {
+      diet: null,
+      exclusions: [],
+      household_size: 2,
+      onboarded: false,
+      week_start: "mon" as const,
+      default_visibility: "link" as const,
+      weekday_max_minutes: null,
+    },
     isAdmin: admin === true,
   };
 });
 
 export type Me = NonNullable<Awaited<ReturnType<typeof getMe>>>;
 
-export function initials(name: string): string {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  return ((parts[0]?.[0] ?? "P") + (parts[1]?.[0] ?? "")).toUpperCase();
-}
+export { initials } from "@/lib/initials";

@@ -21,16 +21,18 @@ export function ShareSheet({
   monday,
   selectedDay,
   diet,
+  defaultVisibility,
 }: {
   open: boolean;
   onClose: () => void;
   monday: string;
   selectedDay: string;
   diet: Diet;
+  defaultVisibility: Visibility;
 }) {
   const [pending, startTransition] = useTransition();
   const [period, setPeriod] = useState<Exclude<Period, "month">>("week");
-  const [visibility, setVisibility] = useState<Visibility>("link");
+  const [visibility, setVisibility] = useState<Visibility>(defaultVisibility);
   const [menuDiet, setMenuDiet] = useState<Diet>(diet);
   const [error, setError] = useState<string | null>(null);
   const [slug, setSlug] = useState<string | null>(null);

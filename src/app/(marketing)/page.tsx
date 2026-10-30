@@ -82,7 +82,7 @@ export default async function LandingPage() {
     }),
   );
 
-  const startHref = userId ? "/plan" : "/sign-up";
+  const startHref = userId ? "/today" : "/sign-up";
 
   return (
     <>
@@ -98,7 +98,7 @@ export default async function LandingPage() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href={startHref} className="btn-primary h-[52px] px-7 text-base">
-              {userId ? "Open my plan" : "Plan my week, free"}
+              {userId ? "Go to my dashboard" : "Plan my week, free"}
             </Link>
             <Link href="/market" className="btn-secondary h-[52px] px-7 text-base">See ready-made menus</Link>
           </div>
@@ -295,7 +295,7 @@ export default async function LandingPage() {
             <p className="mt-2 text-lg text-ink-muted">Free while we&apos;re in early access.</p>
           </div>
           <Link href={startHref} className="btn-primary h-[52px] shrink-0 px-8 text-base">
-            {userId ? "Open my plan" : "Plan my first week"}
+            {userId ? "Go to my dashboard" : "Plan my first week"}
           </Link>
         </div>
       </section>

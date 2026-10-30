@@ -29,6 +29,17 @@ export function mondayOf(iso: string): string {
   return addDays(iso, -((dow + 6) % 7));
 }
 
+/** First day of the week containing `iso`, for a user whose week starts on Monday or Sunday. */
+export function weekStartOf(iso: string, start: "mon" | "sun" = "mon"): string {
+  if (start === "mon") return mondayOf(iso);
+  return addDays(iso, -toUtc(iso).getUTCDay());
+}
+
+export function isWeekday(iso: string): boolean {
+  const dow = toUtc(iso).getUTCDay();
+  return dow >= 1 && dow <= 5;
+}
+
 export function weekDates(monday: string): string[] {
   return Array.from({ length: 7 }, (_, i) => addDays(monday, i));
 }

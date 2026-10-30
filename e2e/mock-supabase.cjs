@@ -39,9 +39,9 @@ const menus = seed.menus.map(([title, desc, period, diet, tags, days], i) => ({
   owner: i === 1 ? { display_name: "Meena Iyer" } : i === 6 ? { display_name: "Raphy Varghese" } : null, owner_id: i === 6 ? UID : null,
   items: days.flatMap((row, di) => row.map((dish, mi) => ({ id: `${i}-${di}-${mi}`, day_index: di, meal: meals[mi], is_eatout: dish === "EAT", dish_name: dish === "EAT" ? null : dish, dish_diet: dish === "EAT" ? null : byName[dish]?.diet, ingredients: [] }))),
 }));
-const profile = { id: UID, username: "raphy", display_name: "Raphy Varghese", bio: "Home cook in Kochi." };
-const settings = { diet: "veg", exclusions: ["onion"], household_size: 3, onboarded: true };
-const newSettings = { diet: null, exclusions: [], household_size: 2, onboarded: false };
+const profile = { id: UID, username: "raphy", display_name: "Raphy Varghese", bio: "Home cook in Kochi.", avatar_url: null };
+const settings = { diet: "veg", exclusions: ["onion"], household_size: 3, onboarded: true, week_start: "mon", default_visibility: "link", weekday_max_minutes: 30 };
+const newSettings = { diet: null, exclusions: [], household_size: 2, onboarded: false, week_start: "mon", default_visibility: "link", weekday_max_minutes: null };
 function subOf(req) {
   const auth = req.headers.authorization || "";
   try { return JSON.parse(Buffer.from(auth.split(".")[1], "base64url").toString()).sub; } catch { return null; }
@@ -63,7 +63,7 @@ http.createServer((req, res) => {
   const send = (rows) => (single ? (rows.length ? json(res, 200, rows[0]) : json(res, 406, { code: "PGRST116", message: "no rows" })) : json(res, 200, rows, { "content-range": `0-${rows.length - 1}/${rows.length}` }));
   const p = u.pathname;
   const sub = subOf(req);
-  if (p === "/auth/v1/user") return sub ? json(res, 200, { id: sub, aud: "authenticated", role: "authenticated", email: "raphy@example.com", user_metadata: { full_name: "Raphy Varghese" } }) : json(res, 401, { msg: "no" });
+  if (p === "/auth/v1/user") return sub ? json(res, 200, { id: sub, aud: "authenticated", role: "authenticated", email: "raphy@example.com", user_metadata: { full_name: "Raphy Varghese" }, identities: [{ provider: "email" }, { provider: "google" }] }) : json(res, 401, { msg: "no" });
   if (p.startsWith("/rest/v1/rpc/")) {
     const fn = p.split("/").pop();
     let body = ""; req.on("data", (c) => (body += c)); req.on("end", () => {

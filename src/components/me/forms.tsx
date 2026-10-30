@@ -2,8 +2,8 @@
 
 import { useState, useTransition } from "react";
 
-import { updateProfile, updateSettings } from "@/lib/actions/profile";
-import { DIET_LABEL, DIETS, type Diet } from "@/lib/labels";
+import { updatePlanning, updateProfile, updateSettings } from "@/lib/actions/profile";
+import { DIET_LABEL, DIETS, VISIBILITY_LABEL, type Diet, type Visibility } from "@/lib/labels";
 
 function Status({ msg }: { msg: { ok: boolean; text: string } | null }) {
   if (!msg) return null;
@@ -82,6 +82,62 @@ export function PreferencesForm({ initial }: { initial: { diet: Diet; exclusions
       </div>
       <Status msg={msg} />
       <button className="btn-primary btn-sm" disabled={pending}>{pending ? "Saving…" : "Save preferences"}</button>
+    </form>
+  );
+}
+
+export function PlanningForm({
+  initial,
+}: {
+  initial: { week_start: "mon" | "sun"; default_visibility: Visibility; weekday_max_minutes: number | null };
+}) {
+  const [weekStart, setWeekStart] = useState(initial.week_start);
+  const [visibility, setVisibility] = useState<Visibility>(initial.default_visibility);
+  const [maxMin, setMaxMin] = useState(initial.weekday_max_minutes ? String(initial.weekday_max_minutes) : "");
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [pending, startTransition] = useTransition();
+  return (
+    <form
+      className="space-y-5"
+      onSubmit={(e) => {
+        e.preventDefault();
+        startTransition(async () => {
+          const res = await updatePlanning({ week_start: weekStart, default_visibility: visibility, weekday_max_minutes: maxMin });
+          setMsg(res.ok ? { ok: true, text: "Saved." } : { ok: false, text: res.error });
+        });
+      }}
+    >
+      <fieldset>
+        <legend className="label">My week starts on</legend>
+        <div className="flex gap-2">
+          {(["mon", "sun"] as const).map((d) => (
+            <button key={d} type="button" className="chip" aria-pressed={weekStart === d} onClick={() => setWeekStart(d)}>
+              {d === "mon" ? "Monday" : "Sunday"}
+            </button>
+          ))}
+        </div>
+      </fieldset>
+      <div>
+        <label htmlFor="maxmin" className="label">Weekday cooking time limit</label>
+        <select id="maxmin" value={maxMin} onChange={(e) => setMaxMin(e.target.value)} className="input sm:w-72">
+          <option value="">No limit</option>
+          <option value="20">Up to 20 minutes</option>
+          <option value="30">Up to 30 minutes</option>
+          <option value="45">Up to 45 minutes</option>
+          <option value="60">Up to 1 hour</option>
+        </select>
+        <p className="mt-1 text-xs text-ink-muted">Monday to Friday, the dish picker suggests quicker dishes first. Weekends are unlimited.</p>
+      </div>
+      <div>
+        <label htmlFor="vis" className="label">When I share a plan, default to</label>
+        <select id="vis" value={visibility} onChange={(e) => setVisibility(e.target.value as Visibility)} className="input sm:w-72">
+          {(["link", "public", "private"] as const).map((v) => (
+            <option key={v} value={v}>{VISIBILITY_LABEL[v]}</option>
+          ))}
+        </select>
+      </div>
+      <Status msg={msg} />
+      <button className="btn-primary btn-sm" disabled={pending}>{pending ? "Saving…" : "Save planning preferences"}</button>
     </form>
   );
 }

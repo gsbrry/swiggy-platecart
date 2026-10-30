@@ -48,15 +48,16 @@ test.describe("signed-in user", () => {
     await expect(page.getByRole("dialog").getByLabel("Day")).toBeVisible();
   });
 
-  test("me page shows profile, preferences and account deletion", async ({ page }) => {
+  test("me page shows profile and menus; settings has account deletion", async ({ page }) => {
     await page.goto("/me");
-    await expect(page.getByRole("heading", { name: "Profile" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Food preferences" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "My menus" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Settings" }).first()).toBeVisible();
+    await page.goto("/me/settings");
     await expect(page.getByRole("button", { name: "Delete my account" })).toBeVisible();
   });
 
   test("no Swiggy or cart leftovers in the app", async ({ page }) => {
-    for (const path of ["/plan", "/dishes", "/market", "/list", "/me"]) {
+    for (const path of ["/today", "/plan", "/dishes", "/market", "/list", "/me", "/me/settings"]) {
       await page.goto(path);
       await expect(page.getByText(/Swiggy|Instamart/i)).toHaveCount(0);
     }
@@ -73,4 +74,38 @@ test("new users are sent to onboarding first", async ({ context, page }) => {
   await page.getByRole("button", { name: /^Veg No meat/ }).click();
   await cont.click();
   await expect(page.getByRole("heading", { name: "Almost done" })).toBeVisible();
+});
+
+test.describe("account and dashboard", () => {
+  test.beforeEach(async ({ context }) => signIn(context));
+
+  test("signing in lands on Today, and the logo goes to the public home page", async ({ page }) => {
+    await page.goto("/sign-in");
+    await expect(page).toHaveURL(/\/today$/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(/Good (morning|afternoon|evening), Raphy/);
+    await expect(page.getByRole("heading", { name: "On the menu today" })).toBeVisible();
+    await page.getByRole("link", { name: "Planetto home page" }).click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByRole("link", { name: "Go to my dashboard" }).first()).toBeVisible();
+  });
+
+  test("avatar opens the account menu", async ({ page }) => {
+    await page.goto("/today");
+    await page.getByRole("button", { name: "Account menu" }).click();
+    const menu = page.getByRole("menu");
+    for (const item of ["My profile", "My menus", "My dishes", "Settings", "Moderation", "Sign out"]) {
+      await expect(menu.getByRole("menuitem", { name: item })).toBeVisible();
+    }
+    await page.keyboard.press("Escape");
+    await expect(menu).toBeHidden();
+  });
+
+  test("settings shows photo, food, planning and account sections", async ({ page }) => {
+    await page.goto("/me/settings");
+    await expect(page.getByRole("button", { name: /Upload photo|Change photo/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Use Google photo" })).toBeVisible();
+    await expect(page.getByLabel("Weekday cooking time limit")).toHaveValue("30");
+    await expect(page.getByRole("button", { name: "Monday", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByText("Google · Email and password")).toBeVisible();
+  });
 });

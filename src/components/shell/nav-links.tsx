@@ -2,11 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, CalendarDays, ShoppingBasket, Store, UserRound } from "lucide-react";
+import { BookOpen, CalendarDays, ShoppingBasket, Store, Sun, UserRound } from "lucide-react";
 
-export const TABS = [
+const DESKTOP = [
+  { href: "/today", label: "Today", public: false },
+  { href: "/plan", label: "Plan", public: false },
+  { href: "/dishes", label: "Dishes", public: true },
+  { href: "/market", label: "Market", public: true },
+  { href: "/list", label: "List", public: false },
+] as const;
+
+// Five tabs fit a 390px phone; Dishes is reached from Plan's picker and the account menu.
+const MOBILE = [
+  { href: "/today", label: "Today", icon: Sun },
   { href: "/plan", label: "Plan", icon: CalendarDays },
-  { href: "/dishes", label: "Dishes", icon: BookOpen },
   { href: "/market", label: "Market", icon: Store },
   { href: "/list", label: "List", icon: ShoppingBasket },
   { href: "/me", label: "Me", icon: UserRound },
@@ -14,16 +23,15 @@ export const TABS = [
 
 function isActive(pathname: string, href: string) {
   if (href === "/market") return pathname.startsWith("/market") || pathname.startsWith("/m/");
+  if (href === "/me") return pathname.startsWith("/me") || pathname.startsWith("/dishes");
   return pathname === href || pathname.startsWith(href + "/");
 }
-
-const PUBLIC_TABS = new Set(["/dishes", "/market"]);
 
 export function DesktopNavLinks({ signedIn }: { signedIn: boolean }) {
   const pathname = usePathname() ?? "";
   return (
     <ul className="hidden items-center gap-1 md:flex">
-      {TABS.filter((t) => t.href !== "/me" && (signedIn || PUBLIC_TABS.has(t.href))).map((t) => {
+      {DESKTOP.filter((t) => signedIn || t.public).map((t) => {
         const active = isActive(pathname, t.href);
         return (
           <li key={t.href}>
@@ -52,7 +60,7 @@ export function BottomTabs() {
       className="glass-strong fixed inset-x-0 bottom-0 z-30 border-t border-hairline pb-[env(safe-area-inset-bottom)] md:hidden"
     >
       <ul className="mx-auto grid h-16 max-w-md grid-cols-5">
-        {TABS.map(({ href, label, icon: Icon }) => {
+        {MOBILE.map(({ href, label, icon: Icon }) => {
           const active = isActive(pathname, href);
           return (
             <li key={href}>

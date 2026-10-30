@@ -27,7 +27,7 @@ export function SiteHeader({ signedIn }: { signedIn: boolean }) {
         </ul>
         <div className="flex items-center gap-2">
           {signedIn ? (
-            <Link href="/plan" className="btn-primary btn-sm">Open my plan</Link>
+            <Link href="/today" className="btn-primary btn-sm">Go to my dashboard</Link>
           ) : (
             <>
               <Link href="/sign-in" className="btn-ghost btn-sm">Sign in</Link>

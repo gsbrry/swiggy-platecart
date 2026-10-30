@@ -18,7 +18,7 @@ export default function PrivacyPage() {
       <h2>What others can see</h2>
       <p>Your name and username appear on dishes, menus and ratings that you make public or share by link. Everything else is private to you.</p>
       <h2>Where it is stored</h2>
-      <p>Data is stored with Supabase in Mumbai, India. The app is hosted on Netlify. These providers process data on our behalf.</p>
+      <p>Data is stored with Supabase in Mumbai, India. The app is hosted on Vercel. These providers process data on our behalf.</p>
       <h2>Your rights</h2>
       <ul>
         <li>Correct your details any time on the Me page.</li>

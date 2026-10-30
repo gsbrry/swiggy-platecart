@@ -75,7 +75,7 @@ Goal: a real person signs up, and everything they do persists.
 1. **Auth + DB stack.** *Recommended: keep Clerk + Neon.* The code is already written for them, so this is the fastest path. The alternative is Supabase (auth + DB + storage in one place, which Claude can provision through its connector). That means rewriting middleware and `current-user.ts`, which costs about 2 extra days.
 2. **Paid menus at launch, or free first?** *Recommended: free first.*
 3. **Sign-in methods:** email + Google (recommended), plus phone OTP? Phone OTP costs money per SMS.
-4. **Hosting:** stay on Netlify (current build fix targets it) or move to Vercel.
+4. **Hosting:** decided — Vercel (Oct 2026).
 
 ## Risks worth knowing
 

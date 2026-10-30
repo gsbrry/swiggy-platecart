@@ -25,7 +25,7 @@ Plan: [`ROADMAP.md`](ROADMAP.md) · Expert reviews: [`reviews/`](reviews/) · Up
 - [ ] 🙋 **Custom SMTP** (e.g. Resend, Brevo; free tiers exist) in Supabase → Auth → SMTP. The built-in mailer only sends a few emails per hour — sign-up confirmations will stall without it
 - [ ] 🙋 Turn on **leaked-password protection** and CAPTCHA (Turnstile, free) in Supabase Auth settings
 - [ ] 🙋 Real **grievance email** and a lawyer's review of `/privacy` and `/terms` (placeholder `grievance@planetto.app` today)
-- [ ] 🙋 Netlify: point the site at this branch/`main`, set `NEXT_PUBLIC_SITE_URL=https://<domain>`
+- [ ] 🙋 Vercel: import the repo, set `NEXT_PUBLIC_SITE_URL=https://<domain>` for Production (see README → Deploy)
 - [ ] 🙋 **Supabase Pro ($25/mo)** before real users: free projects pause after 7 days without activity
 - [ ] 🙋 Make yourself admin (SQL in README) and decide who answers reports within 48 h
 

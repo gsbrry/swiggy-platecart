@@ -2,7 +2,7 @@
 
 A free weekly meal planner for Indian homes. Plan breakfast, lunch and dinner, get a shopping list sized for your household, share your week as a link, and copy ready-made Day / Week / Month menus from other home cooks (and rate them).
 
-**Stack:** Next.js 15 (App Router, React 19) · Supabase (Auth + Postgres with Row Level Security) · Tailwind CSS · Netlify.
+**Stack:** Next.js 15 (App Router, React 19) · Supabase (Auth + Postgres with Row Level Security) · Tailwind CSS · Vercel.
 
 ## Run it locally
 
@@ -58,6 +58,12 @@ docs/
 - A **Menu** is one object for both sharing and the marketplace: visibility `private`, `link` (anyone with the link) or `public` (listed in Market). Menus are snapshots, so a creator editing a dish never changes someone else's week.
 - Multi-row writes (create menu, use menu, copy dish, save dish) are Postgres functions, so they're atomic. Counters (uses, copies, ratings) are only written by the database.
 - Only people who used a menu can rate it, once, and never their own.
+
+## Deploy (Vercel)
+
+1. Import the GitHub repo in Vercel (framework: Next.js, defaults are fine; Node 22).
+2. Environment variable, **Production** only: `NEXT_PUBLIC_SITE_URL=https://<your-domain>`. The Supabase URL and publishable key come from the committed `.env.production`.
+3. Supabase → Authentication → URL Configuration: Site URL = your domain; Redirect URLs = `https://<your-domain>/auth/callback` (and `https://*-<team>.vercel.app/auth/callback` if you want logins on preview deployments).
 
 ## Making someone an admin
 

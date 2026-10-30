@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { Check, Circle } from "lucide-react";
+import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
 import {
@@ -12,6 +13,7 @@ import {
   updatePassword,
   type AuthState,
 } from "@/app/(auth)/actions";
+import { EMAIL_RE, PASSWORD_RULES } from "@/lib/password-rules";
 
 function Submit({ children }: { children: React.ReactNode }) {
   const { pending } = useFormStatus();
@@ -79,8 +81,57 @@ export function SignInForm({ next }: { next: string }) {
   );
 }
 
+/** Password input with a live checklist and a show/hide toggle. */
+function PasswordField({ id = "password", label = "Password" }: { id?: string; label?: string }) {
+  const [value, setValue] = useState("");
+  const [show, setShow] = useState(false);
+  const started = value.length > 0;
+  return (
+    <div>
+      <label htmlFor={id} className="label">{label}</label>
+      <div className="relative">
+        <input
+          id={id}
+          name="password"
+          type={show ? "text" : "password"}
+          autoComplete="new-password"
+          required
+          maxLength={72}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          aria-describedby={`${id}-rules`}
+          className="input pr-16"
+        />
+        <button
+          type="button"
+          onClick={() => setShow((s) => !s)}
+          className="absolute right-1 top-1/2 h-9 -translate-y-1/2 rounded-md px-3 text-sm font-medium text-ink-muted hover:text-ink"
+          aria-label={show ? "Hide password" : "Show password"}
+        >
+          {show ? "Hide" : "Show"}
+        </button>
+      </div>
+      <ul id={`${id}-rules`} className="mt-2 space-y-1" aria-live="polite">
+        {PASSWORD_RULES.map((r) => {
+          const ok = r.test(value);
+          return (
+            <li key={r.id} className={`flex items-center gap-2 text-sm ${ok ? "text-success" : started ? "text-danger" : "text-ink-muted"}`}>
+              {ok ? <Check aria-hidden className="h-4 w-4" /> : <Circle aria-hidden className="h-4 w-4" />}
+              {r.label}
+              <span className="sr-only">{ok ? "(done)" : "(not yet)"}</span>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 export function SignUpForm() {
   const [state, action] = useActionState(signUp, undefined);
+  const [email, setEmail] = useState("");
+  const [emailTouched, setEmailTouched] = useState(false);
+  const emailBad = emailTouched && email.length > 0 && !EMAIL_RE.test(email.trim());
   if (state?.message) return <Notice state={state} />;
   return (
     <form action={action} className="space-y-4" noValidate>
@@ -91,21 +142,27 @@ export function SignUpForm() {
       </div>
       <div>
         <label htmlFor="email" className="label">Email</label>
-        <input id="email" name="email" type="email" autoComplete="email" required className="input" />
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => setEmailTouched(true)}
+          aria-invalid={emailBad || undefined}
+          aria-describedby={emailBad ? "email-error" : undefined}
+          className={`input ${emailBad ? "border-danger" : ""}`}
+        />
+        {emailBad && <p id="email-error" className="mt-1 text-sm text-danger">That doesn&apos;t look like an email address.</p>}
       </div>
-      <div>
-        <label htmlFor="password" className="label">Password</label>
-        <input id="password" name="password" type="password" autoComplete="new-password" minLength={10} required className="input" />
-        <p className="mt-1 text-xs text-ink-muted">At least 10 characters.</p>
-      </div>
-      <label className="flex items-start gap-2.5 text-sm text-ink-muted">
-        <input type="checkbox" name="age" className="mt-0.5 h-5 w-5 accent-[var(--ink-orange)]" required />
-        <span>
-          I am 18 or older and agree to the{" "}
-          <Link href="/terms" className="font-medium text-ink-orange underline">Terms</Link> and{" "}
-          <Link href="/privacy" className="font-medium text-ink-orange underline">Privacy Policy</Link>.
-        </span>
-      </label>
+      <PasswordField />
+      <p className="text-xs text-ink-muted">
+        By creating an account you agree to the{" "}
+        <Link href="/terms" className="font-medium text-ink-orange underline">Terms</Link> and{" "}
+        <Link href="/privacy" className="font-medium text-ink-orange underline">Privacy Policy</Link>.
+      </p>
       <Submit>Create account</Submit>
     </form>
   );
@@ -130,10 +187,7 @@ export function ResetPasswordForm() {
   return (
     <form action={action} className="space-y-4" noValidate>
       <Notice state={state} />
-      <div>
-        <label htmlFor="password" className="label">New password</label>
-        <input id="password" name="password" type="password" autoComplete="new-password" minLength={10} required className="input" />
-      </div>
+      <PasswordField label="New password" />
       <Submit>Save password</Submit>
     </form>
   );

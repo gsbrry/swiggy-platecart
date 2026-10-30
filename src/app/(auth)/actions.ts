@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import { passwordProblem } from "@/lib/password-rules";
 import { safeNext } from "@/lib/safe-next";
 import { siteUrl } from "@/lib/site-url";
 import { createClient } from "@/lib/supabase/server";
@@ -10,7 +11,10 @@ import { createClient } from "@/lib/supabase/server";
 export type AuthState = { error?: string; message?: string } | undefined;
 
 const email = z.string().trim().toLowerCase().email("Enter a valid email address.").max(254);
-const password = z.string().min(10, "Use at least 10 characters.").max(72, "Use at most 72 characters.");
+const password = z.string().superRefine((p, ctx) => {
+  const problem = passwordProblem(p);
+  if (problem) ctx.addIssue({ code: "custom", message: problem });
+});
 
 function friendly(message: string): string {
   if (/invalid login credentials/i.test(message)) return "Email or password is wrong.";
@@ -40,9 +44,8 @@ export async function signUp(_: AuthState, form: FormData): Promise<AuthState> {
       name: z.string().trim().min(1, "Tell us your name.").max(60),
       email,
       password,
-      age: z.literal("on", { message: "You must be 18 or older to use Planetto." }),
     })
-    .safeParse({ name: form.get("name"), email: form.get("email"), password: form.get("password"), age: form.get("age") });
+    .safeParse({ name: form.get("name"), email: form.get("email"), password: form.get("password") });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message };
 
   const supabase = await createClient();

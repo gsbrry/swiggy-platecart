@@ -30,13 +30,19 @@ test("market is browsable without an account", async ({ page }) => {
   await expect(page.getByRole("link", { name: /Use this menu/ })).toHaveAttribute("href", /\/sign-in\?next=%2Fm%2F/);
 });
 
-test("sign-up form validates before submitting", async ({ page }) => {
+test("sign-up checks the password while you type", async ({ page }) => {
   await page.goto("/sign-up");
-  await page.getByLabel("Your name").fill("Asha");
-  await page.getByLabel("Email").fill("asha@example.com");
-  await page.getByLabel("Password").fill("short");
-  await page.getByRole("button", { name: "Create account" }).click();
-  await expect(page.locator("form p[role=alert]")).toContainText(/10 characters|18 or older/);
+  await expect(page.getByRole("checkbox")).toHaveCount(0); // no age checkbox any more
+  const rules = page.locator("#password-rules li");
+  await page.getByLabel("Password", { exact: true }).fill("short");
+  await expect(rules.filter({ hasText: "At least 10 characters" })).toHaveClass(/text-danger/);
+  await expect(rules.filter({ hasText: "Letters and numbers" })).toHaveClass(/text-danger/);
+  await page.getByLabel("Password", { exact: true }).fill("tastydal2026");
+  await expect(rules.filter({ hasText: "At least 10 characters" })).toHaveClass(/text-success/);
+  await expect(rules.filter({ hasText: "Letters and numbers" })).toHaveClass(/text-success/);
+  await page.getByLabel("Email").fill("not-an-email");
+  await page.getByLabel("Your name").focus();
+  await expect(page.getByText("That doesn't look like an email address.")).toBeVisible();
 });
 
 test("unknown share links show a friendly 404", async ({ page }) => {

@@ -23,12 +23,15 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children, modal }: { children: React.ReactNode; modal: React.ReactNode }) {
   // Reading the nonce opts every page into dynamic rendering, so Next can stamp the CSP nonce on its scripts.
   await headers();
   return (
     <html lang="en-IN" className={dmSans.className}>
-      <body>{children}</body>
+      <body>
+        {children}
+        {modal}
+      </body>
     </html>
   );
 }

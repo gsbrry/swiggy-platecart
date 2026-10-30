@@ -4,6 +4,7 @@ import { Logo } from "@/components/brand/logo";
 import { BottomTabs, DesktopNavLinks } from "@/components/shell/nav-links";
 import { UserMenu } from "@/components/shell/user-menu";
 import { getMe } from "@/lib/auth";
+import { AuthLink } from "@/components/auth/auth-link";
 
 /** Sticky glass top bar (desktop links + account menu) and a glass bottom tab bar on phones. */
 export async function AppShell({ children }: { children: React.ReactNode }) {
@@ -23,8 +24,8 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
             <UserMenu name={me.profile.display_name} username={me.profile.username} avatarUrl={me.profile.avatar_url} isAdmin={me.isAdmin} />
           ) : (
             <div className="flex items-center gap-2">
-              <Link href="/sign-in" className="btn-ghost btn-sm hidden sm:inline-flex">Sign in</Link>
-              <Link href="/sign-up" className="btn-primary btn-sm">Start free</Link>
+              <AuthLink to="/sign-in" className="btn-ghost btn-sm !px-3 sm:!px-4">Sign in</AuthLink>
+              <AuthLink to="/sign-up" className="btn-primary btn-sm">Start free</AuthLink>
             </div>
           )}
         </nav>

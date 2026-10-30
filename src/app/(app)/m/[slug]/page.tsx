@@ -8,7 +8,7 @@ import { DietDot } from "@/components/ui/diet-dot";
 import { Stars } from "@/components/ui/stars";
 import { deleteMenu } from "@/lib/actions/menus";
 import { addDays, mondayOf, todayIso } from "@/lib/dates";
-import { DIET_LABEL, MEAL_LABEL, MEALS, PERIOD_LABEL } from "@/lib/labels";
+import { DIET_LABEL, HEALTH_TAGS, MEAL_LABEL, MEALS, PERIOD_LABEL } from "@/lib/labels";
 import { loadMenu, type MenuItem } from "@/lib/menus";
 import { createClient, getUserId } from "@/lib/supabase/server";
 
@@ -74,6 +74,11 @@ export default async function MenuPage({ params }: Params) {
           {owner.username && <> · @{owner.username}</>}
         </p>
         {menu.description && <p className="max-w-2xl whitespace-pre-line">{menu.description}</p>}
+        {menu.tags.some((t) => HEALTH_TAGS.includes(t)) && (
+          <p className="max-w-2xl text-sm text-ink-muted">
+            General food ideas, not medical or diet advice. If you have a health condition, are pregnant, or follow a strict diet like keto, check with a doctor or dietitian first.
+          </p>
+        )}
         <div className="flex flex-wrap items-center gap-4">
           <Stars value={Number(menu.rating_avg)} count={menu.rating_count} size="md" />
           <span className="inline-flex items-center gap-1 text-sm text-ink-muted">

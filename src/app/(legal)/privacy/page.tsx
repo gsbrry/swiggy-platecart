@@ -28,7 +28,7 @@ export default function PrivacyPage() {
       <h2>Age</h2>
       <p>Planetto is for people aged 18 and over.</p>
       <h2>Grievance contact</h2>
-      <p>Email: <a className="text-ink-orange underline" href="mailto:grievance@planetto.app">grievance@planetto.app</a>. We reply within 30 days.</p>
+      <p>Email: <a className="text-ink-orange underline" href="mailto:hello@obio.in">hello@obio.in</a>. We reply within 30 days.</p>
     </>
   );
 }

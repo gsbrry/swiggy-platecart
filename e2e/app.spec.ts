@@ -31,8 +31,10 @@ test.describe("signed-in user", () => {
     await page.goto("/list?range=next7");
     await expect(page.getByRole("heading", { name: "Shopping list" })).toBeVisible();
     await expect(page.getByText(/for 3 people/)).toBeVisible();
-    // Checked items sink to the bottom, so address the item by name rather than position.
-    const item = page.getByRole("checkbox", { name: /^besan for Besan Chilla/ });
+    // Checked items sink to the bottom, so address the item by its name rather than position.
+    const ingredient = (await page.locator("ul li label span.font-medium").first().innerText()).trim();
+    const escaped = ingredient.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const item = page.getByRole("checkbox", { name: new RegExp(`^${escaped} for`, "i") }).first();
     await item.check();
     await expect(item).toBeChecked();
     await expect(page.getByText(/of \d+ left/)).toBeVisible();

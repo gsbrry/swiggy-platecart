@@ -136,6 +136,20 @@ body::before {
   }
 }
 
+/* The one authored motion moment: the hero week "fills in" as if being planned. */
+@keyframes plan-in {
+  from {
+    opacity: 0.35;
+    transform: translateY(6px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
 /* Weak GPUs / user preference: swap every glass level for its opaque equivalent. */
 @media (prefers-reduced-transparency: reduce) {
   .surface,

@@ -102,6 +102,8 @@ http.createServer((req, res) => {
       if (eqParam(u, "period")) rows = rows.filter((m) => m.period === eqParam(u, "period"));
       if (eqParam(u, "owner_id")) rows = rows.filter((m) => m.owner_id === UID);
       if (eqParam(u, "diet")) rows = rows.filter((m) => m.diet === eqParam(u, "diet"));
+      const cs = u.searchParams.get("tags"); // tags=cs.{a,b}
+      if (cs) { const want = cs.replace(/^cs\.\{|\}$/g, "").split(",").map((t) => t.replace(/"/g, "")); rows = rows.filter((m) => want.every((t) => m.tags.includes(t))); }
       return send(rows);
     }
     case "menu_items": return send(menus.flatMap((m) => m.items.filter((it) => it.day_index === 0).map((it) => ({ ...it, menu_id: m.id }))));

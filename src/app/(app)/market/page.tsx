@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { MenuCard, type MenuCardData } from "@/components/menus/menu-card";
-import { DIET_LABEL, DIETS, PERIOD_LABEL, PERIODS, type Diet, type Meal, type Period } from "@/lib/labels";
+import { DIET_LABEL, DIETS, MENU_CATEGORIES, PERIOD_LABEL, PERIODS, type Diet, type Meal, type Period } from "@/lib/labels";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
@@ -17,6 +17,7 @@ export default async function MarketPage({ searchParams }: { searchParams: Promi
   const period: Period = PERIODS.includes(sp.period as Period) ? (sp.period as Period) : "week";
   const diet = DIETS.includes(sp.diet as Diet) ? (sp.diet as Diet) : null;
   const sort: Sort = sp.sort && sp.sort in SORTS ? (sp.sort as Sort) : "top";
+  const tag = MENU_CATEGORIES.some((c) => c.tag === sp.tag) ? sp.tag! : null;
 
   const supabase = await createClient();
   let q = supabase
@@ -25,15 +26,16 @@ export default async function MarketPage({ searchParams }: { searchParams: Promi
     .eq("visibility", "public")
     .eq("status", "active")
     .eq("period", period)
-    .limit(60);
+    .limit(120);
   if (diet) q = q.eq("diet", diet);
+  if (tag) q = q.contains("tags", [tag]);
   q =
     sort === "new"
       ? q.order("created_at", { ascending: false })
       : sort === "popular"
         ? q.order("get_count", { ascending: false }).order("rating_avg", { ascending: false })
         : q.order("rating_avg", { ascending: false }).order("get_count", { ascending: false });
-  const { data: menus } = await q;
+  const { data: menus } = await q.order("title");
 
   const ids = (menus ?? []).map((m) => m.id);
   const { data: firstDay } = ids.length
@@ -62,7 +64,7 @@ export default async function MarketPage({ searchParams }: { searchParams: Promi
 
   const href = (patch: Record<string, string | null>) => {
     const p = new URLSearchParams();
-    const merged: Record<string, string | null> = { period, diet, sort, ...patch };
+    const merged: Record<string, string | null> = { period, diet, tag, sort, ...patch };
     for (const [k, v] of Object.entries(merged)) if (v) p.set(k, v);
     return `/market?${p.toString()}`;
   };
@@ -95,6 +97,12 @@ export default async function MarketPage({ searchParams }: { searchParams: Promi
           </nav>
         </div>
       </div>
+      <nav aria-label="Category" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0 sm:pb-0">
+        <Link href={href({ tag: null })} className="chip" aria-current={!tag ? "page" : undefined}>All goals</Link>
+        {MENU_CATEGORIES.map((c) => (
+          <Link key={c.tag} href={href({ tag: c.tag })} className="chip shrink-0" aria-current={tag === c.tag ? "page" : undefined}>{c.label}</Link>
+        ))}
+      </nav>
       <nav aria-label="Sort" className="flex items-center gap-1 text-sm">
         <span className="text-ink-muted">Sort:</span>
         {(Object.keys(SORTS) as Sort[]).map((s) => (
@@ -106,7 +114,7 @@ export default async function MarketPage({ searchParams }: { searchParams: Promi
 
       {cards.length === 0 ? (
         <div className="surface p-8 text-center">
-          <p className="text-lg font-semibold">No {PERIOD_LABEL[period].toLowerCase()} menus here yet</p>
+          <p className="text-lg font-semibold">No {PERIOD_LABEL[period].toLowerCase()} menus{tag ? " in this category" : ""} yet</p>
           <p className="mt-1 text-ink-muted">Plan a {PERIOD_LABEL[period].toLowerCase()} you love, then publish it from your Plan page.</p>
           <Link href="/plan" className="btn-primary mt-4">Go to my plan</Link>
         </div>

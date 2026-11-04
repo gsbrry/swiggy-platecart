@@ -41,3 +41,35 @@ export const DIET_DOT: Record<Diet, string> = {
   egg: "bg-warning",
   nonveg: "bg-danger",
 };
+
+/** Market categories: the first tag on each Planetto Kitchen menu. Order = chip order. */
+export const MENU_CATEGORIES: { tag: string; label: string }[] = [
+  { tag: "everyday", label: "Everyday" },
+  { tag: "healthy", label: "Healthy" },
+  { tag: "high-protein", label: "High protein" },
+  { tag: "weight-loss", label: "Weight loss" },
+  { tag: "fat-loss", label: "Fat loss" },
+  { tag: "weight-gain", label: "Weight gain" },
+  { tag: "muscle-gain", label: "Muscle gain" },
+  { tag: "keto", label: "Keto" },
+  { tag: "low-carb", label: "Carb cut" },
+  { tag: "non-veg", label: "Non-veg" },
+  { tag: "eggetarian", label: "Eggetarian" },
+  { tag: "vegan", label: "Vegan" },
+  { tag: "jain", label: "Jain" },
+  { tag: "millet", label: "Millets" },
+  { tag: "south-indian", label: "South Indian" },
+  { tag: "north-indian", label: "North Indian" },
+  { tag: "gujarati", label: "Gujarati" },
+  { tag: "maharashtrian", label: "Maharashtrian" },
+  { tag: "bengali", label: "Bengali" },
+  { tag: "kerala", label: "Kerala" },
+  { tag: "english", label: "English" },
+  { tag: "continental", label: "Continental" },
+  { tag: "budget", label: "Budget" },
+  { tag: "quick", label: "Quick" },
+  { tag: "kids", label: "Kids" },
+];
+
+/** Menus with these tags get a "not medical advice" note. */
+export const HEALTH_TAGS = ["weight-loss", "fat-loss", "weight-gain", "muscle-gain", "keto", "low-carb", "high-protein", "healthy"];
